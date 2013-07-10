@@ -1,0 +1,8 @@
+vu.wntools.corpus
+vu.wntools.domains
+vu.wntools.util
+vu.wntools.wnsimilarity
+vu.wntools.wnsimilarity.corpus
+vu.wntools.wnsimilarity.main
+vu.wntools.wnsimilarity.measures
+vu.wntools.wordnet
