@@ -1,12 +1,6 @@
-Project: DutchSemCor
-Project number: 380-70-011
-Funded by the Dutch National Science Foundation (NWO).
-website: http://www2.let.vu.nl/oz/cltl/dutchsemcor/index.html
-Start date: September, 2009
-End date: August, 2012
-
-Data: dutchsemcor-tools
-Version: 1.0
+Project: Wordnet-tools
+Version: 0.1
+Date: May 2013
 Copyright: VU University Amsterdam, Piek Vossen
 Email: piek.vossen@vu.nl
 
@@ -15,14 +9,17 @@ FILE LISTING:
 	LICENSESOFTWARE.TXT
 	README.TXT
 	scripts
-		loganalyser.sh
-		filterlog.sh
-		dsc-double-annotations-sense-groups.sh
-		dsc-ukb-relations.sh
-	src
-	pom.xml
+		wn-sim.sh
+		cumulative-subsumers-frequency.sh
+		wn-average-depth.sh
+		common-subsumer-hierarchy.sh
+		propagate-synset-classification.sh
+		tag-kaf-files-with-wnlmf.sh
 	lib
-		DutchSemcor-1.0-jar-with-dependencies.jar
+		WordnetTools-1.0-jar-with-dependencies.jar
+	resources
+	java-doc
+	input
 
 LICENSE:
 This work is licensed under a GNU GPL version 3.0: <http://fsf.org/>. See the file LICENSESOFTWARE.TXT and COPYING-GPL.TXT that should be in the
@@ -30,55 +27,111 @@ top-directory of this distribution.
 
 DESCIPTION:
 
-dutchsemcor-tools is a collection of functions that operate on the annotation log dump file to extract various types of information and analysis. Different scripts are given in the script folder. These scripts are also provided in the data files that are produced by these scripts.
+Wordnet-tools is a collection of functions that operate on wordnets (Fellbaum 1998, Vossen et al 1998) represented in Wordnet-LMF format (Vossen et al 2013).
+The following functions are provided:
 
-The dump of the log file is in the form of of comma separated file:
-num,word_id,word,lemma,lemma_or,pos,pos_or,source,sense_id,annotator_id,usage,datetime
-1,WR-P-P-H-0000000256.p.8.s.1.w.12,aardig,aardig,,a,,SoNaR,r_a-9035,Fons,N,2010-02-16 23:56:00
-2,WR-P-P-H-0000000245.p.2.s.2.w.11,armen,arm,,n,,SoNaR,,Attila,U,2010-02-17 09:34:08
-3,WS-U-E-A-0000000292.p.3.s.5.w.5,armen,arm,,n,,SoNaR,r_a-8804,Attila,N,2010-02-17 09:38:54
-4,WS-U-E-A-0000000292.p.16.s.1.w.13,arm,arm,,n,,SoNaR,r_a-8804,Attila,N,2010-02-17 09:39:02
-5,WR-P-E-J-0000119226.p.1.s.2.w.8,armen,arm,,n,,SoNaR,r_a-8804,Attila,N,2010-02-17 09:39:02
-6,WR-P-E-J-0000047065.p.2.s.5.w.14,armen,arm,,n,,SoNaR,r_a-8804,Attila,N,2010-02-17 09:39:03
+1. Create a cumulated frequencies for lowest common subsumbers (wordnet hypernyms) from a corpus frequency file. 
+It takes a list of words with corpus frequencies and accumulates these frequencies to the full wordnet hierarchy, passing
+it to the hypernyms of each meaning of the word. The output is a file with hypernym synset ids and their cumulated frequencies.
+This file is used by various semantic similarity measures (Resnik 1995).
 
-Depending on the script other input files and parameters are required. In each script, the input parameters are explained.
 
-The loganalyser.sh shows how an analysis of the log is obtained, showing progress, interannotator-agreement, time spent, multiple tags assigned to corpus tokens, etc. It generates 4 output files:
+2. Derive the average depth of the full hierarchy using the hypernym relations
 
-- dsc20120708-HUMAN2012.08.13 AD at 15_17_57 PM CEST.noun.xls
-<provides details on the annotation of each word, and for each annotator>
-- dsc20120708-HUMAN2012.08.13 AD at 15_17_57 PM CEST.noun.overview.xls
-<provides information for each word as a list, providing overview information of all the annotators together, indicating overlap, interannotator agreement, distribution over the different senses, etc.>
-- dsc20120708-HUMAN2012.08.13 AD at 15_17_57 PM CEST.noun.multitags.xls
-<lists all double annotations by each annotator for the words with frequency>
-- dsc20120708-HUMAN2012.08.13 AD at 15_17_57 PM CEST.noun.time.xls
-<provides for each annotator the total and average time spent per annotation.>
+3. Read a file with word pairs to calculate similarity scores according to various measures: path, Jiang Conrath, Leacock & Chodorow, Resnik, Lin, Wu & Palmer.
 
-The filterlog.sh shows how a log file can be filtered on the basis of the tokens annotated by a single annotator.
+4. Create a subhierarchy of wordnet for a restricted set of input words
 
-The dsc-double-annotations-sense-groups.sh is used to extract sense-groups from double annotations: multiple lexical units assigned to a single token. The program generates an
-XML file with sense-groups, e.g.:
+5. Tag a file in the KYOTO Annotation Format with all the meanings of the Wordnet-LMF file
 
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<file name="sense-groups.rel.xml">
-<lemma spelling="vurig">
-	<relation type="co-annotation" freq="1">
-		<lu sense="1" id="r_a-16187"/>
-		<lu sense="3" id="d_a-324414"/>
-	</relation>
-</lemma>
-<lemma spelling="zoon">
-	<relation type="co-annotation" freq="1">
-		<lu sense="1" id="r_n-44370"/>
-		<lu sense="2" id="r_n-44371"/>
-	</relation>
-</lemma>
-etc...
+6. Create a ontotag file from set of labeled hypernym synsets
 
-The dsc-ukb-relations.sh script calls 3 functions that extract semantic relations for building a UKB graph from the annotations. First, annotations of different words in the same sentence are extracted using the function IntersectAnnotationLogPolysemous. Since, both words are manually dismabiguated, we can derive a semantic relation between the synsets that they belong too. This function requires the log dump and a dump of the synsets of Cornetto.
+We describe each functionality in more detail below.
 
-Secondly, we use the IntersectAnnotationLogMonosemous function to relate annotated words to words in the same sentence with one meaning. This function requires also a dump of the lexical units and a file with all the SONAR token identifiers for the lexical units of the monosemous words in Cornetto, in addition to the annotation log and the dump of the synsets.
+1. Get cumulated frequencies for wordnet synsets
+It takes a list of words with corpus frequencies and accumulates these frequencies to the full wordnet hierarchy, passing
+it to the hypernyms of each meaning of the word. The output is a file with hypernym synset ids and their cumulated frequencies.
+This file is used by various semantic similarity measures (Resnik 1995).
 
-Both file generate a list of tokens and synset pairs. A third function UkbRelationsAndStatisticsForContextRelations extracts from these file the final UKB relations and a CSV file with statistics. It has various parameters to tune the extracted relations.
+INPUT
+zijn/verb/10601235
+hebben/verb/4214494
+worden/verb/3490102
+kunnen/verb/1854277
+zullen/verb/1570042
+moeten/verb/1559258
+jaar/noun/1482974
+gaan/verb/1296115
+komen/verb/1244479
+maken/verb/949996
+willen/verb/945113
+zeggen/verb/893042
 
-dutchsemcor-tools is compiled on Mac OS X version 10.6.8 with Java 1.6. It depends on the CornettoExportParser library for processing the Cornetto database (also provided in this distribution).
+OUTPUT
+nwords:78562
+nld-21-d_v-6971-v/72414
+nld-21-d_v-8502-v/325812
+nld-21-d_v-5711-v/29493
+nld-21-d_n-40707-n/2483
+nld-21-d_n-29687-n/1331
+nld-21-d_n-17459-n/2036
+nld-21-d_v-2668-v/3678
+nld-21-d_n-27578-n/104
+
+		cumulative-subsumers-frequency.sh
+
+2. Derive the average depth of the full hierarchy using the hypernym relations
+
+		wn-average-depth.sh
+
+
+3. Read a file with word pairs to calculate similarity scores according to various measures: path, 
+
+		wn-sim.sh
+
+4. Create a subhierarchy of wordnet for a restricted set of input words
+
+		common-subsumer-hierarchy.sh
+
+5. Tag a file in the KYOTO Annotation Format with all the meanings of the Wordnet-LMF file
+
+		tag-kaf-files-with-wnlmf.sh
+		
+6. Create a ontotag file from set of labeled hypernym synsets
+
+Takes a labeled list of synsets and expands the labels to all other synsets related through specified semantic relations:
+--wn-lmf		<path to a wordnet file in wordn-lmf format> 
+--relations		<path to a text file with the relations y=that should be used to build the graph> 
+--input-file		<path to the input file that contains of a synset identifier and a label on each separate line>
+--separator		<String that separates the synsets from the label> 
+
+		propagate-synset-classification.sh
+
+INPUT
+nld-21-d_v-1370-v,Herstel-activiteit
+nld-21-d_v-2976-v,Herstel-activiteit
+nld-21-d_v-7814-v,Herstel-activiteit
+nld-21-d_v-1213-v,Verval-proces
+nld-21-d_v-5699-v,Herstel-activiteit
+nld-21-d_v-8394-v,Herstel-activiteit
+nld-21-d_v-8983-v,Herstel-activiteit
+nld-21-d_v-211-v,Verval-proces
+nld-21-d_v-4057-v,Verval-proces
+
+OUTPUT
+nld-21-d_v-1370-v sc_subClassOf Herstel-activiteit
+nld-21-d_v-2976-v sc_subClassOf Herstel-activiteit
+nld-21-d_v-7814-v sc_subClassOf Herstel-activiteit
+nld-21-d_v-1213-v sc_subClassOf Verval-proces
+nld-21-d_v-5699-v sc_subClassOf Herstel-activiteit
+nld-21-d_v-8394-v sc_subClassOf Herstel-activiteit
+nld-21-d_v-8983-v sc_subClassOf Herstel-activiteit
+nld-21-d_v-211-v sc_subClassOf Verval-proces
+nld-21-d_v-4057-v sc_subClassOf Verval-proces
+
+
+Wordnet-tools is compiled on Mac OS X version 10.6.8 with Java 1.6.
+
+
+Vossen, P., C. Soria, M. Monacini (2013):
+
