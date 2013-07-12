@@ -218,7 +218,7 @@ public class WordnetData {
 
 
 
-    public int getAverageDepth () {
+    public int getAverageDepthBySynset () {
          int depth = 0;
          Set keySet = hyperRelations.keySet();
          Iterator keys = keySet.iterator();
@@ -238,6 +238,71 @@ public class WordnetData {
             depth = depth/keySet.size();
          }
          return depth;
+    }
+
+    public int getAverageDepthByWord () {
+         int depth = 0;
+         Set keySet = entryToSynsets.keySet();
+         Iterator keys = keySet.iterator();
+         while (keys.hasNext()) {
+             String key = (String) keys.next(); ///word
+             ArrayList<String> wordSynsets = entryToSynsets.get(key);
+             for (int w = 0; w < wordSynsets.size(); w++) {
+                 String wordSynset =  wordSynsets.get(w);
+                 ArrayList<ArrayList<String>> targetChains = new ArrayList<ArrayList<String>>();
+                 getMultipleHyperChain(wordSynset, targetChains);
+                 for (int i = 0; i < targetChains.size(); i++) {
+                     ArrayList<String> targetChain =  targetChains.get(i);
+                     depth+= targetChain.size();
+                 }
+             }
+         }
+         if (keySet.size()==0) {
+            depth = 0;
+         }
+         else {
+            depth = depth/keySet.size();
+         }
+         return depth;
+    }
+
+    public int getMaxDepthBySynset () {
+         int maxDepth = 0;
+         Set keySet = hyperRelations.keySet();
+         Iterator keys = keySet.iterator();
+         while (keys.hasNext()) {
+             String key = (String) keys.next();
+             ArrayList<ArrayList<String>> targetChains = new ArrayList<ArrayList<String>>();
+             getMultipleHyperChain(key, targetChains);
+             for (int i = 0; i < targetChains.size(); i++) {
+                 ArrayList<String> targetChain =  targetChains.get(i);
+                 if (targetChain.size()>maxDepth) {
+                     maxDepth+= targetChain.size();
+                 }
+             }
+         }
+         return maxDepth;
+    }
+
+    public int getMaxDepthByWord () {
+        int maxDepth = 0;
+        Set keySet = entryToSynsets.keySet();
+        Iterator keys = keySet.iterator();
+        while (keys.hasNext()) {
+            String key = (String) keys.next(); ///word
+            ArrayList<String> wordSynsets = entryToSynsets.get(key);
+            for (int w = 0; w < wordSynsets.size(); w++) {
+                String wordSynset =  wordSynsets.get(w);
+                ArrayList<ArrayList<String>> targetChains = new ArrayList<ArrayList<String>>();
+                getMultipleHyperChain(wordSynset, targetChains);
+                for (int i = 0; i < targetChains.size(); i++) {
+                    ArrayList<String> targetChain =  targetChains.get(i);
+                    if (targetChain.size()>maxDepth) {
+                        maxDepth+= targetChain.size();
+                    }                }
+            }
+        }
+        return maxDepth;
     }
 
 

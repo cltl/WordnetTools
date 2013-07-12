@@ -128,7 +128,7 @@ public class CdbSynSaxParser extends DefaultHandler{
             IR = false;
         }
         else if (qName.equalsIgnoreCase("relation")) {
-           // if (posMatch) {
+            if (posMatch) {
                 if (IR) {
                     targetRelation="";
                     targetId = "";
@@ -159,7 +159,7 @@ public class CdbSynSaxParser extends DefaultHandler{
                         }
                     }
                 }
-           // }
+            }
         }
         else if (qName.equalsIgnoreCase("synonym")) {
             if (posMatch) {
@@ -320,7 +320,7 @@ public class CdbSynSaxParser extends DefaultHandler{
         parser.setPos("a");
         parser.setRelations(relations);
         parser.parseFile(pathToFile);
-        int depth = parser.wordnetData.getAverageDepth();
+        int depth = parser.wordnetData.getAverageDepthByWord();
         System.out.println("depth = " + depth);
         System.out.println("parser.wordnetData.entryToSynsets.size() = " + parser.wordnetData.entryToSynsets.size());
         System.out.println("parser.wordnetData.getHyperRelations().size() = " + parser.wordnetData.getHyperRelations().size());

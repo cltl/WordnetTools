@@ -29,7 +29,7 @@ public class LeacockChodorow {
             String s = hyp1.get(i);
             int i2 = hyp2.indexOf(s);
             if (i2>-1) {
-                distance = 1+i+i2;
+                distance = 1+i+i2; /// node counting additional 1 for dividing by zero
                 match = s;
                 break;
             }

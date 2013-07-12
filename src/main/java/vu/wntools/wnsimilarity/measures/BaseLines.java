@@ -19,7 +19,7 @@ public class BaseLines {
             String s = hyp1.get(i);
             int i2 = hyp2.indexOf(s);
             if (i2>-1) {
-                distance = 1+i+i2;
+                distance = 1+i+i2; /// additional 1 for node counting and avoiding zero values
                 match = s;
                 break;
             }

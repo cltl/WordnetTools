@@ -17,6 +17,14 @@ public class GetAverageDepth {
     static public void main (String[] args) {
             WordnetData wordnetData = new WordnetData();
             String pathToWordnetFile = "";
+            String posFilter = "";
+            for (int i = 0; i < args.length; i++) {
+                String arg = args[i];
+                if ((arg.equalsIgnoreCase("--pos")) && args.length>i) {
+                    posFilter = args[i+1];
+                    break;
+                }
+            }
             for (int i = 0; i < args.length; i++) {
                 String arg = args[i];
                 //System.out.println("arg = " + arg);
@@ -29,8 +37,14 @@ public class GetAverageDepth {
                 else if ((arg.equalsIgnoreCase("--lmf-file")) && args.length>i) {
                     pathToWordnetFile = args[i+1];
                     WordnetLmfSaxParser parser = new WordnetLmfSaxParser();
+                    if (!posFilter.isEmpty()) {
+                        System.out.println("posFilter = " + posFilter);
+                        parser.setPos(posFilter);
+                    }
                     parser.parseFile(pathToWordnetFile);
                     wordnetData = parser.wordnetData;
+                    System.out.println("wordnetData.getHyperRelations().size() = " + wordnetData.getHyperRelations().size());
+                    System.out.println("wordnetData.entryToSynsets.size() = " + wordnetData.entryToSynsets.size());
                 }
                 else if ((arg.equalsIgnoreCase("--gwg-file")) && args.length>i) {
                     pathToWordnetFile = args[i+1];
@@ -39,7 +53,7 @@ public class GetAverageDepth {
                     wordnetData = parser.wordnetData;
                 }
             }
-            int aDpeth = wordnetData.getAverageDepth();
+            int aDpeth = wordnetData.getAverageDepthByWord();
             System.out.println(aDpeth);
     }
 }

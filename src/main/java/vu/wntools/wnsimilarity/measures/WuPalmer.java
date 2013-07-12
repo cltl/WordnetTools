@@ -31,7 +31,7 @@ public class WuPalmer {
             i2 = hyp2.indexOf(s);
            // System.out.println("i2 = " + i2);
             if (i2>-1) {
-                distance = 1+i+i2;
+                distance = 1+i+i2; /// initial one for node counting, avoid zero values
                 match = s;
                 break;
             }

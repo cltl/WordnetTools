@@ -309,7 +309,7 @@ public class WordnetLmfSaxParser extends DefaultHandler {
         parser.setRelations(relations);
 
         parser.parseFile(pathToFile);
-        int depth = parser.wordnetData.getAverageDepth();
+        int depth = parser.wordnetData.getAverageDepthByWord();
         System.out.println("depth = " + depth);
         System.out.println("parser.wordnetData.entryToSynsets.size() = " + parser.wordnetData.entryToSynsets.size());
         System.out.println("parser.wordnetData.getHyperRelations().size() = " + parser.wordnetData.getHyperRelations().size());

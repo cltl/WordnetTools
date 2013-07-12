@@ -23,10 +23,11 @@ public class Resnik {
             int i2 = hyp2.indexOf(s);
             if (i2>-1) {
                 double freq = 0;
+                double p = -1;
                 if (hyperFrequencies.containsKey(s)) {
                     freq = (double) hyperFrequencies.get(s);
+                    p = freq/(double)nWords;
                 }
-                double p = freq/(double)nWords;
                 //distance = Math.log(p);
                 distance = p;
                 match = s;
