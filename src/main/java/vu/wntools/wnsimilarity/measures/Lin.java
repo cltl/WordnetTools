@@ -13,6 +13,9 @@ import java.util.HashMap;
 public class Lin {
 
     public static String match = "";
+    public static double valueIc1 = 0;
+    public static double valueIc2 = 0;
+    public static double valueIcLcs = 0;
 
 
     public static double GetDistance (HashMap<String, Long> hyperFrequencies, Long nWords, ArrayList<String> hyp1, ArrayList<String> hyp2) {
@@ -26,6 +29,7 @@ public class Lin {
             if (hyperFrequencies.containsKey(s)) {
                 ic1 = (double) hyperFrequencies.get(s);
                 ic1 = ic1/nWords;
+                valueIc1 = ic1;
                 break;
             }
         }
@@ -34,6 +38,7 @@ public class Lin {
             if (hyperFrequencies.containsKey(s)) {
                 ic2 = (double) hyperFrequencies.get(s);
                 ic2 = ic2/nWords;
+                valueIc2 = ic2;
                 break;
             }
         }
@@ -46,6 +51,7 @@ public class Lin {
                     freq = (double) hyperFrequencies.get(s);
                 }
                 icLcs = freq/nWords;
+                valueIcLcs = icLcs;
                 match = s;
                 break;
             }

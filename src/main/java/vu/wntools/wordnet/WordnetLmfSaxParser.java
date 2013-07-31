@@ -197,6 +197,53 @@ public class WordnetLmfSaxParser extends DefaultHandler {
             }
 
         }
+        else if (qName.equalsIgnoreCase("SynsetRelation")) {
+            type = "";
+            targetId = "";
+            for (int i = 0; i < attributes.getLength(); i++) {
+                if (attributes.getQName(i).equalsIgnoreCase("target")) {
+                    targetId = attributes.getValue(i).trim();
+                }
+                else if (attributes.getQName(i).equalsIgnoreCase("relType")) {
+                    type = attributes.getValue(i).trim();
+                }
+
+            }
+
+            if (relations.size()==0) {
+                if (type.equalsIgnoreCase("hypernym")) {
+                    if (!targetId.isEmpty()) hypers.add(targetId);
+                }
+                else if (type.equalsIgnoreCase("has_hypernym")) {
+                    if (!targetId.isEmpty()) hypers.add(targetId);
+                }
+                else if (type.equalsIgnoreCase("has_hyperonym")) {
+                    if (!targetId.isEmpty()) hypers.add(targetId);
+                }
+                else if (type.equalsIgnoreCase("near_synonym")) {
+                    if (!targetId.isEmpty()) hypers.add(targetId);
+                }
+                else if (type.equalsIgnoreCase("eng_derivative")) {
+                    if (!targetId.isEmpty()) others.add(targetId);
+                }
+                else if (type.equalsIgnoreCase("xpos_near_synonym")) {
+                    if (!targetId.isEmpty()) others.add(targetId);
+                }
+                else if (type.equalsIgnoreCase("xpos_near_hyperonym")) {
+                    if (!targetId.isEmpty()) others.add(targetId);
+                }
+                else if (type.equalsIgnoreCase("xpos_near_hypernym")) {
+                    if (!targetId.isEmpty()) others.add(targetId);
+                }
+            }
+            else if (relations.contains(type)) {
+                if (!targetId.isEmpty()) hypers.add(targetId);
+            }
+            else {
+                if (!targetId.isEmpty()) others.add(targetId);
+            }
+
+        }
         else {
         }
         value = "";

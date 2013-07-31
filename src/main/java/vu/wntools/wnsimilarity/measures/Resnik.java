@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class Resnik {
 
     public static String match = "";
-
+    public static double value = 0;
 
     public static double GetDistance(HashMap<String, Long> hyperFrequencies, Long nWords, ArrayList<String> hyp1, ArrayList<String> hyp2) {
         double distance = -1;
@@ -27,6 +27,7 @@ public class Resnik {
                 if (hyperFrequencies.containsKey(s)) {
                     freq = (double) hyperFrequencies.get(s);
                     p = freq/(double)nWords;
+                    value = p;
                 }
                 //distance = Math.log(p);
                 distance = p;

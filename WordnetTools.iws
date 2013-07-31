@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2f7d334f-39d1-479f-b2c3-380c841d0151" name="Default" comment="" />
+    <list default="true" id="2f7d334f-39d1-479f-b2c3-380c841d0151" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/corpus/ConvertIcSemCor.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/WordEquivalences.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/WordSim.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.TXT" afterPath="$PROJECT_DIR$/README.TXT" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WordnetTools.ipr" afterPath="$PROJECT_DIR$/WordnetTools.ipr" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WordnetTools.iws" afterPath="$PROJECT_DIR$/WordnetTools.iws" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/WordnetSimilarityApi.java" afterPath="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/WordnetSimilarityApi.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/Similarity.java" afterPath="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/Similarity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/JiangConrath.java" afterPath="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/JiangConrath.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/Lin.java" afterPath="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/Lin.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/Resnik.java" afterPath="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/Resnik.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/SimilarityPair.java" afterPath="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/SimilarityPair.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/WordnetData.java" afterPath="$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/WordnetData.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/WordnetLmfSaxParser.java" afterPath="$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/WordnetLmfSaxParser.java" />
+    </list>
     <ignored path="WordnetTools.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -58,10 +73,63 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="WordnetSimilarityApi.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/WordnetSimilarityApi.java">
+      <file leaf-file-name="WordnetData.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/WordnetData.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="93" column="90" selection-start="4348" selection-end="4348" vertical-scroll-proportion="0.0">
+            <state line="37" column="26" selection-start="1472" selection-end="1472" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="e#483#510#0" expanded="true" />
+                <element signature="e#803#830#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Similarity.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/Similarity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="178" column="54" selection-start="7931" selection-end="8331" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="e#10591#10607#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WordEquivalences.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/WordEquivalences.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="60" column="54" selection-start="2190" selection-end="2190" vertical-scroll-proportion="0.6499102">
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#1427#1435#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SubsumersFrequencies.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/corpus/SubsumersFrequencies.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="28" column="61" selection-start="699" selection-end="699" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ConvertIcSemCor.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/corpus/ConvertIcSemCor.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="32" column="74" selection-start="247" selection-end="1161" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WordnetLmfSaxParser.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/WordnetLmfSaxParser.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="199" column="55" selection-start="7846" selection-end="7860" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -70,7 +138,16 @@
       <file leaf-file-name="Resnik.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/Resnik.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="25" selection-start="338" selection-end="338" vertical-scroll-proportion="0.0">
+            <state line="29" column="29" selection-start="939" selection-end="939" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="JiangConrath.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/JiangConrath.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="56" column="35" selection-start="1940" selection-end="1940" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -79,45 +156,16 @@
       <file leaf-file-name="WuPalmer.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/WuPalmer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="31" column="13" selection-start="877" selection-end="877" vertical-scroll-proportion="0.0">
+            <state line="52" column="56" selection-start="1514" selection-end="1514" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Similarity.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/Similarity.java">
+      <file leaf-file-name="Lin.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/Lin.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="222" column="22" selection-start="11087" selection-end="11087" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#22389#22397#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BestCommonSubsumerHierarchy.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/BestCommonSubsumerHierarchy.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="593" column="32" selection-start="28466" selection-end="28466" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PropagateLabels.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/PropagateLabels.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="95" column="10" selection-start="4307" selection-end="4307" vertical-scroll-proportion="0.5479452">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MostCommonSubsumerHierarchy.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/MostCommonSubsumerHierarchy.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="618" column="0" selection-start="29823" selection-end="30078" vertical-scroll-proportion="0.0">
+            <state line="17" column="42" selection-start="307" selection-end="426" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -130,25 +178,28 @@
       <setting name="OPEN_NEW_TAB" value="false" />
     </FindUsagesManager>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/corpus/WordData.java" />
-        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/SynsetNode.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/TagKafFilesWithSynsets.java" />
-        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/corpus/CumulateCorpusFrequency.java" />
-        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/WordnetData.java" />
-        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/SimilarityPair.java" />
+        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/GetAverageDepth.java" />
+        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/PwnSaxParser.java" />
+        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/CdbSynSaxParser.java" />
         <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/WuPalmer.java" />
-        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/JiangConrath.java" />
-        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/Resnik.java" />
+        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/WordSim.java" />
+        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/LeacockChodorow.java" />
+        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/SimilarityPair.java" />
         <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/WordnetSimilarityApi.java" />
+        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/Lin.java" />
+        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/Resnik.java" />
+        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/JiangConrath.java" />
         <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/Similarity.java" />
-        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/MostCommonSubsumerHierarchy.java" />
-        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/BestCommonSubsumerHierarchy.java" />
-        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/ProjectTypes.java" />
-        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/PropagateLabels.java" />
+        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/WordnetData.java" />
+        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/WordnetLmfSaxParser.java" />
+        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/corpus/ConvertIcSemCor.java" />
+        <option value="$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/WordEquivalences.java" />
       </list>
     </option>
   </component>
@@ -197,12 +248,12 @@
     <option name="runMavenInBackground" value="false" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-360" />
-    <option name="y" value="76" />
-    <option name="width" value="1403" />
-    <option name="height" value="878" />
+    <option name="x" value="10" />
+    <option name="y" value="23" />
+    <option name="width" value="1241" />
+    <option name="height" value="1002" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
     <OptionsSetting value="true" id="Checkout" />
@@ -234,6 +285,20 @@
             <PATH_ELEMENT USER_OBJECT="Root">
               <option name="myItemId" value="" />
               <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WordnetTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WordnetTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -442,6 +507,40 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="wnsimilarity" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="corpus" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WordnetTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WordnetTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wntools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="util" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -504,20 +603,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WordnetTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WordnetTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -526,7 +611,7 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="recentsLimit" value="5" />
-    <property name="options.lastSelected" value="reference.settings.project.maven.runner" />
+    <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="MemberChooser.copyJavadoc" value="false" />
@@ -546,7 +631,7 @@
       <recent name="vu" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.PropagateLabels">
+  <component name="RunManager" selected="Application.ConvertIcSemCor">
     <configuration default="false" name="WordnetDomainVersioning" type="Application" factoryName="Application" temporary="true">
       <extension name="coverage" enabled="false" merge="false" />
       <option name="MAIN_CLASS_NAME" value="vu.wntools.domains.WordnetDomainVersioning" />
@@ -555,6 +640,23 @@
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="WordnetTools" />
+      <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="ConvertIcSemCor" type="Application" factoryName="Application" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" />
+      <option name="MAIN_CLASS_NAME" value="vu.wntools.wnsimilarity.corpus.ConvertIcSemCor" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <option name="ENABLE_SWING_INSPECTOR" value="false" />
       <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
@@ -738,7 +840,7 @@
       <extension name="coverage" enabled="false" merge="false" />
       <option name="MAIN_CLASS_NAME" value="vu.wntools.wnsimilarity.main.Similarity" />
       <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="--lmf-file &quot;/Tools/wordnet-tools.0.1/resources/cornetto2.1.lmf.xml&quot; --input &quot;/Tools/wordnet-tools.0.1/input/official_mc_zonder_magier.input&quot;  --method all  --pairs words  --subsumers &quot;/Tools/wordnet-tools.0.1/resources/cornettosubsumers.cum&quot;  --pos n  --relations &quot;/Tools/wordnet-tools.0.1/resources/relations.txt&quot;  " />
+      <option name="PROGRAM_PARAMETERS" value="--lmf-file &quot;/Tools/wordnet-tools.0.1/resources/cornetto2.1.lmf.xml&quot; --input &quot;/Tools/wordnet-tools.0.1/input/sim-processing/official_mc_zonder_magier.input&quot; --method all --pairs words --subsumers &quot;/Tools/wordnet-tools.0.1/resources/cornettosubsumers.cum&quot; --pos n --relations &quot;/Tools/wordnet-tools.0.1/resources/relations.txt&quot;" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" value="" />
@@ -768,7 +870,7 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <list size="7">
+    <list size="8">
       <item index="0" class="java.lang.String" itemvalue="Application.WordnetDomainVersioning" />
       <item index="1" class="java.lang.String" itemvalue="Application.MostCommonSubsumerHierarchy" />
       <item index="2" class="java.lang.String" itemvalue="Application.PropagateLabels" />
@@ -776,6 +878,7 @@
       <item index="4" class="java.lang.String" itemvalue="Application.BestCommonSubsumerHierarchy (1)" />
       <item index="5" class="java.lang.String" itemvalue="Application.Similarity" />
       <item index="6" class="java.lang.String" itemvalue="Application.MostCommonSubsumerHierarchy-usage" />
+      <item index="7" class="java.lang.String" itemvalue="Application.ConvertIcSemCor" />
     </list>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
@@ -804,11 +907,24 @@
       <created>1360872943976</created>
       <updated>1360872943976</updated>
     </task>
+    <task id="LOCAL-00001" summary="- readme draft">
+      <created>1373444585699</created>
+      <updated>1373444585699</updated>
+    </task>
+    <task id="LOCAL-00002" summary="- readme draft">
+      <created>1373624181580</created>
+      <updated>1373624181580</updated>
+    </task>
+    <task id="LOCAL-00003" summary="- readme draft">
+      <created>1373624202573</created>
+      <updated>1373624202573</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-360" y="76" width="1403" height="878" extended-state="6" />
-    <editor active="true" />
+    <frame x="10" y="23" width="1241" height="1002" extended-state="6" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -818,19 +934,19 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="14" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32841328" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14338575" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14212549" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22435424" sideWeight="0.6683739" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.012573345" sideWeight="0.7082873" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24059041" sideWeight="0.6683739" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33162612" sideWeight="0.99722683" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3361274" sideWeight="0.7082873" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2917127" sideWeight="0.99722683" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="SVN Repositories" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20465116" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven-2 Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27384326" sideWeight="0.99929875" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27272728" sideWeight="0.9884275" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="EJB" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="JSON Formatter" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
@@ -875,7 +991,7 @@
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <option name="LAST_COMMIT_MESSAGE" value="- readme draft" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -888,6 +1004,7 @@
     <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
+    <MESSAGE value="- readme draft" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -897,93 +1014,119 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/GetAverageDepth.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="0" selection-start="1143" selection-end="1143" vertical-scroll-proportion="0.45302013" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="94" selection-start="916" selection-end="916" vertical-scroll-proportion="0.3557875" />
+        <state line="6" column="25" selection-start="315" selection-end="327" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/TagKafFilesWithSynsets.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/WordSim.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="46" selection-start="1180" selection-end="1180" vertical-scroll-proportion="0.0" />
+        <state line="19" column="37" selection-start="437" selection-end="449" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/SynsetNode.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/LeacockChodorow.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="79" column="23" selection-start="1479" selection-end="1479" vertical-scroll-proportion="0.0" />
+        <state line="35" column="42" selection-start="1123" selection-end="1123" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="jar:///System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Classes/alt-rt.jar!/java/util/HashMap.class">
+    <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/corpus/WordData.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="227" column="0" selection-start="8416" selection-end="8416" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/corpus/CumulateCorpusFrequency.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="201" column="48" selection-start="9971" selection-end="9971" vertical-scroll-proportion="0.021520803" />
+        <state line="9" column="13" selection-start="194" selection-end="194" vertical-scroll-proportion="0.19396552">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/SimilarityPair.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="23" selection-start="422" selection-end="422" vertical-scroll-proportion="0.3456284" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/JiangConrath.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="17" selection-start="888" selection-end="888" vertical-scroll-proportion="-0.19298245" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/WordnetData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="347" column="19" selection-start="13113" selection-end="13113" vertical-scroll-proportion="0.51578945" />
+        <state line="4" column="0" selection-start="72" selection-end="72" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/WordnetSimilarityApi.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="93" column="90" selection-start="4348" selection-end="4348" vertical-scroll-proportion="0.0" />
+        <state line="388" column="55" selection-start="19972" selection-end="19980" vertical-scroll-proportion="-23.115385">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/Resnik.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="25" selection-start="338" selection-end="338" vertical-scroll-proportion="0.0" />
+        <state line="29" column="29" selection-start="939" selection-end="939" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/Lin.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="42" selection-start="307" selection-end="426" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/JiangConrath.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="56" column="35" selection-start="1940" selection-end="1940" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/measures/WuPalmer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="13" selection-start="877" selection-end="877" vertical-scroll-proportion="0.0" />
+        <state line="52" column="56" selection-start="1514" selection-end="1514" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/Similarity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="222" column="22" selection-start="11087" selection-end="11087" vertical-scroll-proportion="0.0">
+        <state line="178" column="54" selection-start="7931" selection-end="8331" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="e#22389#22397#0" expanded="true" />
+            <element signature="e#10591#10607#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/BestCommonSubsumerHierarchy.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/WordnetData.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="593" column="32" selection-start="28466" selection-end="28466" vertical-scroll-proportion="0.0">
+        <state line="37" column="26" selection-start="1472" selection-end="1472" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#483#510#0" expanded="true" />
+            <element signature="e#803#830#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/WordnetLmfSaxParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="199" column="55" selection-start="7846" selection-end="7860" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/MostCommonSubsumerHierarchy.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/corpus/SubsumersFrequencies.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="618" column="0" selection-start="29823" selection-end="30078" vertical-scroll-proportion="0.0">
+        <state line="28" column="61" selection-start="699" selection-end="699" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/PropagateLabels.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/corpus/ConvertIcSemCor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="95" column="10" selection-start="4307" selection-end="4307" vertical-scroll-proportion="0.5479452">
+        <state line="32" column="74" selection-start="247" selection-end="1161" vertical-scroll-proportion="0.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wnsimilarity/main/WordEquivalences.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="60" column="54" selection-start="2190" selection-end="2190" vertical-scroll-proportion="0.6499102">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1427#1435#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

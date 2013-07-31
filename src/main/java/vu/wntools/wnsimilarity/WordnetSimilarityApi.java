@@ -96,6 +96,8 @@ public class WordnetSimilarityApi {
                             //System.out.println("similarityPair = " + similarityPair.getScore());
                             if (score>similarityPair.getScore()) {
                                 similarityPair.setScore(score);
+                                similarityPair.setSourceTree(hyperSource);
+                                similarityPair.setTargetTree(hyperTarget);
                             }
                         }
                     }
@@ -135,6 +137,8 @@ public class WordnetSimilarityApi {
                 double score = vu.wntools.wnsimilarity.measures.Resnik.GetDistance(subsumersFrequencies.data, subsumersFrequencies.nWords, hyperSource, hyperTarget);
                 if (score>similarityPair.getScore()) {
                     similarityPair.setScore(score);
+                    similarityPair.setSourceTree(hyperSource);
+                    similarityPair.setTargetTree(hyperTarget);
                 }
             }
         }
@@ -190,6 +194,8 @@ public class WordnetSimilarityApi {
                             double score = JiangConrath.GetDistance(subsumersFrequencies.data, subsumersFrequencies.nWords, hyperSource, hyperTarget);
                             if (score>similarityPair.getScore()) {
                                 similarityPair.setScore(score);
+                                similarityPair.setSourceTree(hyperSource);
+                                similarityPair.setTargetTree(hyperTarget);
                             }
                         }
                     }
@@ -228,6 +234,8 @@ public class WordnetSimilarityApi {
                 double score = JiangConrath.GetDistance(subsumersFrequencies.data, subsumersFrequencies.nWords, hyperSource, hyperTarget);
                 if (score>similarityPair.getScore()) {
                     similarityPair.setScore(score);
+                    similarityPair.setSourceTree(hyperSource);
+                    similarityPair.setTargetTree(hyperTarget);
                 }
             }
         }
@@ -282,6 +290,8 @@ public class WordnetSimilarityApi {
                             double score = Lin.GetDistance(subsumersFrequencies.data, subsumersFrequencies.nWords, hyperSource, hyperTarget);
                             if (score>similarityPair.getScore()) {
                                 similarityPair.setScore(score);
+                                similarityPair.setSourceTree(hyperSource);
+                                similarityPair.setTargetTree(hyperTarget);
                             }
                         }
                     }
@@ -321,6 +331,8 @@ public class WordnetSimilarityApi {
                 double score = Lin.GetDistance(subsumersFrequencies.data, subsumersFrequencies.nWords, hyperSource, hyperTarget);
                 if (score>similarityPair.getScore()) {
                     similarityPair.setScore(score);
+                    similarityPair.setSourceTree(hyperSource);
+                    similarityPair.setTargetTree(hyperTarget);
                 }
             }
         }
@@ -375,6 +387,8 @@ public class WordnetSimilarityApi {
                             double score = LeacockChodorow.GetDistance(averageDepth, hyperSource, hyperTarget);
                             if (score>similarityPair.getScore()) {
                                 similarityPair.setScore(score);
+                                similarityPair.setSourceTree(hyperSource);
+                                similarityPair.setTargetTree(hyperTarget);
                             }
                         }
                     }
@@ -438,6 +452,8 @@ public class WordnetSimilarityApi {
                            // System.out.println("similarityPair = " + similarityPair.getScore());
                             if (score>similarityPair.getScore()) {
                                 similarityPair.setScore(score);
+                                similarityPair.setSourceTree(hyperSource);
+                                similarityPair.setTargetTree(hyperTarget);
                             }
                         }
                     }
@@ -477,6 +493,8 @@ public class WordnetSimilarityApi {
                 double score = vu.wntools.wnsimilarity.measures.LeacockChodorow.GetDistance(averageDepth, hyperSource, hyperTarget);
                 if (score>similarityPair.getScore()) {
                     similarityPair.setScore(score);
+                    similarityPair.setSourceTree(hyperSource);
+                    similarityPair.setTargetTree(hyperTarget);
                 }
             }
         }
@@ -512,6 +530,8 @@ public class WordnetSimilarityApi {
                 double score = vu.wntools.wnsimilarity.measures.LeacockChodorow.GetDistance(D, hyperSource, hyperTarget);
                 if (score>similarityPair.getScore()) {
                     similarityPair.setScore(score);
+                    similarityPair.setSourceTree(hyperSource);
+                    similarityPair.setTargetTree(hyperTarget);
                 }
             }
         }
@@ -564,6 +584,8 @@ public class WordnetSimilarityApi {
                             double score = WuPalmer.GetDistance(hyperSource, hyperTarget);
                             if (score>similarityPair.getScore()) {
                                 similarityPair.setScore(score);
+                                similarityPair.setSourceTree(hyperSource);
+                                similarityPair.setTargetTree(hyperTarget);
                             }
                         }
                     }
@@ -603,6 +625,8 @@ public class WordnetSimilarityApi {
                 double score = WuPalmer.GetDistance(hyperSource, hyperTarget);
                 if (score>similarityPair.getScore()) {
                     similarityPair.setScore(score);
+                    similarityPair.setSourceTree(hyperSource);
+                    similarityPair.setTargetTree(hyperTarget);
                 }
             }
         }
@@ -654,6 +678,8 @@ public class WordnetSimilarityApi {
                             double score = BaseLines.GetPath(hyperSource, hyperTarget);
                             if (score>similarityPair.getScore()) {
                                 similarityPair.setScore(score);
+                                similarityPair.setSourceTree(hyperSource);
+                                similarityPair.setTargetTree(hyperTarget);
                             }
                         }
                     }
@@ -692,6 +718,8 @@ public class WordnetSimilarityApi {
                 double score = BaseLines.GetPath(hyperSource, hyperTarget);
                 if (score>similarityPair.getScore()) {
                     similarityPair.setScore(score);
+                    similarityPair.setSourceTree(hyperSource);
+                    similarityPair.setTargetTree(hyperTarget);
                 }
             }
         }

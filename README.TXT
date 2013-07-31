@@ -53,6 +53,16 @@ It takes a list of words with corpus frequencies and accumulates these frequenci
 it to the hypernyms of each meaning of the word. The output is a file with hypernym synset ids and their cumulated frequencies.
 This file is used by various semantic similarity measures (Resnik 1995).
 
+Main function:
+vu.wntools.wnsimilarity.corpus.CumulateCorpusFrequency
+Usage:
+--lmf-file		<path to the wordnet file in Wordnet-LMF file>
+--corpus-freq	<path to a file with frequencies from lemmas>
+--separator		<
+		cumulative-subsumers-frequency.sh
+
+java -Xmx812m -cp ../lib/WordnetTools-1.0-jar-with-dependencies.jar vu.wntools.wnsimilarity.corpus.CumulateCorpusFrequency --lmf-file "../resources/cornetto2.1.lmf.xml" --corpus-freq "../resources/cornettolemmafreq.txt" --separator "/" --lemma-field 0 --pos-field 1 --freq-field 2
+
 INPUT
 zijn/verb/10601235
 hebben/verb/4214494
@@ -78,7 +88,6 @@ nld-21-d_n-17459-n/2036
 nld-21-d_v-2668-v/3678
 nld-21-d_n-27578-n/104
 
-		cumulative-subsumers-frequency.sh
 
 2. Derive the average depth of the full hierarchy using the hypernym relations
 

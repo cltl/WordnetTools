@@ -19,6 +19,7 @@ public class WordnetData {
     private HashMap<String, ArrayList<String>> hyperRelations = new HashMap<String, ArrayList<String>>();
     private HashMap<String, ArrayList<String>> otherRelations = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> entryToSynsets = new HashMap<String, ArrayList<String>>();
+    public HashMap<String, ArrayList<String>> entryToEquiSynsets = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> synsetToEntries = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> childRelations = new HashMap<String, ArrayList<String>>();
     private int nAverageNounDepth = 0;
@@ -34,6 +35,7 @@ public class WordnetData {
         hyperRelations = new HashMap<String, ArrayList<String>>();
         otherRelations = new HashMap<String, ArrayList<String>>();
         entryToSynsets = new HashMap<String, ArrayList<String>>();
+        entryToEquiSynsets = new HashMap<String, ArrayList<String>>();
         synsetToEntries = new HashMap<String, ArrayList<String>>();
         childRelations = new HashMap<String, ArrayList<String>>();
         nAverageNounDepth = 0;
@@ -406,6 +408,44 @@ public class WordnetData {
             }
     }
 
+
+    /**
+     * Cuts the tree after the first hypernym of the first synset
+     * @param word
+     * @param targetChain
+     */
+    public void getSingleHyperChainForWord (String word, ArrayList<String> targetChain) {
+        ArrayList<String> synsetIds = entryToSynsets.get(word);
+        if (synsetIds!=null && synsetIds.size()>0) {
+            String source = synsetIds.get(0);
+            if (hyperRelations.containsKey(source)) {
+                ArrayList<String> targets = hyperRelations.get(source);
+                // System.out.println("targets.toString() = " + targets.toString());
+                for (int i = 0; i < targets.size(); i++) {
+                    String target =  targets.get(i);
+                    if (!target.equals(source)) {
+                        if (!targetChain.contains(target)) {
+                            targetChain.add(target);
+                            //   System.out.println("source = " + source);
+                            //   System.out.println("target = " + target);
+                            getSingleHyperChain(target, targetChain);
+                        }
+                        else {
+                            ///circular
+                            break;
+                        }
+                    }
+                    else {
+                        /// circular
+                        break;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+
     public void getMultipleHyperChain (String source, ArrayList<ArrayList<String>> targetChain) {
         ArrayList<String> initChain = new ArrayList<String>();
         initChain.add(source);
@@ -514,6 +554,21 @@ public class WordnetData {
         }
     }
 
+    public String toHyperString (ArrayList<String> synsets) {
+        String str = "[";
+        for (int i = 0; i < synsets.size(); i++) {
+            String synset = synsets.get(i);
+            if (synsetToEntries.containsKey(synset)) {
+                ArrayList<String> entries = synsetToEntries.get(synset);
+                str += entries.get(0)+"->";
+            }
+            else {
+                str += synset+"->";
+            }
+        }
+        str +="]";
+        return str;
+    }
     //[bombard,     eng-30-01507914-v, eng-30-05045208-n, eng-30-10413429-n, eng-30-01508368-v, eng-30-00104539-n, eng-30-10709529-n, eng-30-01511706-v, eng-30-00045250-n, eng-30-00104249-n, eng-30-00809790-a, eng-30-00842550-a, eng-30-03563460-n, eng-30-04011827-n, eng-30-14691822-n, eng-30-01850315-v, eng-30-00279835-n, eng-30-00280586-n, eng-30-01523724-a, eng-30-01526062-a, eng-30-08478482-n, eng-30-10336234-n]
     //[bombardment, eng-30-00978413-n, eng-30-01131902-v, eng-30-00972621-n, eng-30-01118449-v, eng-30-01119169-v, eng-30-00955060-n, eng-30-01109863-v, eng-30-00407535-n, eng-30-00927373-a, eng-30-01515280-a, eng-30-00030358-n, eng-30-01643657-v, eng-30-01649999-v, eng-30-02367363-v, eng-30-00029378-n, eng-30-00023100-n, eng-30-00002137-n, eng-30-00692329-v, eng-30-00001740-n]
 
