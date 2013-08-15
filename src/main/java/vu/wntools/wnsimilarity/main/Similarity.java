@@ -213,10 +213,12 @@ public class Similarity {
                        // System.out.println("source = " + source);
                        // System.out.println("target = " + target);
                         String logString = "";
+                        String logString2 = "";
+                        String match = "";
                         if (pairs.equalsIgnoreCase("words")) {
                             if (!method.equals("all")) {
-                                String match = "";
                                 ArrayList<SimilarityPair> similarityPairArrayList = new ArrayList<SimilarityPair>();
+                                SimilarityPair topPair = new SimilarityPair();
                                 if (method.equalsIgnoreCase("leacock-chodorow")) {
                                     LeacockChodorow.match = "";
                                     if (averageDepth>0) {
@@ -225,24 +227,29 @@ public class Similarity {
                                     else {
                                         similarityPairArrayList = WordnetSimilarityApi.wordLeacockChodorowSimilarity(wordnetData, source, target);
                                     }
+                                    topPair = WordnetSimilarityApi.getTopScoringSimilarityPair(similarityPairArrayList);
                                     match = vu.wntools.wnsimilarity.measures.LeacockChodorow.match;
+
                                 }
                                 else if (method.equalsIgnoreCase("path")) {
                                     BaseLines.match = "";
                                     similarityPairArrayList = WordnetSimilarityApi.wordPathSimilarity(wordnetData, source, target);
+                                    topPair = WordnetSimilarityApi.getTopScoringSimilarityPair(similarityPairArrayList);
                                     match = BaseLines.match;
                                 }
                                 else if (method.equalsIgnoreCase("wu-palmer")) {
                                     WuPalmer.match = "";
                                     similarityPairArrayList = WordnetSimilarityApi.wordWuPalmerSimilarity(wordnetData, source, target);
+                                    topPair = WordnetSimilarityApi.getTopScoringSimilarityPair(similarityPairArrayList);
                                     match = WuPalmer.match;
                                 }
                                 else if (method.equalsIgnoreCase("resnik")) {
                                     Resnik.match = "";
                                     Resnik.value = 0;
                                     similarityPairArrayList = WordnetSimilarityApi.wordResnikSimilarity(wordnetData, subsumersFrequencies, source, target);
+                                    topPair = WordnetSimilarityApi.getTopScoringSimilarityPair(similarityPairArrayList);
                                     match = Resnik.match;
-                                    logString += "Resnik value = "+Resnik.value+"\n";
+                                    logString2 = "Resnik value = "+Resnik.value+"\n";
                                 }
                                 else if (method.equalsIgnoreCase("lin")) {
                                     vu.wntools.wnsimilarity.measures.Lin.match = "";
@@ -250,10 +257,11 @@ public class Similarity {
                                     Lin.valueIc2 = 0;
                                     Lin.valueIcLcs = 0;
                                     similarityPairArrayList = WordnetSimilarityApi.wordLinSimilarity(wordnetData, subsumersFrequencies, source, target);
+                                    topPair = WordnetSimilarityApi.getTopScoringSimilarityPair(similarityPairArrayList);
                                     match = Lin.match;
-                                    logString += "Lin value Ic1 = "+Lin.valueIc1+"\n";
-                                    logString += "Lin value Ic2 = "+Lin.valueIc2+"\n";
-                                    logString += "Lin value IcLcs = "+Lin.valueIcLcs+"\n";
+                                    logString2 = "Lin value Ic1 = "+Lin.valueIc1+"\n";
+                                    logString2 += "Lin value Ic2 = "+Lin.valueIc2+"\n";
+                                    logString2 += "Lin value IcLcs = "+Lin.valueIcLcs+"\n";
                                 }
                                 else if (method.equalsIgnoreCase("jiang-conrath")) {
                                     JiangConrath.match = "";
@@ -261,32 +269,46 @@ public class Similarity {
                                     JiangConrath.valueIc2 = 0;
                                     JiangConrath.valueIcLcs = 0;
                                     similarityPairArrayList = WordnetSimilarityApi.wordJiangConrathSimilarity(wordnetData, subsumersFrequencies, source, target);
+                                    topPair = WordnetSimilarityApi.getTopScoringSimilarityPair(similarityPairArrayList);
                                     match = JiangConrath.match;
-                                    logString += "JiangConrath value Ic1 = "+JiangConrath.valueIc1+"\n";
-                                    logString += "JiangConrath value Ic2 = "+JiangConrath.valueIc2+"\n";
-                                    logString += "JiangConrath value IcLcs = "+JiangConrath.valueIcLcs+"\n";
+                                    logString2 = "JiangConrath value Ic1 = "+JiangConrath.valueIc1+"\n";
+                                    logString2 += "JiangConrath value Ic2 = "+JiangConrath.valueIc2+"\n";
+                                    logString2 += "JiangConrath value IcLcs = "+JiangConrath.valueIcLcs+"\n";
                                 }
+                                logString = "Method = "+method+"\n";
+                                logString += "\tScore = "+topPair.getScore()+"\n";
+                                if (!logString2.isEmpty()) {
+                                    logString += logString2;
+                                }
+                                logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(match)+"\n";
+                                logString += source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
+                                logString += target+wordnetData.toHyperString(topPair.getTargetTree())+"\n";
                                 logString += "\n";
-                                SimilarityPair topPair = WordnetSimilarityApi.getTopScoringSimilarityPair(similarityPairArrayList);
+                                log.write(logString.getBytes());
+
                                 inputLine+=separator+topPair.getScore()+separator+match +"\n";
                                 //System.out.println("inputLine = " + inputLine);
                                 fos.write(inputLine.getBytes());
-                                log.write(inputLine.getBytes());
-                                str = source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
-                                str += target+wordnetData.toHyperString(topPair.getTargetTree())+"\n";
-                                log.write(str.getBytes());
-                                log.write(logString.getBytes());
                             }
                             else {
                                 SimilarityPair topPair = new SimilarityPair();
                                 ArrayList<SimilarityPair> similarityPairArrayList = new ArrayList<SimilarityPair>();
                                 LeacockChodorow.match = "";
 
+                                //// Path
                                 similarityPairArrayList = WordnetSimilarityApi.wordPathSimilarity(wordnetData, source, target);
                                 topPair = WordnetSimilarityApi.getTopScoringSimilarityPair(similarityPairArrayList);
                                 inputLine+=separator+topPair.getScore()+separator+BaseLines.match;
 
+                                logString = "Method = Path\n";
+                                logString += "\tScore = "+topPair.getScore()+"\n";
+                                logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(BaseLines.match)+"\n";
+                                logString += source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
+                                logString += target+wordnetData.toHyperString(topPair.getTargetTree())+"\n";
+                                log.write(logString.getBytes());
 
+
+                                /// L&C
                                 if (averageDepth>0) {
                                     similarityPairArrayList = WordnetSimilarityApi.wordLeacockChodorowSimilarity(wordnetData, averageDepth, source, target);
                                 }
@@ -296,18 +318,43 @@ public class Similarity {
                                 topPair = WordnetSimilarityApi.getTopScoringSimilarityPair(similarityPairArrayList);
                                 inputLine+=separator+topPair.getScore()+separator+LeacockChodorow.match;
 
+                                logString = "Method = LeacockChodorow\n";
+                                logString += "\tScore = "+topPair.getScore()+"\n";
+                                logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(LeacockChodorow.match)+"\n";
+                                logString += source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
+                                logString += target+wordnetData.toHyperString(topPair.getTargetTree())+"\n";
+                                log.write(logString.getBytes());
+
+                                //// W&P
                                 WuPalmer.match = "";
                                 similarityPairArrayList = WordnetSimilarityApi.wordWuPalmerSimilarity(wordnetData, source, target);
                                 topPair = WordnetSimilarityApi.getTopScoringSimilarityPair(similarityPairArrayList);
                                 inputLine+=separator+topPair.getScore()+separator+WuPalmer.match;
 
+
+                                logString = "Method = WuPalmer\n";
+                                logString += "\tScore = "+topPair.getScore()+"\n";
+                                logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(WuPalmer.match)+"\n";
+                                logString += source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
+                                logString += target+wordnetData.toHyperString(topPair.getTargetTree())+"\n";
+                                log.write(logString.getBytes());
+
+                                /// Resnik
                                 Resnik.match = "";
                                 Resnik.value = 0;
                                 similarityPairArrayList = WordnetSimilarityApi.wordResnikSimilarity(wordnetData, subsumersFrequencies, source, target);
                                 topPair = WordnetSimilarityApi.getTopScoringSimilarityPair(similarityPairArrayList);
                                 inputLine+=separator+topPair.getScore()+separator+Resnik.match;
-                                logString += "Resnik value = "+Resnik.value+"\n";
 
+                                logString = "Method = Resnik\n";
+                                logString += "\tScore = "+topPair.getScore()+"\n";
+                                logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(Resnik.match)+"\n";
+                                logString += "\tIcLcs = "+Resnik.value+"\n";
+                                logString += source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
+                                logString += target+wordnetData.toHyperString(topPair.getTargetTree())+"\n";
+                                log.write(logString.getBytes());
+
+                                /// Lin
                                 vu.wntools.wnsimilarity.measures.Lin.match = "";
                                 Lin.valueIc1 = 0;
                                 Lin.valueIc2 = 0;
@@ -315,34 +362,40 @@ public class Similarity {
                                 similarityPairArrayList = WordnetSimilarityApi.wordLinSimilarity(wordnetData, subsumersFrequencies, source, target);
                                 topPair = WordnetSimilarityApi.getTopScoringSimilarityPair(similarityPairArrayList);
                                 inputLine+=separator+topPair.getScore()+separator+Lin.match;
-                                logString += "Lin value Ic1 = "+Lin.valueIc1+"\n";
-                                logString += "Lin value Ic2 = "+Lin.valueIc2+"\n";
-                                logString += "Lin value IcLcs = "+Lin.valueIcLcs+"\n";
+
+                                logString = "Method = Lin\n";
+                                logString += "\tScore = "+topPair.getScore()+"\n";
+                                logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(Lin.match)+"\n";
+                                logString += "Ic1 = "+Lin.valueIc1+"\n";
+                                logString += "Ic2 = "+Lin.valueIc2+"\n";
+                                logString += "IcLcs = "+Lin.valueIcLcs+"\n";
+                                logString += source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
+                                logString += target+wordnetData.toHyperString(topPair.getTargetTree())+"\n";
+                                log.write(logString.getBytes());
 
 
-                                JiangConrath.match = "";
-
+                                // J&C
                                 JiangConrath.match = "";
                                 JiangConrath.valueIc1 = 0;
                                 JiangConrath.valueIc2 = 0;
                                 JiangConrath.valueIcLcs = 0;
 
                                 similarityPairArrayList = WordnetSimilarityApi.wordJiangConrathSimilarity(wordnetData, subsumersFrequencies, source, target);
-
-                                logString += "JiangConrath value Ic1 = "+JiangConrath.valueIc1+"\n";
-                                logString += "JiangConrath value Ic2 = "+JiangConrath.valueIc2+"\n";
-                                logString += "JiangConrath value IcLcs = "+JiangConrath.valueIcLcs+"\n";
-                                logString += "\n";
-
                                 topPair = WordnetSimilarityApi.getTopScoringSimilarityPair(similarityPairArrayList);
                                 inputLine+=separator+topPair.getScore()+separator+JiangConrath.match;
+
+                                logString = "Method = JiangConrath\n";
+                                logString += "\tScore = "+topPair.getScore()+"\n";
+                                logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(JiangConrath.match)+"\n";
+                                logString += "Ic1 = "+Lin.valueIc1+"\n";
+                                logString += "Ic2 = "+Lin.valueIc2+"\n";
+                                logString += "IcLcs = "+Lin.valueIcLcs+"\n";
+                                logString += source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
+                                logString += target+wordnetData.toHyperString(topPair.getTargetTree())+"\n\n";
+                                log.write(logString.getBytes());
+
                                 inputLine+= "\n";
                                 fos.write(inputLine.getBytes());
-                                log.write(inputLine.getBytes());
-                                str = source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
-                                str += target+wordnetData.toHyperString(topPair.getTargetTree())+"\n";
-                                log.write(str.getBytes());
-                                log.write(logString.getBytes());
                             }
                         }
                         else if ((pairs.equalsIgnoreCase("synsets")) ||
@@ -362,7 +415,6 @@ public class Similarity {
                                 }
                             }
                             if (!method.equals("all")) {
-                                String match = "";
                                 SimilarityPair similarityPair = new SimilarityPair();
                                 if (method.equalsIgnoreCase("leacock-chodorow")) {
                                     vu.wntools.wnsimilarity.measures.LeacockChodorow.match = "";
@@ -389,7 +441,7 @@ public class Similarity {
                                     Resnik.value = 0;
                                     similarityPair = WordnetSimilarityApi.synsetResnikSimilarity(wordnetData, subsumersFrequencies, source, target);
                                     match = Resnik.match;
-                                    logString += "Resnik value = "+Resnik.value+"\n";
+                                    logString2 = "Resnik icLcs = "+Resnik.value+"\n";
                                 }
                                 else if (method.equalsIgnoreCase("lin")) {
                                     Lin.match = "";
@@ -398,9 +450,9 @@ public class Similarity {
                                     Lin.valueIcLcs = 0;
                                     similarityPair = WordnetSimilarityApi.synsetLinSimilarity(wordnetData, subsumersFrequencies, source, target);
                                     match = Lin.match;
-                                    logString += "Lin value Ic1 = "+Lin.valueIc1+"\n";
-                                    logString += "Lin value Ic2 = "+Lin.valueIc2+"\n";
-                                    logString += "Lin value IcLcs = "+Lin.valueIcLcs+"\n";
+                                    logString2 = "Lin value Ic1 = "+Lin.valueIc1+"\n";
+                                    logString2 += "Lin value Ic2 = "+Lin.valueIc2+"\n";
+                                    logString2 += "Lin value IcLcs = "+Lin.valueIcLcs+"\n";
                                 }
                                 else if (method.equalsIgnoreCase("jiang-conrath")) {
                                     JiangConrath.match = "";
@@ -409,28 +461,41 @@ public class Similarity {
                                     JiangConrath.valueIcLcs = 0;
                                     similarityPair = WordnetSimilarityApi.synsetJiangConrathSimilarity(wordnetData, subsumersFrequencies, source, target);
                                     match = JiangConrath.match;
-                                    logString += "JiangConrath value Ic1 = "+JiangConrath.valueIc1+"\n";
-                                    logString += "JiangConrath value Ic2 = "+JiangConrath.valueIc2+"\n";
-                                    logString += "JiangConrath value IcLcs = "+JiangConrath.valueIcLcs+"\n";
+                                    logString2 = "JiangConrath value Ic1 = "+JiangConrath.valueIc1+"\n";
+                                    logString2 += "JiangConrath value Ic2 = "+JiangConrath.valueIc2+"\n";
+                                    logString2 += "JiangConrath value IcLcs = "+JiangConrath.valueIcLcs+"\n";
                                 }
+
+                                logString = "Method = "+method+"\n";
+                                logString += "\tScore = "+similarityPair.getScore()+"\n";
+                                if (!logString2.isEmpty()) {
+                                    logString += logString2;
+                                }
+                                logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(match)+"\n";
+                                logString += word1+"#"+source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
+                                logString += word2+"#"+target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
                                 logString += "\n";
+                                log.write(logString.getBytes());
 
                                 inputLine+=separator+similarityPair.getScore()+separator+match +"\n";
                                 fos.write(inputLine.getBytes());
-                                log.write(inputLine.getBytes());
-                                str = word1+"#"+source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
-                                str += word2+"#"+target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
-                                log.write(str.getBytes());
-                                log.write(logString.getBytes());
                             }
                             else {
                                 SimilarityPair similarityPair = new SimilarityPair();
 
+                                /// Path
                                 BaseLines.match = "";
                                 similarityPair = WordnetSimilarityApi.synsetPathSimilarity(wordnetData, source, target);
                                 inputLine+=separator+similarityPair.getScore()+separator+BaseLines.match;
 
+                                logString = "Method = Path\n";
+                                logString += "\tScore = "+similarityPair.getScore()+"\n";
+                                logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(BaseLines.match)+"\n";
+                                logString += source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
+                                logString += target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
+                                log.write(logString.getBytes());
 
+                                /// L&C
                                 LeacockChodorow.match = "";
                                 if (averageDepth>0) {
                                     similarityPair = WordnetSimilarityApi.synsetLeacockChodorowSimilarity(wordnetData, averageDepth, source, target);
@@ -440,44 +505,80 @@ public class Similarity {
                                 }
                                 inputLine+=separator+similarityPair.getScore()+separator+LeacockChodorow.match;
 
+                                logString = "Method = LeacockChodorow\n";
+                                logString += "\tScore = "+similarityPair.getScore()+"\n";
+                                logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(LeacockChodorow.match)+"\n";
+                                logString += source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
+                                logString += target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
+                                log.write(logString.getBytes());
+
+                                //// WuPalmer
                                 WuPalmer.match = "";
                                 similarityPair = WordnetSimilarityApi.synsetWuPalmerSimilarity(wordnetData, source, target);
                                 inputLine+=separator+similarityPair.getScore()+separator+WuPalmer.match;
 
+                                logString = "Method = WuPalmer\n";
+                                logString += "\tScore = "+similarityPair.getScore()+"\n";
+                                logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(WuPalmer.match)+"\n";
+                                logString += source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
+                                logString += target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
+                                log.write(logString.getBytes());
+
+
+                                //// Resnik
                                 vu.wntools.wnsimilarity.measures.Resnik.match = "";
                                 Resnik.value = 0;
                                 similarityPair = WordnetSimilarityApi.synsetResnikSimilarity(wordnetData, subsumersFrequencies, source, target);
                                 inputLine+=separator+similarityPair.getScore()+separator+Resnik.match;
-                                logString += "Resnik value = "+Resnik.value+"\n";
 
+                                logString = "Method = Resnik\n";
+                                logString += "\tScore = "+similarityPair.getScore()+"\n";
+                                logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(Resnik.match)+"\n";
+                                logString += "IcLcs = "+Resnik.value+"\n";
+                                logString += source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
+                                logString += target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
+                                log.write(logString.getBytes());
+
+                                /// Lin
                                 Lin.match = "";
                                 Lin.valueIc1 = 0;
                                 Lin.valueIc2 = 0;
                                 Lin.valueIcLcs = 0;
                                 similarityPair = WordnetSimilarityApi.synsetLinSimilarity(wordnetData, subsumersFrequencies, source, target);
                                 inputLine+=separator+similarityPair.getScore()+separator+Lin.match;
-                                logString += "Lin value Ic1 = "+Lin.valueIc1+"\n";
-                                logString += "Lin value Ic2 = "+Lin.valueIc2+"\n";
-                                logString += "Lin value IcLcs = "+Lin.valueIcLcs+"\n";
 
+                                logString = "Method = Lin\n";
+                                logString += "\tScore = "+similarityPair.getScore()+"\n";
+                                logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(Lin.match)+"\n";
+                                logString += "Ic1 = "+Lin.valueIc1+"\n";
+                                logString += "Ic2 = "+Lin.valueIc2+"\n";
+                                logString += "IcLcs = "+Lin.valueIcLcs+"\n";
+                                logString += source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
+                                logString += target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
+                                log.write(logString.getBytes());
+
+                                /// J&C
                                 JiangConrath.match = "";
                                 JiangConrath.valueIc1 = 0;
                                 JiangConrath.valueIc2 = 0;
                                 JiangConrath.valueIcLcs = 0;
                                 similarityPair = WordnetSimilarityApi.synsetJiangConrathSimilarity(wordnetData, subsumersFrequencies, source, target);
                                 inputLine+=separator+similarityPair.getScore()+separator+JiangConrath.match;
-                                logString += "JiangConrath value Ic1 = "+JiangConrath.valueIc1+"\n";
-                                logString += "JiangConrath value Ic2 = "+JiangConrath.valueIc2+"\n";
-                                logString += "JiangConrath value IcLcs = "+JiangConrath.valueIcLcs+"\n";
+
+
+                                logString = "Method = JiangConrath\n";
+                                logString += "\tScore = "+similarityPair.getScore()+"\n";
+                                logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(JiangConrath.match)+"\n";
+                                logString += "Ic1 = "+JiangConrath.valueIc1+"\n";
+                                logString += "Ic2 = "+JiangConrath.valueIc2+"\n";
+                                logString += "IcLcs = "+JiangConrath.valueIcLcs+"\n";
+                                logString += source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
+                                logString += target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
                                 logString += "\n";
+                                log.write(logString.getBytes());
 
                                 inputLine+= "\n";
                                 fos.write(inputLine.getBytes());
-                                log.write(inputLine.getBytes());
-                                str = word1+"#"+source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
-                                str += word2+"#"+target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
-                                log.write(str.getBytes());
-                                log.write(logString.getBytes());
                             }
 
                         }

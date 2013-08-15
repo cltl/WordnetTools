@@ -22,12 +22,12 @@ public class WordEquivalences {
 
     static public void main (String[] args) {
         WordnetData wordnetData = new WordnetData();
-        String pathToLex = "";
-        String pathToInputFile = "";
-        if (args.length==0) {
+        String pathToLex = "/Tools/wordnet-tools.0.1/resources/cdb2.0-nldsynset_domain_graph_equi.lex";
+        String pathToInputFile = "/Tools/wordnet-tools.0.1/input/sim-processing/official_mc_zonder_magier.input";
+       /* if (args.length==0) {
             System.out.println(usage);
         }
-
+*/
         for (int i = 0; i < args.length; i++) {
             String arg = args[i];
             if ((arg.equalsIgnoreCase("--lex")) && args.length>i) {
@@ -45,19 +45,27 @@ public class WordEquivalences {
             ArrayList<String> words = new ArrayList<String>();
             while (in.ready()&&(inputLine = in.readLine()) != null) {
                   if (!inputLine.isEmpty()) {
-                      words.add(inputLine.trim());
+                      String [] fields = inputLine.split("\t");
+                      for (int i = 0; i < fields.length; i++) {
+                          String field = fields[i];
+                          if (!words.contains(field)) {
+                              words.add(field);
+                          }
+                      }
                   }
             }
 
-            FileOutputStream fos = new FileOutputStream(pathToLex+".equi");
+            FileOutputStream fos = new FileOutputStream(pathToInputFile+".equi");
             FileInputStream fislex = new FileInputStream(pathToLex);
             isr = new InputStreamReader(fislex);
             in = new BufferedReader(isr);
             while (in.ready()&&(inputLine = in.readLine()) != null) {
                 String [] fields = inputLine.split(" ");
                 if (fields.length>1) {
-                    String word = fields[0];
+                    String word = fields[0].trim();
+                   // System.out.println("word = " + word);
                     if (words.contains(word)) {
+                        inputLine+= "\n";
                         fos.write(inputLine.getBytes());
                     }
                 }

@@ -218,6 +218,18 @@ public class WordnetData {
         return synsetNode;
     }
 
+    public String getSynsetString (String synsetId) {
+        String synsetString = "";
+        if (synsetToEntries.containsKey(synsetId)) {
+            ArrayList<String> synonyms = synsetToEntries.get(synsetId);
+            for (int i = 0; i < synonyms.size(); i++) {
+                String s = synonyms.get(i);
+                synsetString += s+";";
+            }
+        }
+        return synsetString;
+    }
+
 
 
     public int getAverageDepthBySynset () {
@@ -552,6 +564,16 @@ public class WordnetData {
                 }
             }
         }
+    }
+
+    public String getFirstEntryForSynset (String synset) {
+        String word = synset;
+        if (synsetToEntries.containsKey(synset)) {
+            ArrayList<String> entries = synsetToEntries.get(synset);
+            word = entries.get(0);
+        }
+
+        return word;
     }
 
     public String toHyperString (ArrayList<String> synsets) {
