@@ -27,8 +27,8 @@ public class Lin {
         for (int i = 0; i < hyp1.size(); i++) {
             String s = hyp1.get(i);
             if (hyperFrequencies.containsKey(s)) {
-                ic1 = (double) hyperFrequencies.get(s);
-                ic1 = ic1/nWords;
+                double prob = (double) hyperFrequencies.get(s);
+                ic1 = -Math.log(prob/(double) nWords);
                 valueIc1 = ic1;
                 break;
             }
@@ -36,8 +36,8 @@ public class Lin {
         for (int i = 0; i < hyp2.size(); i++) {
             String s = hyp2.get(i);
             if (hyperFrequencies.containsKey(s)) {
-                ic2 = (double) hyperFrequencies.get(s);
-                ic2 = ic2/nWords;
+                double prob = (double) hyperFrequencies.get(s);
+                ic2 = -Math.log(prob/(double) nWords);
                 valueIc2 = ic2;
                 break;
             }
@@ -46,11 +46,11 @@ public class Lin {
             String s = hyp1.get(i);
             int i2 = hyp2.indexOf(s);
             if (i2>-1) {
-                double freq = 0;
+                double prob = 0;
                 if (hyperFrequencies.containsKey(s)) {
-                    freq = (double) hyperFrequencies.get(s);
+                    prob = (double) hyperFrequencies.get(s);
                 }
-                icLcs = freq/nWords;
+                icLcs = -Math.log(prob/(double) nWords);
                 valueIcLcs = icLcs;
                 match = s;
                 break;

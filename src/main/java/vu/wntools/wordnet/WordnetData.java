@@ -461,7 +461,7 @@ public class WordnetData {
     public void getMultipleHyperChain (String source, ArrayList<ArrayList<String>> targetChain) {
         ArrayList<String> initChain = new ArrayList<String>();
         initChain.add(source);
-        getHyperChains(source, targetChain, new ArrayList<String>());
+        getHyperChains(source, targetChain, initChain);
         if (DEBUG) System.out.println("FINAL RESULT:"+getMatrixPrint(targetChain));
     }
 
@@ -566,11 +566,24 @@ public class WordnetData {
         }
     }
 
-    public String getFirstEntryForSynset (String synset) {
+/*    public String getFirstEntryForSynset (String synset) {
         String word = synset;
         if (synsetToEntries.containsKey(synset)) {
             ArrayList<String> entries = synsetToEntries.get(synset);
             word = entries.get(0);
+        }
+
+        return word;
+    }*/
+
+  //  public String getSynonymsForSynset (String synset) {
+    public String getFirstEntryForSynset (String synset) {
+        String word = synset;
+        if (synsetToEntries.containsKey(synset)) {
+            ArrayList<String> entries = synsetToEntries.get(synset);
+            for (int i = 0; i < entries.size(); i++) {
+                word += ";"+ entries.get(i);
+            }
         }
 
         return word;
@@ -582,7 +595,10 @@ public class WordnetData {
             String synset = synsets.get(i);
             if (synsetToEntries.containsKey(synset)) {
                 ArrayList<String> entries = synsetToEntries.get(synset);
-                str += entries.get(0)+"->";
+                for (int j = 0; j < entries.size(); j++) {
+                    str += ";"+ entries.get(j);
+                }
+                str += "->";
             }
             else {
                 str += synset+"->";

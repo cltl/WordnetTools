@@ -32,9 +32,9 @@ public class Similarity {
             "   --input         <file with pairs to be compared on single lines separate with \"/\">\n"+
             "   --pairs         <indicate the type of input values: \"words\" or \"synsets\" or \"word-synsets\">\n" +
             "   --method        <leacock-chodorow, resnik, path, wu-palmer, jiang-conrath, lin or all>\n"+
-            "   --average-depth <optional: a fixed value for average depth can be given, >\n"+
+            "   --depth         <optional: a fixed value for average depth can be given, >\n"+
             "   --subsumers     <path to a file with subsumer frequencies, required for resnik, lin, jiang-conrath or all>\n"+
-            "   --separator     token for separating input and output fields, default is <TAB>\n";
+            "   --separator     <token for separating input and output fields, default is <TAB>>\n";
 
     /**
      *
@@ -54,7 +54,7 @@ public class Similarity {
         String pathToRelFile = "";
         String pathToSubsumerFrequencies = "";
         String posFilter = "";
-        int averageDepth = 0;
+        int depth = 0;
         String pairs = "";
         String method = "";
         if (args.length==0) {
@@ -93,9 +93,9 @@ public class Similarity {
             else if ((arg.equalsIgnoreCase("--pairs")) && args.length>i) {
                 pairs = args[i+1];
             }
-            else if ((arg.equalsIgnoreCase("--average-depth")) && args.length>i) {
+            else if ((arg.equalsIgnoreCase("--depth")) && args.length>i) {
                 try {
-                    averageDepth = Integer.parseInt(args[i+1]);
+                    depth = Integer.parseInt(args[i+1]);
                 } catch (NumberFormatException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
@@ -150,7 +150,7 @@ public class Similarity {
                 str += "subsumersFrequencies nr of words= " + subsumersFrequencies.nWords+"\n";
                 str += "posFilter = " + posFilter+"\n";
                 str += "pathToRelFile = " + pathToRelFile+"\n";
-                str += "averageDepth = " + averageDepth+"\n";
+                str += "depth = " + depth+"\n";
                 if (pathToRelFile.isEmpty()) {
                     relations = readRelationsFile(pathToInputFile);
                     str += "relationFile = "+pathToRelFile+"\n";
@@ -198,10 +198,10 @@ public class Similarity {
                     str = "word-synset-1\tword-synset-2\t";
                 }
                 if (!method.equals("all"))  {
-                    str += "Distance by "+method+"\tLCS\n";
+                    str += "Similar by "+method+"\tLCS\n";
                 }
                 else {
-                    str += "Distance by path\tLCS path\tDistance by L&C\tLCS L&C\tDistance by W&P\tLCS W&P\tDistance by R\tLCS R\tDistance by L\tLCS L\tDistance by J&C\tLCS J&C\n";
+                    str += "Similar by path\tLCS path\tSimilar by L&C\tLCS L&C\tSimilar by W&P\tLCS W&P\tSimilar by R\tLCS R\tSimilar by L\tLCS L\tSimilar by J&C\tLCS J&C\n";
                 }
                 fos.write(str.getBytes());
                 log.write(str.getBytes());
@@ -221,8 +221,8 @@ public class Similarity {
                                 SimilarityPair topPair = new SimilarityPair();
                                 if (method.equalsIgnoreCase("leacock-chodorow")) {
                                     LeacockChodorow.match = "";
-                                    if (averageDepth>0) {
-                                        similarityPairArrayList = WordnetSimilarityApi.wordLeacockChodorowSimilarity(wordnetData, averageDepth, source, target);
+                                    if (depth>0) {
+                                        similarityPairArrayList = WordnetSimilarityApi.wordLeacockChodorowSimilarity(wordnetData, depth, source, target);
                                     }
                                     else {
                                         similarityPairArrayList = WordnetSimilarityApi.wordLeacockChodorowSimilarity(wordnetData, source, target);
@@ -281,8 +281,8 @@ public class Similarity {
                                     logString += logString2;
                                 }
                                 logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(match)+"\n";
-                                logString += source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
-                                logString += target+wordnetData.toHyperString(topPair.getTargetTree())+"\n";
+                                logString += "\t"+source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
+                                logString += "\t"+target+wordnetData.toHyperString(topPair.getTargetTree())+"\n";
                                 logString += "\n";
                                 log.write(logString.getBytes());
 
@@ -303,14 +303,14 @@ public class Similarity {
                                 logString = "Method = Path\n";
                                 logString += "\tScore = "+topPair.getScore()+"\n";
                                 logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(BaseLines.match)+"\n";
-                                logString += source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
-                                logString += target+wordnetData.toHyperString(topPair.getTargetTree())+"\n";
+                                logString += "\t"+source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
+                                logString += "\t"+target+wordnetData.toHyperString(topPair.getTargetTree())+"\n";
                                 log.write(logString.getBytes());
 
 
                                 /// L&C
-                                if (averageDepth>0) {
-                                    similarityPairArrayList = WordnetSimilarityApi.wordLeacockChodorowSimilarity(wordnetData, averageDepth, source, target);
+                                if (depth>0) {
+                                    similarityPairArrayList = WordnetSimilarityApi.wordLeacockChodorowSimilarity(wordnetData, depth, source, target);
                                 }
                                 else {
                                     similarityPairArrayList = WordnetSimilarityApi.wordLeacockChodorowSimilarity(wordnetData, source, target);
@@ -321,8 +321,8 @@ public class Similarity {
                                 logString = "Method = LeacockChodorow\n";
                                 logString += "\tScore = "+topPair.getScore()+"\n";
                                 logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(LeacockChodorow.match)+"\n";
-                                logString += source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
-                                logString += target+wordnetData.toHyperString(topPair.getTargetTree())+"\n";
+                                logString += "\t"+source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
+                                logString += "\t"+target+wordnetData.toHyperString(topPair.getTargetTree())+"\n";
                                 log.write(logString.getBytes());
 
                                 //// W&P
@@ -330,13 +330,11 @@ public class Similarity {
                                 similarityPairArrayList = WordnetSimilarityApi.wordWuPalmerSimilarity(wordnetData, source, target);
                                 topPair = WordnetSimilarityApi.getTopScoringSimilarityPair(similarityPairArrayList);
                                 inputLine+=separator+topPair.getScore()+separator+WuPalmer.match;
-
-
                                 logString = "Method = WuPalmer\n";
                                 logString += "\tScore = "+topPair.getScore()+"\n";
                                 logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(WuPalmer.match)+"\n";
-                                logString += source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
-                                logString += target+wordnetData.toHyperString(topPair.getTargetTree())+"\n";
+                                logString += "\t"+source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
+                                logString += "\t"+target+wordnetData.toHyperString(topPair.getTargetTree())+"\n";
                                 log.write(logString.getBytes());
 
                                 /// Resnik
@@ -350,8 +348,8 @@ public class Similarity {
                                 logString += "\tScore = "+topPair.getScore()+"\n";
                                 logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(Resnik.match)+"\n";
                                 logString += "\tIcLcs = "+Resnik.value+"\n";
-                                logString += source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
-                                logString += target+wordnetData.toHyperString(topPair.getTargetTree())+"\n";
+                                logString += "\t"+source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
+                                logString += "\t"+target+wordnetData.toHyperString(topPair.getTargetTree())+"\n";
                                 log.write(logString.getBytes());
 
                                 /// Lin
@@ -369,8 +367,8 @@ public class Similarity {
                                 logString += "Ic1 = "+Lin.valueIc1+"\n";
                                 logString += "Ic2 = "+Lin.valueIc2+"\n";
                                 logString += "IcLcs = "+Lin.valueIcLcs+"\n";
-                                logString += source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
-                                logString += target+wordnetData.toHyperString(topPair.getTargetTree())+"\n";
+                                logString += "\t"+source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
+                                logString += "\t"+target+wordnetData.toHyperString(topPair.getTargetTree())+"\n";
                                 log.write(logString.getBytes());
 
 
@@ -390,8 +388,8 @@ public class Similarity {
                                 logString += "Ic1 = "+Lin.valueIc1+"\n";
                                 logString += "Ic2 = "+Lin.valueIc2+"\n";
                                 logString += "IcLcs = "+Lin.valueIcLcs+"\n";
-                                logString += source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
-                                logString += target+wordnetData.toHyperString(topPair.getTargetTree())+"\n\n";
+                                logString += "\t"+source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
+                                logString += "\t"+target+wordnetData.toHyperString(topPair.getTargetTree())+"\n\n";
                                 log.write(logString.getBytes());
 
                                 inputLine+= "\n";
@@ -418,8 +416,8 @@ public class Similarity {
                                 SimilarityPair similarityPair = new SimilarityPair();
                                 if (method.equalsIgnoreCase("leacock-chodorow")) {
                                     vu.wntools.wnsimilarity.measures.LeacockChodorow.match = "";
-                                    if (averageDepth>0) {
-                                        similarityPair = WordnetSimilarityApi.synsetLeacockChodorowSimilarity(wordnetData, averageDepth, source, target);
+                                    if (depth>0) {
+                                        similarityPair = WordnetSimilarityApi.synsetLeacockChodorowSimilarity(wordnetData, depth, source, target);
                                     }
                                     else {
                                         similarityPair = WordnetSimilarityApi.synsetLeacockChodorowSimilarity(wordnetData, source, target);
@@ -472,8 +470,8 @@ public class Similarity {
                                     logString += logString2;
                                 }
                                 logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(match)+"\n";
-                                logString += word1+"#"+source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
-                                logString += word2+"#"+target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
+                                logString += "\t"+word1+"#"+source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
+                                logString += "\t"+word2+"#"+target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
                                 logString += "\n";
                                 log.write(logString.getBytes());
 
@@ -491,14 +489,14 @@ public class Similarity {
                                 logString = "Method = Path\n";
                                 logString += "\tScore = "+similarityPair.getScore()+"\n";
                                 logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(BaseLines.match)+"\n";
-                                logString += source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
-                                logString += target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
+                                logString += "\t"+source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
+                                logString += "\t"+target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
                                 log.write(logString.getBytes());
 
                                 /// L&C
                                 LeacockChodorow.match = "";
-                                if (averageDepth>0) {
-                                    similarityPair = WordnetSimilarityApi.synsetLeacockChodorowSimilarity(wordnetData, averageDepth, source, target);
+                                if (depth>0) {
+                                    similarityPair = WordnetSimilarityApi.synsetLeacockChodorowSimilarity(wordnetData, depth, source, target);
                                 }
                                 else {
                                     similarityPair = WordnetSimilarityApi.synsetLeacockChodorowSimilarity(wordnetData, source, target);
@@ -508,8 +506,8 @@ public class Similarity {
                                 logString = "Method = LeacockChodorow\n";
                                 logString += "\tScore = "+similarityPair.getScore()+"\n";
                                 logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(LeacockChodorow.match)+"\n";
-                                logString += source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
-                                logString += target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
+                                logString += "\t"+source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
+                                logString += "\t"+target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
                                 log.write(logString.getBytes());
 
                                 //// WuPalmer
@@ -520,8 +518,8 @@ public class Similarity {
                                 logString = "Method = WuPalmer\n";
                                 logString += "\tScore = "+similarityPair.getScore()+"\n";
                                 logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(WuPalmer.match)+"\n";
-                                logString += source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
-                                logString += target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
+                                logString += "\t"+source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
+                                logString += "\t"+target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
                                 log.write(logString.getBytes());
 
 
@@ -535,8 +533,8 @@ public class Similarity {
                                 logString += "\tScore = "+similarityPair.getScore()+"\n";
                                 logString += "\tMatch ="+wordnetData.getFirstEntryForSynset(Resnik.match)+"\n";
                                 logString += "IcLcs = "+Resnik.value+"\n";
-                                logString += source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
-                                logString += target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
+                                logString += "\t"+source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
+                                logString += "\t"+target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
                                 log.write(logString.getBytes());
 
                                 /// Lin
@@ -553,8 +551,8 @@ public class Similarity {
                                 logString += "Ic1 = "+Lin.valueIc1+"\n";
                                 logString += "Ic2 = "+Lin.valueIc2+"\n";
                                 logString += "IcLcs = "+Lin.valueIcLcs+"\n";
-                                logString += source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
-                                logString += target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
+                                logString += "\t"+source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
+                                logString += "\t"+target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
                                 log.write(logString.getBytes());
 
                                 /// J&C
@@ -572,8 +570,8 @@ public class Similarity {
                                 logString += "Ic1 = "+JiangConrath.valueIc1+"\n";
                                 logString += "Ic2 = "+JiangConrath.valueIc2+"\n";
                                 logString += "IcLcs = "+JiangConrath.valueIcLcs+"\n";
-                                logString += source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
-                                logString += target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
+                                logString += "\t"+source+wordnetData.toHyperString(similarityPair.getSourceTree())+"\n";
+                                logString += "\t"+target+wordnetData.toHyperString(similarityPair.getTargetTree())+"\n";
                                 logString += "\n";
                                 log.write(logString.getBytes());
 

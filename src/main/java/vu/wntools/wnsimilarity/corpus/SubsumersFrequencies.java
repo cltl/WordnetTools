@@ -25,10 +25,12 @@ public class SubsumersFrequencies {
 
     public HashMap<String, Long> data;
     public long nWords;
+    public long maxFreq;
 
     public SubsumersFrequencies() {
         this.data = new HashMap<String, Long>();
         this.nWords = 0;
+        this.maxFreq = 0;
     }
 
     public int readSubsumerFrequenciesFromFile (String pathToSubsumersFrequenciesFile) {
@@ -64,6 +66,9 @@ public class SubsumersFrequencies {
                     String freqString = fields[1].trim();
                     Long freq = Long.parseLong(freqString);
                     data.put(hyper, freq);
+                    if (freq>maxFreq) {
+                        maxFreq = freq;
+                    }
                 }
             }
             System.out.println("Nr of subsumers = " + data.size());

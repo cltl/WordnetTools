@@ -38,6 +38,8 @@ public class LeacockChodorow {
             }
         }
         if (distance>-1) {
+         //   System.out.println("distance = " + distance);
+         //   System.out.println("averageDepth = " + averageDepth);
             distance = - Math.log(distance/(2*averageDepth));
         }
         return distance;

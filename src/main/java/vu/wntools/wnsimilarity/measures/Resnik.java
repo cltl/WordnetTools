@@ -29,8 +29,8 @@ public class Resnik {
                     p = freq/(double)nWords;
                     value = p;
                 }
-                //distance = Math.log(p);
-                distance = p;
+                distance = -Math.log(p);
+                //distance = p;
                 match = s;
                 break;
             }
