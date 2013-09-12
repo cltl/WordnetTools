@@ -295,7 +295,7 @@ public class Similarity {
                                 ArrayList<SimilarityPair> similarityPairArrayList = new ArrayList<SimilarityPair>();
                                 LeacockChodorow.match = "";
 
-/*
+
                                 //// Path
                                 similarityPairArrayList = WordnetSimilarityApi.wordPathSimilarity(wordnetData, source, target);
                                 topPair = WordnetSimilarityApi.getTopScoringSimilarityPair(similarityPairArrayList);
@@ -353,7 +353,7 @@ public class Similarity {
                                 logString += "\t"+source+wordnetData.toHyperString(topPair.getSourceTree())+"\n";
                                 logString += "\t"+target+wordnetData.toHyperString(topPair.getTargetTree())+"\n";
                                 log.write(logString.getBytes());
-*/
+
 
                                 /// Lin
                                 vu.wntools.wnsimilarity.measures.Lin.match = "";
