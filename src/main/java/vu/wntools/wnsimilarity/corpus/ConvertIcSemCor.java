@@ -8,9 +8,10 @@ import java.io.*;
  * Date: 7/31/13
  * Time: 10:37 PM
  * To change this template use File | Settings | File Templates.
+ * This class is used to convert the semcor-cumulative frequency file to the WordnetTools format
+ * We assume that the frequencies of synsets are already
  */
 public class ConvertIcSemCor {
-
     static public void main(String [] args) {
         //String filePath = args[0];
         String filePath = "/Tools/wordnet-tools.0.1/resources/ic-semcor.dat";
@@ -34,7 +35,7 @@ public class ConvertIcSemCor {
                 nLines++;
                 /*
                     1740n 128767 ROOT
-                    1930n 69661
+                    1930n 69661 -> this is a high value because the frequencies are passed on to this hypernym
                     2137n 59062
                     2452n 3669
                     2684n 39997

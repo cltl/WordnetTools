@@ -15,7 +15,7 @@ public class Resnik {
     public static String match = "";
     public static double value = 0;
 
-    public static double GetDistance(HashMap<String, Long> hyperFrequencies, Long nWords, ArrayList<String> hyp1, ArrayList<String> hyp2) {
+    public static double GetDistance(HashMap<String, Long> hyperFrequencies, Long topFrequency, ArrayList<String> hyp1, ArrayList<String> hyp2) {
         double distance = -1;
         match = "";
         for (int i = 0; i < hyp1.size(); i++) {
@@ -26,7 +26,7 @@ public class Resnik {
                 double p = -1;
                 if (hyperFrequencies.containsKey(s)) {
                     freq = (double) hyperFrequencies.get(s);
-                    p = freq/(double)nWords;
+                    p = freq/(double)topFrequency;
                     value = p;
                 }
                 distance = -Math.log(p);

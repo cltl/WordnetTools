@@ -15,6 +15,7 @@ public class SimilarityPair {
 
     private String sourceId;
     private String targetId;
+    private String match;
     double score;
     double normalizedScore;
     private ArrayList<String> sourceTree;
@@ -22,6 +23,7 @@ public class SimilarityPair {
 
 
     public SimilarityPair() {
+        this.match = "";
         this.normalizedScore = -1;
         this.score = -1;
         this.sourceId = "";
@@ -76,5 +78,13 @@ public class SimilarityPair {
 
     public void setTargetId(String targetId) {
         this.targetId = targetId;
+    }
+
+    public String getMatch() {
+        return match;
+    }
+
+    public void setMatch(String match) {
+        this.match = match;
     }
 }

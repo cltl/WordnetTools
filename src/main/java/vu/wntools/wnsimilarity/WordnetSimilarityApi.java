@@ -95,6 +95,7 @@ public class WordnetSimilarityApi {
                             //System.out.println("score = " + score);
                             //System.out.println("similarityPair = " + similarityPair.getScore());
                             if (score>similarityPair.getScore()) {
+                                similarityPair.setMatch(Resnik.match);
                                 similarityPair.setScore(score);
                                 similarityPair.setSourceTree(hyperSource);
                                 similarityPair.setTargetTree(hyperTarget);
@@ -136,6 +137,7 @@ public class WordnetSimilarityApi {
                 ArrayList<String> hyperTarget = hyperChainsTarget.get(j);
                 double score = vu.wntools.wnsimilarity.measures.Resnik.GetDistance(subsumersFrequencies.data, subsumersFrequencies.maxFreq, hyperSource, hyperTarget);
                 if (score>similarityPair.getScore()) {
+                    similarityPair.setMatch(Resnik.match);
                     similarityPair.setScore(score);
                     similarityPair.setSourceTree(hyperSource);
                     similarityPair.setTargetTree(hyperTarget);
@@ -193,6 +195,7 @@ public class WordnetSimilarityApi {
                             ArrayList<String> hyperTarget = hyperChainsTarget.get(l);
                             double score = JiangConrath.GetDistance(subsumersFrequencies.data, subsumersFrequencies.maxFreq, hyperSource, hyperTarget);
                             if (score>similarityPair.getScore()) {
+                                similarityPair.setMatch(JiangConrath.match);
                                 similarityPair.setScore(score);
                                 similarityPair.setSourceTree(hyperSource);
                                 similarityPair.setTargetTree(hyperTarget);
@@ -233,6 +236,7 @@ public class WordnetSimilarityApi {
                 ArrayList<String> hyperTarget = hyperChainsTarget.get(j);
                 double score = JiangConrath.GetDistance(subsumersFrequencies.data, subsumersFrequencies.maxFreq, hyperSource, hyperTarget);
                 if (score>similarityPair.getScore()) {
+                    similarityPair.setMatch(JiangConrath.match);
                     similarityPair.setScore(score);
                     similarityPair.setSourceTree(hyperSource);
                     similarityPair.setTargetTree(hyperTarget);
@@ -289,6 +293,7 @@ public class WordnetSimilarityApi {
                             ArrayList<String> hyperTarget = hyperChainsTarget.get(l);
                             double score = Lin.GetDistance(subsumersFrequencies.data, subsumersFrequencies.maxFreq, hyperSource, hyperTarget);
                             if (score>similarityPair.getScore()) {
+                                similarityPair.setMatch(Lin.match);
                                 similarityPair.setScore(score);
                                 similarityPair.setSourceTree(hyperSource);
                                 similarityPair.setTargetTree(hyperTarget);
@@ -330,6 +335,7 @@ public class WordnetSimilarityApi {
                 ArrayList<String> hyperTarget = hyperChainsTarget.get(j);
                 double score = Lin.GetDistance(subsumersFrequencies.data, subsumersFrequencies.maxFreq, hyperSource, hyperTarget);
                 if (score>similarityPair.getScore()) {
+                    similarityPair.setMatch(Lin.match);
                     similarityPair.setScore(score);
                     similarityPair.setSourceTree(hyperSource);
                     similarityPair.setTargetTree(hyperTarget);
@@ -386,6 +392,7 @@ public class WordnetSimilarityApi {
                             ArrayList<String> hyperTarget = hyperChainsTarget.get(l);
                             double score = LeacockChodorow.GetDistance(averageDepth, hyperSource, hyperTarget);
                             if (score>similarityPair.getScore()) {
+                                similarityPair.setMatch(LeacockChodorow.match);
                                 similarityPair.setScore(score);
                                 similarityPair.setSourceTree(hyperSource);
                                 similarityPair.setTargetTree(hyperTarget);
@@ -451,6 +458,7 @@ public class WordnetSimilarityApi {
                             //System.out.println("L & C score = " + score);
                            // System.out.println("similarityPair = " + similarityPair.getScore());
                             if (score>similarityPair.getScore()) {
+                                similarityPair.setMatch(LeacockChodorow.match);
                                 similarityPair.setScore(score);
                                 similarityPair.setSourceTree(hyperSource);
                                 similarityPair.setTargetTree(hyperTarget);
@@ -492,6 +500,7 @@ public class WordnetSimilarityApi {
                 ArrayList<String> hyperTarget = hyperChainsTarget.get(l);
                 double score = vu.wntools.wnsimilarity.measures.LeacockChodorow.GetDistance(averageDepth, hyperSource, hyperTarget);
                 if (score>similarityPair.getScore()) {
+                    similarityPair.setMatch(LeacockChodorow.match);
                     similarityPair.setScore(score);
                     similarityPair.setSourceTree(hyperSource);
                     similarityPair.setTargetTree(hyperTarget);
@@ -529,6 +538,7 @@ public class WordnetSimilarityApi {
                 int D = 1+(hyperSource.size()+hyperTarget.size())/2;
                 double score = vu.wntools.wnsimilarity.measures.LeacockChodorow.GetDistance(D, hyperSource, hyperTarget);
                 if (score>similarityPair.getScore()) {
+                    similarityPair.setMatch(LeacockChodorow.match);
                     similarityPair.setScore(score);
                     similarityPair.setSourceTree(hyperSource);
                     similarityPair.setTargetTree(hyperTarget);
@@ -582,6 +592,7 @@ public class WordnetSimilarityApi {
                             ArrayList<String> hyperTarget = hyperChainsTarget.get(l);
                             double score = WuPalmer.GetDistance(hyperSource, hyperTarget);
                             if (score>similarityPair.getScore()) {
+                                similarityPair.setMatch(WuPalmer.match);
                                 similarityPair.setScore(score);
                                 similarityPair.setSourceTree(hyperSource);
                                 similarityPair.setTargetTree(hyperTarget);
@@ -623,6 +634,7 @@ public class WordnetSimilarityApi {
                 ArrayList<String> hyperTarget = hyperChainsTarget.get(j);
                 double score = WuPalmer.GetDistance(hyperSource, hyperTarget);
                 if (score>similarityPair.getScore()) {
+                    similarityPair.setMatch(WuPalmer.match);
                     similarityPair.setScore(score);
                     similarityPair.setSourceTree(hyperSource);
                     similarityPair.setTargetTree(hyperTarget);
@@ -676,6 +688,7 @@ public class WordnetSimilarityApi {
                             ArrayList<String> hyperTarget = hyperChainsTarget.get(l);
                             double score = BaseLines.GetPath(hyperSource, hyperTarget);
                             if (score>similarityPair.getScore()) {
+                                similarityPair.setMatch(BaseLines.match);
                                 similarityPair.setScore(score);
                                 similarityPair.setSourceTree(hyperSource);
                                 similarityPair.setTargetTree(hyperTarget);
@@ -716,6 +729,7 @@ public class WordnetSimilarityApi {
                 ArrayList<String> hyperTarget = hyperChainsTarget.get(j);
                 double score = BaseLines.GetPath(hyperSource, hyperTarget);
                 if (score>similarityPair.getScore()) {
+                    similarityPair.setMatch(BaseLines.match);
                     similarityPair.setScore(score);
                     similarityPair.setSourceTree(hyperSource);
                     similarityPair.setTargetTree(hyperTarget);
