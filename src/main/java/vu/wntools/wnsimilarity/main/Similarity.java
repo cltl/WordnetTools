@@ -1,5 +1,6 @@
 package vu.wntools.wnsimilarity.main;
 
+import vu.wntools.util.Util;
 import vu.wntools.wnsimilarity.WordnetSimilarityApi;
 import vu.wntools.wnsimilarity.corpus.SubsumersFrequencies;
 import vu.wntools.wnsimilarity.measures.*;
@@ -152,7 +153,7 @@ public class Similarity {
                 str += "pathToRelFile = " + pathToRelFile+"\n";
                 str += "depth = " + depth+"\n";
                 if (pathToRelFile.isEmpty()) {
-                    relations = readRelationsFile(pathToInputFile);
+                    relations = Util.readRelationsFile(pathToRelFile);
                     str += "relationFile = "+pathToRelFile+"\n";
                 }
                 if (wnformat.equalsIgnoreCase("--cdb-file")) {
@@ -595,29 +596,6 @@ public class Similarity {
             }
         }
 
-    }
-
-    static ArrayList<String> readRelationsFile (String pathToRelationFile) {
-        ArrayList<String> relations = new ArrayList<String>();
-        if (!new File(pathToRelationFile).exists())   {
-            System.out.println("Cannot find pathToRelationFile = " + pathToRelationFile);
-        }
-        try {
-            FileInputStream fis = new FileInputStream(pathToRelationFile);
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader in = new BufferedReader(isr);
-            String inputLine;
-            while (in.ready()&&(inputLine = in.readLine()) != null) {
-                if (!inputLine.trim().isEmpty()) {
-                    if (!inputLine.startsWith("#"))
-                    relations.add(inputLine.trim());
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            //To change body of catch statement use File | Settings | File Templates.
-        }
-        return relations;
     }
 
 }

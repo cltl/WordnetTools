@@ -1,7 +1,5 @@
 package vu.wntools.wordnet;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -93,34 +91,6 @@ public class WordnetData {
     }
 
 
-    public void writeTreeString (WordnetData wordnetData, ArrayList<String> topNodes, int level, FileOutputStream fos) {
-        String str = "";
-        for (int i = 0; i < topNodes.size(); i++) {
-            String hper = topNodes.get(i);
-            str = "";
-            if (wordnetData.childRelations.containsKey(hper)) {
-                for (int j = 0; j < level; j++) {
-                    str += "  ";
-
-                }
-                str += hper+"\n";
-                //  System.out.println("str = " + str);
-                try {
-                    fos.write(str.getBytes());
-                } catch (IOException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
-                ArrayList<String> children = wordnetData.childRelations.get(hper);
-                if (children.size()>0) {
-                    writeTreeString(wordnetData, children, level+1, fos);
-                }
-                else {
-                    //     System.out.println("leaf node.getSynset() = " + node.getSynset());
-                }
-            }
-        }
-    }
-
     public ArrayList<String> getTopNodes () {
         ArrayList<String> topNodes = new ArrayList<String>();
         Set keyHyperSet = entryToSynsets.keySet();
@@ -148,19 +118,43 @@ public class WordnetData {
                 String synsetId = synsetIds.get(i);
                 if (!hyperRelations.containsKey(synsetId)) {
                    ArrayList<String> hypers = hyperRelations.get(synsetId);
-                    for (int j = 0; j < hypers.size(); j++) {
-                        String hyper = hypers.get(j);
-                        if (childRelations.containsKey(hyper)) {
-                            ArrayList<String> children = childRelations.get(hyper);
-                            children.add(synsetId);
-                            childRelations.put(hyper, children);
+                   if (hypers!=null) {
+                        for (int j = 0; j < hypers.size(); j++) {
+                            String hyper = hypers.get(j);
+                            if (childRelations.containsKey(hyper)) {
+                                ArrayList<String> children = childRelations.get(hyper);
+                                children.add(synsetId);
+                                childRelations.put(hyper, children);
+                            }
+                            else {
+                                ArrayList<String> children = new ArrayList<String>();
+                                children.add(synsetId);
+                                childRelations.put(hyper, children);
+                            }
                         }
-                        else {
-                            ArrayList<String> children = new ArrayList<String>();
-                            children.add(synsetId);
-                            childRelations.put(hyper, children);
-                        }
-                    }
+                   }
+                }
+            }
+        }
+    }
+
+    public void buildChildRelationsFromids () {
+        Set keyHyperSet = hyperRelations.keySet();
+        Iterator entries = keyHyperSet.iterator();
+        while(entries.hasNext()) {
+            String synsetId = (String) entries.next();
+            ArrayList<String> hypers = hyperRelations.get(synsetId);
+            for (int i = 0; i < hypers.size(); i++) {
+                String hyper = hypers.get(i);
+                if (childRelations.containsKey(hyper)) {
+                    ArrayList<String> children = childRelations.get(hyper);
+                    children.add(synsetId);
+                    childRelations.put(hyper, children);
+                }
+                else {
+                    ArrayList<String> children = new ArrayList<String>();
+                    children.add(synsetId);
+                    childRelations.put(hyper, children);
                 }
             }
         }
