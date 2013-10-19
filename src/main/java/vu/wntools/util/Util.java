@@ -110,5 +110,27 @@ public class Util {
         return relations;
     }
 
+    static public ArrayList<String> readFile (String pathToFile) {
+        ArrayList<String> relations = new ArrayList<String>();
+        if (!new File(pathToFile).exists())   {
+            System.out.println("Cannot find pathToFile = " + pathToFile);
+        }
+        try {
+            FileInputStream fis = new FileInputStream(pathToFile);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader in = new BufferedReader(isr);
+            String inputLine;
+            while (in.ready()&&(inputLine = in.readLine()) != null) {
+                if (!inputLine.trim().isEmpty()) {
+                        relations.add(inputLine.trim());
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            //To change body of catch statement use File | Settings | File Templates.
+        }
+        return relations;
+    }
+
 
 }

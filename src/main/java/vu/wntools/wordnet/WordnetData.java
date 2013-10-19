@@ -248,6 +248,25 @@ public class WordnetData {
          return depth;
     }
 
+    public int getAverageDepthBySynset (String synset) {
+         int depth = 0;
+         ArrayList<ArrayList<String>> targetChains = new ArrayList<ArrayList<String>>();
+         if (hyperRelations.containsKey (synset)) {
+             getMultipleHyperChain(synset, targetChains);
+             for (int i = 0; i < targetChains.size(); i++) {
+                 ArrayList<String> targetChain =  targetChains.get(i);
+                 depth+= targetChain.size();
+             }
+         }
+         if (targetChains.size()==0) {
+            depth = 0;
+         }
+         else {
+            depth = depth/targetChains.size();
+         }
+         return depth;
+    }
+
     public int getAverageDepthByWord () {
          int depth = 0;
          Set keySet = entryToSynsets.keySet();

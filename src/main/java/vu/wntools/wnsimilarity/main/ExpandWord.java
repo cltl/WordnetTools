@@ -4,6 +4,7 @@ import vu.wntools.util.Util;
 import vu.wntools.wordnet.WordnetData;
 import vu.wntools.wordnet.WordnetLmfSaxParser;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,8 +21,11 @@ public class ExpandWord {
 
     static public void main (String[] args) {
         String pathToWordnetFile = "/Tools/wordnet-tools.0.1/resources/cornetto2.1.lmf.xml";
+        //String pathToWordnetFile = "/Tools/wordnet-tools.0.1/resources/wneng-30.lmf.xml";
         String pathToRelFile = "/Tools/wordnet-tools.0.1/resources/relations2.txt";
-        String pathToInputFile = "/Tools/wordnet-tools.0.1/input/expansion/vorst.txt";
+        //String pathToInputFile = "/Tools/wordnet-tools.0.1/input/expansion/smell.txt";
+        //String pathToInputFile = "/Tools/wordnet-tools.0.1/input/expansion/huis.txt";
+        String pathToInputFile = "oorzaak";
         String posFilter = "";
         WordnetData wordnetData = new WordnetData();
         ArrayList<String> relations = new ArrayList<String>();
@@ -47,7 +51,12 @@ public class ExpandWord {
             return;
         }
         else {
-            inputwords = Util.readRelationsFile(pathToInputFile);
+            if (new File(pathToInputFile).exists()) {
+                inputwords = Util.readRelationsFile(pathToInputFile);
+            }
+            else {
+                inputwords.add(pathToInputFile);
+            }
         }
         if (pathToRelFile.isEmpty()) {
             relations = Util.readRelationsFile(pathToRelFile);
