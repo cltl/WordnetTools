@@ -138,6 +138,14 @@ public class WordnetData {
         }
     }
 
+    public int getChildCountForId(String synsetId) {
+        int count = 0;
+        if (childRelations.containsKey(synsetId)) {
+            count = childRelations.get(synsetId).size();
+        }
+        return count;
+    }
+
     public void buildChildRelationsFromids () {
         Set keyHyperSet = hyperRelations.keySet();
         Iterator entries = keyHyperSet.iterator();
