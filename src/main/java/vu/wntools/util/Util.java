@@ -248,7 +248,11 @@ public class Util {
                     if (fields.length>1) {
                         String key = fields[0];
                         String [] keyFields = key.split(":");
-                        key = keyFields[1];
+                        // event:other:aanbieden:	3	participant:Fabrimetal:a1	1
+                        // OR
+                        // functie:matigen:	136	object:G:	21	object:S:	14	object:m:	14
+
+                        key = keyFields[keyFields.length-1];
                         if (!isStopWord(key)) {
                             int freq = Integer.parseInt(fields[1]);
                             int dispersion = 0;

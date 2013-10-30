@@ -8,10 +8,8 @@ import vu.wntools.wordnet.WordnetLmfSaxParser;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,6 +20,8 @@ import java.util.Set;
  */
 public class SubsumerHierarchy {
 
+    static String version = "1.0";
+    static String copyright = "Piek Vossen (piek.vossen@vu.nl)";
     static boolean monosemous = false;
     static int proportion = 30;
     static String pos = "";
@@ -86,7 +86,7 @@ public class SubsumerHierarchy {
 
             ArrayList<String> children = new ArrayList<String>();
 
-
+            topNodes = new ArrayList<SynsetNode>();
             hyperTree = new HashMap<String, SynsetNode>();
             for (int i = 0; i < wordMap.size(); i++) {
                 WordData wordData = wordMap.get(i);
@@ -162,12 +162,13 @@ public class SubsumerHierarchy {
             /// WE BUILD A HYPERTREE BASED ON ALL MEANINGS OF A WORD AND WE PASS ON THE FREQUENCIES FROM THE LEAVES TO THE HYPERNYMS
             for (int i = 0; i < wordMap.size(); i++) {
                 WordData wordData =  wordMap.get(i);
-                //System.out.println("word = " + word);
+               // System.out.println("word = " + wordData.getWord());
                 if (wordnetData.entryToSynsets.containsKey(wordData.getWord())) {
                     ArrayList<String> synsetIds = wordnetData.entryToSynsets.get(wordData.getWord());
                     if (!monosemous || synsetIds.size()==1) {
                         for (int s = 0; s < synsetIds.size(); s++) {
                             String synsetId =  synsetIds.get(s);
+                           // System.out.println("synsetId = " + synsetId);
                             SynsetNode sNode = wordnetData.makeSynsetNode(wordData.getWord(), synsetId);
                             if (hyperTree.containsKey(synsetId)) {
                                 /// we already got it before so we just update the frequency
@@ -213,7 +214,17 @@ public class SubsumerHierarchy {
                                                 hNode.setDepth(hypers.size()-j);
                                                 hyperTree.put(hyperSynsetId, hNode);
                                             }
-                                            sNode = hNode;
+                                            // we have the last hyper in the the chain
+                                            if (c == hyperChain.size()-1) {
+                                                if (!Util.hasSynsetNode(topNodes, hNode)) {
+                                                    topNodes.add(hNode);
+                                                }
+                                            }
+                                            else {
+                                                sNode = hNode;
+                                            }
+
+                                            //sNode = hNode;
                                         }
                                     }
                                     /// In the next loop we store all the chains for a word sense or synset at the word level
@@ -228,6 +239,7 @@ public class SubsumerHierarchy {
                                     else {
                                         wordHyperMap.put(wordData.getWord(), hypers);
                                     }
+
                                 }
                                 else {
                                     /// there is nothing to do... This is a top node
@@ -411,6 +423,7 @@ public class SubsumerHierarchy {
         System.out.println("wordnetLmfSaxParser.wordnetData.getHyperRelations().size() = " + wordnetLmfSaxParser.wordnetData.getHyperRelations().size());
         System.out.println("wordnetLmfSaxParser.wordnetData.entryToSynsets.size() = " + wordnetLmfSaxParser.wordnetData.entryToSynsets.size());
         wordnetLmfSaxParser.wordnetData.buildSynsetIndex();
+
         if (format.equals("tagmap"))  {
             HashMap<String, ArrayList<String>> tagSynsetMap = new HashMap<String, ArrayList<String>>();
             //// transform tagMap to wordMap
@@ -435,15 +448,45 @@ public class SubsumerHierarchy {
         else if (format.equals("wordmap")) {
            wordMap = Util.readFileToWordDataList(pathToInputFile);
         }
+        /// first build up the full tree data
         getFullTree(wordnetLmfSaxParser.wordnetData, wordMap);
+
         if (prune) {
             getTreePrunedForCumulatedHypernymFrequency(wordnetLmfSaxParser.wordnetData, wordHyperMap);
         }
         try {
+            FileOutputStream fosSpreadSheet = new FileOutputStream (pathToInputFile+"."+pos+".xls");
             FileOutputStream fos = new FileOutputStream (pathToInputFile+"."+pos+".bcs");
+            System.out.println("hyperTree = " + hyperTree.size());
+            String keystr = "";
 
-            String keystr = "\nOVERVIEW OF HYPERNYMS\n";
-            keystr += "synset id\tsynset\tdescendants\tdepth\tvalue\tchildren\n";
+            Date date = new Date(System.currentTimeMillis());
+
+            String settingsString = "WordnetTools\n";
+            settingsString += "Version\t"+version+"\n";
+            settingsString += "Copyright\t"+copyright+"\n";
+            SimpleDateFormat ft =
+                    new SimpleDateFormat("E yyyy.MM.dd 'at' hh:mm:ss a zzz");
+
+            settingsString += "Date\t" + ft.format(date)+"\n";
+            settingsString += "input file\t"+pathToInputFile+"\n";
+            settingsString += "wordnet file\t"+pathToWordnetLmfFile+"\n";
+            settingsString += "relations\t"+pathToRelationsFile+"\n";
+            settingsString += "monosemous\t"+monosemous+"\n";
+            settingsString += "prune\t"+ prune+"\n";
+            settingsString += "first hypernym\t"+firsthypernym+"\n";
+            settingsString += "input format\t"+format+"\n";
+            settingsString += "part of speech\t"+pos+"\n";
+            settingsString += "proportion\t"+proportion+"\n";
+            settingsString += "\n";
+
+            keystr += settingsString;
+
+            keystr += "\nOVERVIEW OF HYPERNYMS\n";
+
+            keystr += SynsetNode.toCsvHeader();
+
+
             Set keyHyperSet = hyperTree.keySet();
             Iterator hpers = keyHyperSet.iterator();
             while(hpers.hasNext()) {
@@ -453,10 +496,14 @@ public class SubsumerHierarchy {
                 //keystr += synsetNode.toString();
                 keystr += synsetNode.toCsv();
             }
-            fos.write(keystr.getBytes());
-            //  System.out.println(keystr);
+            fosSpreadSheet.write(keystr.getBytes());
+            fosSpreadSheet.close();
 
-            keystr = "\nTOP NODES\n";
+            //  System.out.println(keystr);
+            System.out.println("topNodes = " + topNodes.size());
+
+            keystr = settingsString;
+            keystr += "\nTOP NODES\n";
             for (int i = 0; i < topNodes.size(); i++) {
                 SynsetNode synsetNode = topNodes.get(i);
                 keystr+= synsetNode.toCsv();

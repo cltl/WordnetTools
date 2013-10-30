@@ -133,4 +133,9 @@ public class SynsetNode {
                 "\t" + children.size()+
                 "\n";
     }
+
+    static public String toCsvHeader () {
+       String keystr = "synset id\tsynset\tdescendants\tdepth\tfreq\tcumulation\tvalue(descendants*depth)\tchildren\n";
+       return keystr;
+    }
 }
