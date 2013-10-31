@@ -23,7 +23,7 @@ public class Util {
         String str = "";
         for (int i = 0; i < topNodes.size(); i++) {
             SynsetNode hper = topNodes.get(i);
-            // System.out.println("hper = " + hper.getSynsetId());
+           // System.out.println("hper = " + hper.getSynsetId());
             if (covered.contains(hper.getSynsetId())) {
                 ///circular
                 //    System.out.println("CIRCULAR");
@@ -32,27 +32,13 @@ public class Util {
                 str = "";
                 if (hyperTree.containsKey(hper.getSynsetId())) {
                     SynsetNode node = hyperTree.get(hper.getSynsetId());
-/*
-                    if (node.getSynsetId().equals("nld-21-d_v-2645-v")) {
-                        System.out.println("node.toString() = " + node.toString());
-                        System.out.println("level = " + level);
-                    }
-                    if (node.getSynsetId().equals("nld-21-d_v-1370-v")) {
-                        System.out.println("node.toString() = " + node.toString());
-                        System.out.println("level = " + level);
-                        for (int j = 0; j < node.getChildren().size(); j++) {
-                            SynsetNode synsetNode = node.getChildren().get(j);
-                            System.out.println("hasChild synsetNode.getSynset() = " + synsetNode.getSynset());
-                        }
-                    }
-*/
                     for (int j = 0; j < level; j++) {
                         str += "  ";
 
                     }
-                    str += node.getSynsetId()+":"+node.getSynset()+":"+node.getFreq()+":"+node.getCum()+"\n";
+                    str += node.toCsv();
+                    //str += node.getSynsetId()+":"+node.getSynset()+":"+node.getFreq()+":"+node.getCum()+"\n";
                     covered.add(hper.getSynsetId());
-                    //  System.out.println("str = " + str);
                     try {
                         fos.write(str.getBytes());
                     } catch (IOException e) {
@@ -64,7 +50,7 @@ public class Util {
                         writeTreeString(covered, hyperTree, children, nextLevel, fos);
                     }
                     else {
-                        //     System.out.println("leaf node.getSynset() = " + node.getSynset());
+                             System.out.println("leaf node.getSynset() = " + node.getSynset());
                     }
                 }
                 else {
@@ -203,7 +189,35 @@ public class Util {
             while (in.ready()&&(inputLine = in.readLine()) != null) {
                 if (inputLine.trim().length()>0) {
                     WordData wordData = new WordData();
-                    wordData.setWord(inputLine.trim());
+                    String [] fields = inputLine.split("\t");
+                    if (fields.length==1) {
+                        wordData.setWord(inputLine.trim());
+                    }
+                    else if (fields.length==2) {
+                        String word = fields[0];
+                        int freq = 0;
+                        try {
+                            freq = Integer.parseInt(fields[1]);
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        }
+                        wordData.setWord(word);
+                        wordData.setFreq(freq);
+                    }
+                    else if (fields.length==3) {
+                        String word = fields[0];
+                        int dispersion = 0;
+                        int freq = 0;
+                        try {
+                            freq = Integer.parseInt(fields[1]);
+                            dispersion = Integer.parseInt(fields[2]);
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        }
+                        wordData.setWord(word);
+                        wordData.setFreq(freq);
+                        wordData.setDispersion(dispersion);
+                    }
                     words.add(wordData);
                 }
             }
