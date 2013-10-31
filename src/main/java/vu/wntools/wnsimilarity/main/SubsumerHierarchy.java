@@ -26,7 +26,7 @@ public class SubsumerHierarchy {
     static int proportion = 30;
     static String pos = "";
     static boolean firsthypernym = false;
-    static boolean prune = false;
+    static String prune = "";
     static ArrayList<SynsetNode> topNodes = new ArrayList<SynsetNode>();
     static HashMap <String, SynsetNode> hyperTree = new HashMap<String, SynsetNode>();
     static ArrayList<WordData> wordMap = new ArrayList<WordData>();
@@ -95,7 +95,7 @@ public class SubsumerHierarchy {
         /// WE BUILD A HYPERTREE BASED ON ALL MEANINGS OF A WORD AND WE PASS ON THE FREQUENCIES FROM THE LEAVES TO THE HYPERNYMS
         for (int i = 0; i < wordMap.size(); i++) {
             WordData wordData =  wordMap.get(i);
-            System.out.println("word = " + wordData.getWord());
+            //System.out.println("word = " + wordData.getWord());
             ArrayList<ArrayList<String>> chains = new ArrayList<ArrayList<String>>();
             if (wordnetData.entryToSynsets.containsKey(wordData.getWord())) {
                 ArrayList<String> synsetIds = wordnetData.entryToSynsets.get(wordData.getWord());
@@ -123,7 +123,7 @@ public class SubsumerHierarchy {
                 ArrayList<ArrayList<String>> hyperchains = wordHyperMap.get(wordData.getWord());
                 for (int j = 0; j < chains.size(); j++) {
                     ArrayList<String> hyperChain = chains.get(j);
-                    chains.add(hyperChain);
+                    hyperchains.add(hyperChain);
                 }
                 wordHyperMap.put(wordData.getWord(), hyperchains);
             }
@@ -154,7 +154,8 @@ public class SubsumerHierarchy {
             for (int i = 0; i < wordMap.size(); i++) {
                 WordData wordData = wordMap.get(i);
                 ArrayList<ArrayList<String>> topChains = new ArrayList<ArrayList<String>>();
-                ArrayList<Integer> topFreqChain = new ArrayList<Integer>();
+                ArrayList<Integer> topFreqChain = new ArrayList<Integer>(); /// for storing the topFrequencies
+                /// get all the chains stored for this word
                 if (wordHyperMap.containsKey(wordData.getWord())) {
                     ArrayList<ArrayList<String>> chains = wordHyperMap.get(wordData.getWord());
                     for (int j = 0; j < chains.size(); j++) {
@@ -193,12 +194,146 @@ public class SubsumerHierarchy {
             for (int i = 0; i < wordMap.size(); i++) {
                 WordData wordData = wordMap.get(i);
                 if (wordHyperMap.containsKey(wordData.getWord())) {
+                    //// we get the topchains only and not the full set of chains
                     ArrayList<ArrayList<String>> chains = wordHyperMap.get(wordData.getWord());
                     buildHyperTreeFromChains(wordnetData, wordData, chains);
                 }
             }
             System.out.println("pruned hyperTree = " + hyperTree.size());
     }
+
+    /**
+     * If words are polysemous we keep the sense with most children and prune the rest
+     * @param wordnetData
+     * @param wordHyperMap
+     */
+    public static void getTreePrunedForCumulatedHypernymChildren (WordnetData wordnetData, HashMap<String, ArrayList<ArrayList<String>>> wordHyperMap) {
+
+            /**
+             * We select those chains that have the most frequent most specific hypernym if there is a choice between different senses
+             * We build a chain of the topFrequency at each level starting from the leaves.
+             * If a new chain has a higher frequency than stored so far, we declare it as a new top chain and erase all top chains so far
+             * If chains are equal then they are added to the top set.
+             * Longer chains just add frequency to the frequency chain but this has no effect on the top chains
+             */
+
+            for (int i = 0; i < wordMap.size(); i++) {
+                WordData wordData = wordMap.get(i);
+                ArrayList<ArrayList<String>> topChains = new ArrayList<ArrayList<String>>();
+                ArrayList<Integer> topChildChain = new ArrayList<Integer>(); /// for storing the topFrequencies
+                /// get all the chains stored for this word
+                if (wordHyperMap.containsKey(wordData.getWord())) {
+                    ArrayList<ArrayList<String>> chains = wordHyperMap.get(wordData.getWord());
+                    for (int j = 0; j < chains.size(); j++) {
+                        ArrayList<String> hyperChain = chains.get(j);
+                        for (int k = 0; k < hyperChain.size(); k++) {
+                            String s = hyperChain.get(k);
+                            if (hyperTree.containsKey(s)) {
+                                SynsetNode synsetNode = hyperTree.get(s);
+                                if (topChildChain.size() > k) {
+                                    if (topChildChain.get(k) < synsetNode.getChildren().size()) {
+                                        topChildChain.set(k, synsetNode.getChildren().size());
+                                        topChains = new ArrayList<ArrayList<String>>();
+                                        topChains.add(hyperChain);
+                                    }
+                                    else if (topChildChain.get(k) == synsetNode.getChildren().size()) {
+                                        topChildChain.set(k, synsetNode.getChildren().size());
+                                        topChains.add(hyperChain);
+                                    }
+                                }
+                                else {
+                                    topChildChain.add(synsetNode.getChildren().size());
+                                }
+                            }
+                        }
+
+                    }
+                    //// replace the map with the topChains
+                    wordHyperMap.put(wordData.getWord(), topChains);
+                }
+            }
+
+            /// rebuild the hyperTree based on the pruned chains based on most frequent lowest subsumers
+            /// reinitialize the static repositories
+            topNodes = new ArrayList<SynsetNode>();
+            hyperTree = new HashMap<String, SynsetNode>();
+            for (int i = 0; i < wordMap.size(); i++) {
+                WordData wordData = wordMap.get(i);
+                if (wordHyperMap.containsKey(wordData.getWord())) {
+                    //// we get the topchains only and not the full set of chains
+                    ArrayList<ArrayList<String>> chains = wordHyperMap.get(wordData.getWord());
+                    buildHyperTreeFromChains(wordnetData, wordData, chains);
+                }
+            }
+            System.out.println("pruned hyperTree = " + hyperTree.size());
+    }
+
+    /**
+     * If words are polysemous we keep the sense with most descendants and prune the rest
+     * @param wordnetData
+     * @param wordHyperMap
+     */
+    public static void getTreePrunedForCumulatedHypernymDescendants (WordnetData wordnetData, HashMap<String, ArrayList<ArrayList<String>>> wordHyperMap) {
+
+            /**
+             * We select those chains that have the most frequent most specific hypernym if there is a choice between different senses
+             * We build a chain of the topFrequency at each level starting from the leaves.
+             * If a new chain has a higher frequency than stored so far, we declare it as a new top chain and erase all top chains so far
+             * If chains are equal then they are added to the top set.
+             * Longer chains just add frequency to the frequency chain but this has no effect on the top chains
+             */
+
+            for (int i = 0; i < wordMap.size(); i++) {
+                WordData wordData = wordMap.get(i);
+                ArrayList<ArrayList<String>> topChains = new ArrayList<ArrayList<String>>();
+                ArrayList<Integer> topDescendantsChain = new ArrayList<Integer>(); /// for storing the topFrequencies
+                /// get all the chains stored for this word
+                if (wordHyperMap.containsKey(wordData.getWord())) {
+                    ArrayList<ArrayList<String>> chains = wordHyperMap.get(wordData.getWord());
+                    for (int j = 0; j < chains.size(); j++) {
+                        ArrayList<String> hyperChain = chains.get(j);
+                        for (int k = 0; k < hyperChain.size(); k++) {
+                            String s = hyperChain.get(k);
+                            if (hyperTree.containsKey(s)) {
+                                SynsetNode synsetNode = hyperTree.get(s);
+                                if (topDescendantsChain.size() > k) {
+                                    if (topDescendantsChain.get(k) < synsetNode.getnDescendants()) {
+                                        topDescendantsChain.set(k, synsetNode.getnDescendants());
+                                        topChains = new ArrayList<ArrayList<String>>();
+                                        topChains.add(hyperChain);
+                                    }
+                                    else if (topDescendantsChain.get(k) == synsetNode.getnDescendants()) {
+                                        topDescendantsChain.set(k, synsetNode.getnDescendants());
+                                        topChains.add(hyperChain);
+                                    }
+                                }
+                                else {
+                                    topDescendantsChain.add(synsetNode.getnDescendants());
+                                }
+                            }
+                        }
+
+                    }
+                    //// replace the map with the topChains
+                    wordHyperMap.put(wordData.getWord(), topChains);
+                }
+            }
+
+            /// rebuild the hyperTree based on the pruned chains based on most frequent lowest subsumers
+            /// reinitialize the static repositories
+            topNodes = new ArrayList<SynsetNode>();
+            hyperTree = new HashMap<String, SynsetNode>();
+            for (int i = 0; i < wordMap.size(); i++) {
+                WordData wordData = wordMap.get(i);
+                if (wordHyperMap.containsKey(wordData.getWord())) {
+                    //// we get the topchains only and not the full set of chains
+                    ArrayList<ArrayList<String>> chains = wordHyperMap.get(wordData.getWord());
+                    buildHyperTreeFromChains(wordnetData, wordData, chains);
+                }
+            }
+            System.out.println("pruned hyperTree = " + hyperTree.size());
+    }
+
     /**
      * If words are polysemous we keep the sense with most children and prune the rest
      * @param wordnetData
@@ -316,7 +451,7 @@ public class SubsumerHierarchy {
             "--wn-lmf\t\t<path to a wordnet file in wordn-lmf format> \n" +
             "--relations\t\t<path to a text file with the relations y=that should be used to build the hierarchy> \n" +
             "--input-file\t\t<path to the input file>\n" +
-            "--prune\t\t<prunes the tree to most frequent hypernyms>\n"+
+            "--prune\t\t<prunes the tree to most frequent hypernyms (freq) or most children (child)>\n"+
             "--format\t<format of the input file. Values are 'tuplemap', 'wordmap (with or without frequencies)' and 'tagmap'>\n" +
             "--pos\t<part-of-speech considered for the input words>\n" +
             "--proportion\t\t<OPTIONAL: proportional frequency threshold, relative to the most frequent word, only works for 'tuplemap' format>\n" +
@@ -354,8 +489,8 @@ public class SubsumerHierarchy {
             else if (arg.equals("--relations") && (args.length-1>i)) {
                 pathToRelationsFile = args[i+1].trim();
             }
-            else if (arg.equals("--prune")) {
-                prune = true;
+            else if (arg.equals("--prune") && (args.length-1>i)) {
+                prune = args[i+1].trim();
             }
             else if (arg.equals("--format") && (args.length-1>i)) {
                 format = args[i+1].trim();
@@ -417,8 +552,11 @@ public class SubsumerHierarchy {
         /// first build up the full tree data
         getFullTree(wordnetLmfSaxParser.wordnetData, wordMap);
 
-        if (prune) {
+        if (prune.equalsIgnoreCase("freq")) {
             getTreePrunedForCumulatedHypernymFrequency(wordnetLmfSaxParser.wordnetData, wordHyperMap);
+        }
+        else if (prune.equalsIgnoreCase("child")) {
+            getTreePrunedForCumulatedHypernymChildren(wordnetLmfSaxParser.wordnetData, wordHyperMap);
         }
         try {
             FileOutputStream fosSpreadSheet = new FileOutputStream (pathToInputFile+"."+pos+".prune="+prune+".xls");

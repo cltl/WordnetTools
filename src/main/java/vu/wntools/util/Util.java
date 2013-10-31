@@ -50,7 +50,7 @@ public class Util {
                         writeTreeString(covered, hyperTree, children, nextLevel, fos);
                     }
                     else {
-                             System.out.println("leaf node.getSynset() = " + node.getSynset());
+                          //   System.out.println("leaf node.getSynset() = " + node.getSynset());
                     }
                 }
                 else {
