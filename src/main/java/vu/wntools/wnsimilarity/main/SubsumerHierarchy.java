@@ -151,42 +151,183 @@ public class SubsumerHierarchy {
              * Longer chains just add frequency to the frequency chain but this has no effect on the top chains
              */
 
-            for (int i = 0; i < wordMap.size(); i++) {
-                WordData wordData = wordMap.get(i);
-                ArrayList<ArrayList<String>> topChains = new ArrayList<ArrayList<String>>();
-                ArrayList<Integer> topFreqChain = new ArrayList<Integer>(); /// for storing the topFrequencies
-                /// get all the chains stored for this word
-                if (wordHyperMap.containsKey(wordData.getWord())) {
-                    ArrayList<ArrayList<String>> chains = wordHyperMap.get(wordData.getWord());
-                    for (int j = 0; j < chains.size(); j++) {
-                        ArrayList<String> hyperChain = chains.get(j);
+        for (int i = 0; i < wordMap.size(); i++) {
+            WordData wordData = wordMap.get(i);
+            ArrayList<ArrayList<String>> topChains = new ArrayList<ArrayList<String>>();
+            ArrayList<Integer> topChildChain = new ArrayList<Integer>(); /// for storing the topFrequencies
+            /// get all the chains stored for this word
+            if (wordHyperMap.containsKey(wordData.getWord())) {
+                ArrayList<ArrayList<String>> chains = wordHyperMap.get(wordData.getWord());
+                for (int j = 0; j < chains.size(); j++) {
+                    ArrayList<String> hyperChain = chains.get(j);
+                    if (topChildChain.size()==0) {
+                        /// this is the first chain so we assume it is the best so far
+                        for (int l = 0; l < hyperChain.size(); l++) {
+                            String s1 =  hyperChain.get(l);
+                            if (hyperTree.containsKey(s1)) {
+                                SynsetNode synsetNode1 = hyperTree.get(s1);
+                                topChildChain.add(synsetNode1.getFreq());
+                            }
+                        }
+                        topChains = new ArrayList<ArrayList<String>>();
+                        topChains.add(hyperChain);
+                    }
+                    else {
+                        /// now we got competition
+                        boolean completed = true;
                         for (int k = 0; k < hyperChain.size(); k++) {
                             String s = hyperChain.get(k);
                             if (hyperTree.containsKey(s)) {
                                 SynsetNode synsetNode = hyperTree.get(s);
-                                if (topFreqChain.size() > k) {
-                                    if (topFreqChain.get(k) < synsetNode.getFreq()) {
-                                        topFreqChain.set(k, synsetNode.getFreq());
+                                if (topChildChain.size() > k) {
+                                    if (topChildChain.get(k) < synsetNode.getFreq()) {
+                                        /// we found a better chain, with a lower higher match
+                                        /// recreate the chain of top counts
+                                        topChildChain = new ArrayList<Integer>();
+                                        for (int l = 0; l < hyperChain.size(); l++) {
+                                            String s1 =  hyperChain.get(l);
+                                            if (hyperTree.containsKey(s1)) {
+                                                SynsetNode synsetNode1 = hyperTree.get(s1);
+                                                topChildChain.add(synsetNode1.getFreq());
+                                            }
+                                        }
                                         topChains = new ArrayList<ArrayList<String>>();
                                         topChains.add(hyperChain);
+                                        completed = false;
+                                        break;
                                     }
-                                    else if (topFreqChain.get(k) == synsetNode.getFreq()) {
-                                        topFreqChain.set(k, synsetNode.getFreq());
-                                        topChains.add(hyperChain);
+                                    else if (topChildChain.get(k) > synsetNode.getFreq()) {
+                                        /// the one we have is better so we can break and try the next chain if any
+                                        completed = false;
+                                        break;
+                                    }
+                                    else {
+                                        /// we do nothing if equal and move to the next level
                                     }
                                 }
                                 else {
-                                    topFreqChain.add(synsetNode.getFreq());
+                                    //// if equal or smaller this means we do not have a winner
+                                    // and the chain is longer
+                                    // in this case we consider equal strength and add the top-chain
                                 }
                             }
+                            else {
+                                //// we do nothing
+                            }
                         }
-
+                        if (completed) {
+                            //// this means this chain is as good as the top chain
+                            topChains.add(hyperChain);
+                        }
                     }
-                    //// replace the map with the topChains
-                    wordHyperMap.put(wordData.getWord(), topChains);
+                }
+                //// replace the map with the topChains
+                wordHyperMap.put(wordData.getWord(), topChains);
+            }
+        }
+            /// rebuild the hyperTree based on the pruned chains based on most frequent lowest subsumers
+            /// reinitialize the static repositories
+            topNodes = new ArrayList<SynsetNode>();
+            hyperTree = new HashMap<String, SynsetNode>();
+            for (int i = 0; i < wordMap.size(); i++) {
+                WordData wordData = wordMap.get(i);
+                if (wordHyperMap.containsKey(wordData.getWord())) {
+                    //// we get the topchains only and not the full set of chains
+                    ArrayList<ArrayList<String>> chains = wordHyperMap.get(wordData.getWord());
+                    buildHyperTreeFromChains(wordnetData, wordData, chains);
                 }
             }
+            System.out.println("pruned hyperTree = " + hyperTree.size());
+    }
+    /**
+     * If words are polysemous we keep the sense with most children and prune the rest
+     * @param wordnetData
+     * @param wordHyperMap
+     */
+    public static void getTreePrunedForCumulatedHypernymCumulatedFreq (WordnetData wordnetData, HashMap<String, ArrayList<ArrayList<String>>> wordHyperMap) {
 
+            /**
+             * We select those chains that have the most frequent most specific hypernym if there is a choice between different senses
+             * We build a chain of the topFrequency at each level starting from the leaves.
+             * If a new chain has a higher frequency than stored so far, we declare it as a new top chain and erase all top chains so far
+             * If chains are equal then they are added to the top set.
+             * Longer chains just add frequency to the frequency chain but this has no effect on the top chains
+             */
+
+        for (int i = 0; i < wordMap.size(); i++) {
+            WordData wordData = wordMap.get(i);
+            ArrayList<ArrayList<String>> topChains = new ArrayList<ArrayList<String>>();
+            ArrayList<Integer> topChildChain = new ArrayList<Integer>(); /// for storing the topFrequencies
+            /// get all the chains stored for this word
+            if (wordHyperMap.containsKey(wordData.getWord())) {
+                ArrayList<ArrayList<String>> chains = wordHyperMap.get(wordData.getWord());
+                for (int j = 0; j < chains.size(); j++) {
+                    ArrayList<String> hyperChain = chains.get(j);
+                    if (topChildChain.size()==0) {
+                        /// this is the first chain so we assume it is the best so far
+                        for (int l = 0; l < hyperChain.size(); l++) {
+                            String s1 =  hyperChain.get(l);
+                            if (hyperTree.containsKey(s1)) {
+                                SynsetNode synsetNode1 = hyperTree.get(s1);
+                                topChildChain.add(synsetNode1.getCum());
+                            }
+                        }
+                        topChains = new ArrayList<ArrayList<String>>();
+                        topChains.add(hyperChain);
+                    }
+                    else {
+                        /// now we got competition
+                        boolean completed = true;
+                        for (int k = 0; k < hyperChain.size(); k++) {
+                            String s = hyperChain.get(k);
+                            if (hyperTree.containsKey(s)) {
+                                SynsetNode synsetNode = hyperTree.get(s);
+                                if (topChildChain.size() > k) {
+                                    if (topChildChain.get(k) < synsetNode.getCum()) {
+                                        /// we found a better chain, with a lower higher match
+                                        /// recreate the chain of top counts
+                                        topChildChain = new ArrayList<Integer>();
+                                        for (int l = 0; l < hyperChain.size(); l++) {
+                                            String s1 =  hyperChain.get(l);
+                                            if (hyperTree.containsKey(s1)) {
+                                                SynsetNode synsetNode1 = hyperTree.get(s1);
+                                                topChildChain.add(synsetNode1.getCum());
+                                            }
+                                        }
+                                        topChains = new ArrayList<ArrayList<String>>();
+                                        topChains.add(hyperChain);
+                                        completed = false;
+                                        break;
+                                    }
+                                    else if (topChildChain.get(k) > synsetNode.getCum()) {
+                                        /// the one we have is better so we can break and try the next chain if any
+                                        completed = false;
+                                        break;
+                                    }
+                                    else {
+                                        /// we do nothing if equal and move to the next level
+                                    }
+                                }
+                                else {
+                                    //// if equal or smaller this means we do not have a winner
+                                    // and the chain is longer
+                                    // in this case we consider equal strength and add the top-chain
+                                }
+                            }
+                            else {
+                                //// we do nothing
+                            }
+                        }
+                        if (completed) {
+                            //// this means this chain is as good as the top chain
+                            topChains.add(hyperChain);
+                        }
+                    }
+                }
+                //// replace the map with the topChains
+                wordHyperMap.put(wordData.getWord(), topChains);
+            }
+        }
             /// rebuild the hyperTree based on the pruned chains based on most frequent lowest subsumers
             /// reinitialize the static repositories
             topNodes = new ArrayList<SynsetNode>();
@@ -210,7 +351,7 @@ public class SubsumerHierarchy {
     public static void getTreePrunedForCumulatedHypernymChildren (WordnetData wordnetData, HashMap<String, ArrayList<ArrayList<String>>> wordHyperMap) {
 
             /**
-             * We select those chains that have the most frequent most specific hypernym if there is a choice between different senses
+             * We select those chains that have most specific hypernym with most children if there is a choice between different senses
              * We build a chain of the topFrequency at each level starting from the leaves.
              * If a new chain has a higher frequency than stored so far, we declare it as a new top chain and erase all top chains so far
              * If chains are equal then they are added to the top set.
@@ -226,27 +367,66 @@ public class SubsumerHierarchy {
                     ArrayList<ArrayList<String>> chains = wordHyperMap.get(wordData.getWord());
                     for (int j = 0; j < chains.size(); j++) {
                         ArrayList<String> hyperChain = chains.get(j);
-                        for (int k = 0; k < hyperChain.size(); k++) {
-                            String s = hyperChain.get(k);
-                            if (hyperTree.containsKey(s)) {
-                                SynsetNode synsetNode = hyperTree.get(s);
-                                if (topChildChain.size() > k) {
-                                    if (topChildChain.get(k) < synsetNode.getChildren().size()) {
-                                        topChildChain.set(k, synsetNode.getChildren().size());
-                                        topChains = new ArrayList<ArrayList<String>>();
-                                        topChains.add(hyperChain);
+                        if (topChildChain.size()==0) {
+                            /// this is the first chain so we assume it is the best so far
+                            for (int l = 0; l < hyperChain.size(); l++) {
+                                String s1 =  hyperChain.get(l);
+                                if (hyperTree.containsKey(s1)) {
+                                    SynsetNode synsetNode1 = hyperTree.get(s1);
+                                    topChildChain.add(synsetNode1.getChildren().size());
+                                }
+                            }
+                            topChains = new ArrayList<ArrayList<String>>();
+                            topChains.add(hyperChain);
+                        }
+                        else {
+                            /// now we got competition
+                            boolean completed = true;
+                            for (int k = 0; k < hyperChain.size(); k++) {
+                                String s = hyperChain.get(k);
+                                if (hyperTree.containsKey(s)) {
+                                    SynsetNode synsetNode = hyperTree.get(s);
+                                    if (topChildChain.size() > k) {
+                                        if (topChildChain.get(k) < synsetNode.getChildren().size()) {
+                                            /// we found a better chain, with a lower higher match
+                                            /// recreate the chain of top counts
+                                            topChildChain = new ArrayList<Integer>();
+                                            for (int l = 0; l < hyperChain.size(); l++) {
+                                                String s1 =  hyperChain.get(l);
+                                                if (hyperTree.containsKey(s1)) {
+                                                    SynsetNode synsetNode1 = hyperTree.get(s1);
+                                                    topChildChain.add(synsetNode1.getChildren().size());
+                                                }
+                                            }
+                                            topChains = new ArrayList<ArrayList<String>>();
+                                            topChains.add(hyperChain);
+                                            completed = false;
+                                            break;
+                                        }
+                                        else if (topChildChain.get(k) > synsetNode.getChildren().size()) {
+                                            /// the one we have is better so we can break and try the next chain if any
+                                            completed = false;
+                                            break;
+                                        }
+                                        else {
+                                            /// we do nothing if equal and move to the next level
+                                        }
                                     }
-                                    else if (topChildChain.get(k) == synsetNode.getChildren().size()) {
-                                        topChildChain.set(k, synsetNode.getChildren().size());
-                                        topChains.add(hyperChain);
+                                    else {
+                                       //// if equal or smaller this means we do not have a winner
+                                       // and the chain is longer
+                                       // in this case we consider equal strength and add the top-chain
                                     }
                                 }
                                 else {
-                                    topChildChain.add(synsetNode.getChildren().size());
+                                    //// we do nothing
                                 }
                             }
+                            if (completed) {
+                               //// this means this chain is as good as the top chain
+                                topChains.add(hyperChain);
+                            }
                         }
-
                     }
                     //// replace the map with the topChains
                     wordHyperMap.put(wordData.getWord(), topChains);
@@ -283,41 +463,80 @@ public class SubsumerHierarchy {
              * Longer chains just add frequency to the frequency chain but this has no effect on the top chains
              */
 
-            for (int i = 0; i < wordMap.size(); i++) {
-                WordData wordData = wordMap.get(i);
-                ArrayList<ArrayList<String>> topChains = new ArrayList<ArrayList<String>>();
-                ArrayList<Integer> topDescendantsChain = new ArrayList<Integer>(); /// for storing the topFrequencies
-                /// get all the chains stored for this word
-                if (wordHyperMap.containsKey(wordData.getWord())) {
-                    ArrayList<ArrayList<String>> chains = wordHyperMap.get(wordData.getWord());
-                    for (int j = 0; j < chains.size(); j++) {
-                        ArrayList<String> hyperChain = chains.get(j);
+        for (int i = 0; i < wordMap.size(); i++) {
+            WordData wordData = wordMap.get(i);
+            ArrayList<ArrayList<String>> topChains = new ArrayList<ArrayList<String>>();
+            ArrayList<Integer> topChildChain = new ArrayList<Integer>(); /// for storing the topFrequencies
+            /// get all the chains stored for this word
+            if (wordHyperMap.containsKey(wordData.getWord())) {
+                ArrayList<ArrayList<String>> chains = wordHyperMap.get(wordData.getWord());
+                for (int j = 0; j < chains.size(); j++) {
+                    ArrayList<String> hyperChain = chains.get(j);
+                    if (topChildChain.size()==0) {
+                        /// this is the first chain so we assume it is the best so far
+                        for (int l = 0; l < hyperChain.size(); l++) {
+                            String s1 =  hyperChain.get(l);
+                            if (hyperTree.containsKey(s1)) {
+                                SynsetNode synsetNode1 = hyperTree.get(s1);
+                                topChildChain.add(synsetNode1.getnDescendants());
+                            }
+                        }
+                        topChains = new ArrayList<ArrayList<String>>();
+                        topChains.add(hyperChain);
+                    }
+                    else {
+                        /// now we got competition
+                        boolean completed = true;
                         for (int k = 0; k < hyperChain.size(); k++) {
                             String s = hyperChain.get(k);
                             if (hyperTree.containsKey(s)) {
                                 SynsetNode synsetNode = hyperTree.get(s);
-                                if (topDescendantsChain.size() > k) {
-                                    if (topDescendantsChain.get(k) < synsetNode.getnDescendants()) {
-                                        topDescendantsChain.set(k, synsetNode.getnDescendants());
+                                if (topChildChain.size() > k) {
+                                    if (topChildChain.get(k) < synsetNode.getnDescendants()) {
+                                        /// we found a better chain, with a lower higher match
+                                        /// recreate the chain of top counts
+                                        topChildChain = new ArrayList<Integer>();
+                                        for (int l = 0; l < hyperChain.size(); l++) {
+                                            String s1 =  hyperChain.get(l);
+                                            if (hyperTree.containsKey(s1)) {
+                                                SynsetNode synsetNode1 = hyperTree.get(s1);
+                                                topChildChain.add(synsetNode1.getnDescendants());
+                                            }
+                                        }
                                         topChains = new ArrayList<ArrayList<String>>();
                                         topChains.add(hyperChain);
+                                        completed = false;
+                                        break;
                                     }
-                                    else if (topDescendantsChain.get(k) == synsetNode.getnDescendants()) {
-                                        topDescendantsChain.set(k, synsetNode.getnDescendants());
-                                        topChains.add(hyperChain);
+                                    else if (topChildChain.get(k) > synsetNode.getnDescendants()) {
+                                        /// the one we have is better so we can break and try the next chain if any
+                                        completed = false;
+                                        break;
+                                    }
+                                    else {
+                                        /// we do nothing if equal and move to the next level
                                     }
                                 }
                                 else {
-                                    topDescendantsChain.add(synsetNode.getnDescendants());
+                                    //// if equal or smaller this means we do not have a winner
+                                    // and the chain is longer
+                                    // in this case we consider equal strength and add the top-chain
                                 }
                             }
+                            else {
+                                //// we do nothing
+                            }
                         }
-
+                        if (completed) {
+                            //// this means this chain is as good as the top chain
+                            topChains.add(hyperChain);
+                        }
                     }
-                    //// replace the map with the topChains
-                    wordHyperMap.put(wordData.getWord(), topChains);
                 }
+                //// replace the map with the topChains
+                wordHyperMap.put(wordData.getWord(), topChains);
             }
+        }
 
             /// rebuild the hyperTree based on the pruned chains based on most frequent lowest subsumers
             /// reinitialize the static repositories
@@ -334,107 +553,6 @@ public class SubsumerHierarchy {
             System.out.println("pruned hyperTree = " + hyperTree.size());
     }
 
-    /**
-     * If words are polysemous we keep the sense with most children and prune the rest
-     * @param wordnetData
-     * @param wordMap
-     */
-/*    public static void getFullTree_old (WordnetData wordnetData, ArrayList<WordData> wordMap) {
-            /// WE BUILD A HYPERTREE BASED ON ALL MEANINGS OF A WORD AND WE PASS ON THE FREQUENCIES FROM THE LEAVES TO THE HYPERNYMS
-            for (int i = 0; i < wordMap.size(); i++) {
-                WordData wordData =  wordMap.get(i);
-                System.out.println("word = " + wordData.getWord());
-                if (wordnetData.entryToSynsets.containsKey(wordData.getWord())) {
-                    ArrayList<String> synsetIds = wordnetData.entryToSynsets.get(wordData.getWord());
-                    if (!monosemous || synsetIds.size()==1) {
-                        for (int s = 0; s < synsetIds.size(); s++) {
-                            String synsetId =  synsetIds.get(s);
-                            System.out.println("synsetId = " + synsetId);
-                            SynsetNode sNode = wordnetData.makeSynsetNode(wordData.getWord(), synsetId);
-                            if (hyperTree.containsKey(synsetId)) {
-                                /// we already got it before so we just update the frequency
-                                /// no need to build its tree since it should already be there
-                                sNode = hyperTree.get(synsetId);
-                                sNode.addFreq(wordData.getFreq());
-                                hyperTree.put(synsetId, sNode);
-                            }
-                            else {
-                                /// this is a new one so we set the frequency
-                                sNode.setFreq(wordData.getFreq());
-                                hyperTree.put(synsetId, sNode);
-                                /// since it is new we build the tree upward, possibly multiple hierarchies upward
-                                SynsetNode hNode = null;
-                                ArrayList<ArrayList<String>> hypers = new ArrayList<ArrayList<String>>();
-                                if (firsthypernym) {
-                                    ArrayList<String> singleHypers = new ArrayList<String>();
-                                    wordnetData.getSingleHyperChain(synsetId, singleHypers);
-                                    hypers.add(singleHypers);
-                                }
-                                else {
-                                    wordnetData.getMultipleHyperChain(synsetId, hypers);
-                                }
-                                /// we build up the hyper tree for this new synset
-                                if (hypers.size()>0) {
-                                    for (int c = 0; c < hypers.size(); c++) {
-                                        ArrayList<String> hyperChain = hypers.get(c);
-                                        int cumFreq = sNode.getFreq();
-                                        for (int j = 0; j < hyperChain.size(); j++) {
-                                            String hyperSynsetId = hyperChain.get(j);
-                                            if (hyperTree.containsKey(hyperSynsetId)) {
-                                                hNode = hyperTree.get(hyperSynsetId);
-                                                hNode.incrementDescendants();
-                                                hNode.addCum(cumFreq);
-                                                cumFreq = hNode.getCum();
-                                                hyperTree.put(hyperSynsetId, hNode);
-                                            }
-                                            else {
-                                                hNode = wordnetData.makeSynsetNode(hyperSynsetId);
-                                                hNode.incrementDescendants();
-                                                hNode.addChildren(sNode);
-                                                hNode.addCum(cumFreq);
-                                                cumFreq = hNode.getCum();
-                                                hNode.setDepth(hypers.size()-j);
-                                                hyperTree.put(hyperSynsetId, hNode);
-                                            }
-                                            // we have the last hyper in the the chain
-                                            if (j == hyperChain.size()-1) {
-                                                if (!Util.hasSynsetNode(topNodes, hNode)) {
-                                                    topNodes.add(hNode);
-                                                }
-                                            }
-                                            else {
-                                                sNode = hNode;
-                                            }
-
-                                            //sNode = hNode;
-                                        }
-                                    }
-                                    /// In the next loop we store all the chains for a word sense or synset at the word level
-                                    if (wordHyperMap.containsKey(wordData.getWord())) {
-                                        ArrayList<ArrayList<String>> chains = wordHyperMap.get(wordData.getWord());
-                                        for (int j = 0; j < hypers.size(); j++) {
-                                            ArrayList<String> hyperChain = hypers.get(j);
-                                            chains.add(hyperChain);
-                                        }
-                                        wordHyperMap.put(wordData.getWord(), chains);
-                                    }
-                                    else {
-                                        wordHyperMap.put(wordData.getWord(), hypers);
-                                    }
-                                }
-                                else {
-                                    /// there is nothing to do... This is a top node
-                                }
-                            }
-                        }
-                    }
-                    else {
-                        /// we ignore words with more than one meaning if monosemous flag is turned on
-                    }
-                }
-            }
-            System.out.println("unpruned hyperTree = " + hyperTree.size());
-    }*/
 
 
     /**
@@ -451,8 +569,8 @@ public class SubsumerHierarchy {
             "--wn-lmf\t\t<path to a wordnet file in wordn-lmf format> \n" +
             "--relations\t\t<path to a text file with the relations y=that should be used to build the hierarchy> \n" +
             "--input-file\t\t<path to the input file>\n" +
-            "--prune\t\t<prunes the tree to most frequent hypernyms (freq) or most children (child)>\n"+
-            "--format\t<format of the input file. Values are 'tuplemap', 'wordmap (with or without frequencies)' and 'tagmap'>\n" +
+            "--prune\t\t<prunes the tree to lowest hypernyms scored for frequency(freq), descendants (descendant), cumulated freq (cumulation), or children (child)>\n"+
+            "--format\t<format of the input file. Values are 'kybotmap' (overview file generated by kybots from kaf) or 'wordmap (with or without frequencies)'>\n" +
             "--pos\t<part-of-speech considered for the input words>\n" +
             "--proportion\t\t<OPTIONAL: proportional frequency threshold, relative to the most frequent word, only works for 'tuplemap' format>\n" +
             "--monosemous\t\t<OPTIONAL: only consider input words that are monosemous>\n" +
@@ -524,12 +642,8 @@ public class SubsumerHierarchy {
         System.out.println("wordnetLmfSaxParser.wordnetData.getHyperRelations().size() = " + wordnetLmfSaxParser.wordnetData.getHyperRelations().size());
         System.out.println("wordnetLmfSaxParser.wordnetData.entryToSynsets.size() = " + wordnetLmfSaxParser.wordnetData.entryToSynsets.size());
         wordnetLmfSaxParser.wordnetData.buildSynsetIndex();
-
-        if (format.equals("tagmap"))  {
-            HashMap<String, ArrayList<String>> tagSynsetMap = new HashMap<String, ArrayList<String>>();
-            //// transform tagMap to wordMap
-        }
-        else if (format.equals("tuplemap")) {
+        System.out.println("format = " + format);
+        if (format.equals("kybotmap")) {
             ArrayList<WordData> wordDataMap = Util.readOverviewFileToArrayList(pathToInputFile);
             int topFreq = 0;
             for (int i = 0; i < wordDataMap.size(); i++) {
@@ -548,7 +662,7 @@ public class SubsumerHierarchy {
         else if (format.equals("wordmap")) {
            wordMap = Util.readFileToWordDataList(pathToInputFile);
         }
-
+        System.out.println("prune = " + prune);
         /// first build up the full tree data
         getFullTree(wordnetLmfSaxParser.wordnetData, wordMap);
 
@@ -557,6 +671,12 @@ public class SubsumerHierarchy {
         }
         else if (prune.equalsIgnoreCase("child")) {
             getTreePrunedForCumulatedHypernymChildren(wordnetLmfSaxParser.wordnetData, wordHyperMap);
+        }
+        else if (prune.equalsIgnoreCase("descendant")) {
+            getTreePrunedForCumulatedHypernymDescendants(wordnetLmfSaxParser.wordnetData, wordHyperMap);
+        }
+        else if (prune.equalsIgnoreCase("cumulation")) {
+            getTreePrunedForCumulatedHypernymCumulatedFreq(wordnetLmfSaxParser.wordnetData, wordHyperMap);
         }
         try {
             FileOutputStream fosSpreadSheet = new FileOutputStream (pathToInputFile+"."+pos+".prune="+prune+".xls");

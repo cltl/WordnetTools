@@ -14,8 +14,8 @@ import java.util.Set;
  */
 public class WordnetData {
     public boolean DEBUG = false;
-    private HashMap<String, ArrayList<String>> hyperRelations = new HashMap<String, ArrayList<String>>();
-    private HashMap<String, ArrayList<String>> otherRelations = new HashMap<String, ArrayList<String>>();
+    public HashMap<String, ArrayList<String>> hyperRelations = new HashMap<String, ArrayList<String>>();
+    public HashMap<String, ArrayList<String>> otherRelations = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> entryToSynsets = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> entryToEquiSynsets = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> synsetToEntries = new HashMap<String, ArrayList<String>>();
@@ -248,7 +248,7 @@ public class WordnetData {
              }
          }
          if (keySet.size()==0) {
-            depth = 0;
+            depth = 1;
          }
          else {
             depth = depth/keySet.size();
@@ -267,7 +267,7 @@ public class WordnetData {
              }
          }
          if (targetChains.size()==0) {
-            depth = 0;
+            depth = 1;
          }
          else {
             depth = depth/targetChains.size();
@@ -293,7 +293,7 @@ public class WordnetData {
              }
          }
          if (keySet.size()==0) {
-            depth = 0;
+            depth = 1;
          }
          else {
             depth = depth/keySet.size();
