@@ -211,8 +211,8 @@ public class Similarity {
                     if (fields.length==2) {
                         String source = fields[0].trim();
                         String target = fields[1].trim();
-                       // System.out.println("source = " + source);
-                       // System.out.println("target = " + target);
+                        System.out.println("source = " + source);
+                        System.out.println("target = " + target);
                         String logString = "";
                         String logString2 = "";
                         String match = "";
