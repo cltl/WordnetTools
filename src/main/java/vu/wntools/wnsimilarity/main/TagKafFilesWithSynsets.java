@@ -64,7 +64,7 @@ public class TagKafFilesWithSynsets {
             }
             try {
                 FileOutputStream fos = new FileOutputStream(pathToKafFile+".wordnet.kaf");
-                kafSaxParser.writeKafToStream(fos);
+                kafSaxParser.writeNafToStream(fos);
                 fos.close();
             } catch (IOException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

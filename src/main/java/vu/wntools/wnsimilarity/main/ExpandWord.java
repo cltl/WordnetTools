@@ -25,7 +25,8 @@ public class ExpandWord {
         String pathToRelFile = "/Tools/wordnet-tools.0.1/resources/relations2.txt";
         //String pathToInputFile = "/Tools/wordnet-tools.0.1/input/expansion/smell.txt";
         //String pathToInputFile = "/Tools/wordnet-tools.0.1/input/expansion/huis.txt";
-        String pathToInputFile = "oorzaak";
+        //String pathToInputFile = "oorzaak";
+        String pathToInputFile = "persoon";
         String posFilter = "";
         WordnetData wordnetData = new WordnetData();
         ArrayList<String> relations = new ArrayList<String>();
@@ -71,6 +72,7 @@ public class ExpandWord {
                 wordnetData = parser.wordnetData;
                 wordnetData.buildSynsetIndex();
                 wordnetData.buildChildRelationsFromids();
+                System.out.println("wordnetData entryToSynsets = " + wordnetData.entryToSynsets.size());
                 System.out.println("wordnetData child relations = " + wordnetData.childRelations.size());
                 for (int i = 0; i < inputwords.size(); i++) {
                     String word =  inputwords.get(i);
@@ -85,7 +87,7 @@ public class ExpandWord {
                         }
                     }
                     else {
-                       // System.out.println("Cannot find the word");
+                        System.out.println("Cannot find the word");
                     }
                 }
                 fos.close();
