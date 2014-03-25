@@ -256,47 +256,30 @@ public class WordnetLmfSaxParser extends DefaultHandler {
 
 
         if (qName.equalsIgnoreCase("Synset")) {
-            /// we store all synsets that we find and build the full graph
-            if ((!sourceId.isEmpty()) && hypers.size()>0) {
-                wordnetData.addHyperRelation(sourceId, hypers);
-            }
-            if ((!sourceId.isEmpty()) && others.size()>0) {
-                wordnetData.addOtherRelations(sourceId, others);
-            }
-/*
-            if (!posFilter.isEmpty()) {
+            if ((posFilter.isEmpty()) || sourceId.endsWith(posFilter)) {
+                /// we store all synsets that we find and build the full graph
                // System.out.println("posFilter = " + posFilter);
-                if (sourceId.endsWith("-"+posFilter)) {
-                    posMatch = true;
-                }
-                else if (pos.isEmpty()) {
-                   posMatch = true;
-                }
-                else {
-                    posMatch = false;
-                }
-            }
-            if (posMatch) {
+               // System.out.println("sourceId = " + sourceId);
                 if ((!sourceId.isEmpty()) && hypers.size()>0) {
                     wordnetData.addHyperRelation(sourceId, hypers);
                 }
                 if ((!sourceId.isEmpty()) && others.size()>0) {
                     wordnetData.addOtherRelations(sourceId, others);
                 }
+                sourceId = "";
+                others = new ArrayList<String>();
+                hypers = new ArrayList<String>();
+
+
+    /*            if (wordnetData.getHyperRelations().size()%1000==0) {
+                    System.out.println("wordnetData.getHyperRelations().size() = " + wordnetData.getHyperRelations().size());
+                }*/
             }
             else {
-
+                if (!pos.equalsIgnoreCase("n")) {
+                    System.out.println("pos = " + pos);
+                }
             }
-*/
-            sourceId = "";
-            others = new ArrayList<String>();
-            hypers = new ArrayList<String>();
-
-
-/*            if (wordnetData.getHyperRelations().size()%1000==0) {
-                System.out.println("wordnetData.getHyperRelations().size() = " + wordnetData.getHyperRelations().size());
-            }*/
-
         }
         else if (qName.equalsIgnoreCase("LexicalEntry")) {
             if (!entry.isEmpty()) {

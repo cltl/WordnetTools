@@ -45,9 +45,14 @@ public class GetStats {
             wordnetLmfSaxParser.setRelations(relations);
             if (!pos.isEmpty()) {
                 wordnetLmfSaxParser.setPos(pos);
+                System.out.println("pos = " + pos);
             }
             wordnetLmfSaxParser.parseFile(pathToWnLmfFile);
             wordnetLmfSaxParser.wordnetData.buildSynsetIndex();
+            System.out.println("wordnetLmfSaxParser.wordnetData.entryToSynsets.size() = " + wordnetLmfSaxParser.wordnetData.entryToSynsets.size());
+            System.out.println("wordnetLmfSaxParser.wordnetData.synsetToEntries.size() = " + wordnetLmfSaxParser.wordnetData.synsetToEntries.size());
+            System.out.println("wordnetLmfSaxParser.wordnetData.hyperRelations.size() = " + wordnetLmfSaxParser.wordnetData.hyperRelations.size());
+            System.out.println("wordnetLmfSaxParser.wordnetData.otherRelations.size() = " + wordnetLmfSaxParser.wordnetData.otherRelations.size());
             HashMap<Integer, Integer> depthCount = new HashMap<Integer, Integer>();
             HashMap<Integer, Integer> hyperCount = new HashMap<Integer, Integer>();
 
