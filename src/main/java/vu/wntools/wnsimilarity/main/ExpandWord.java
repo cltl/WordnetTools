@@ -1,6 +1,7 @@
 package vu.wntools.wnsimilarity.main;
 
 import vu.wntools.util.Util;
+import vu.wntools.wordnet.SynsetNode;
 import vu.wntools.wordnet.WordnetData;
 import vu.wntools.wordnet.WordnetLmfSaxParser;
 
@@ -26,6 +27,7 @@ public class ExpandWord {
         //String pathToInputFile = "/Tools/wordnet-tools.0.1/input/expansion/smell.txt";
         //String pathToInputFile = "/Tools/wordnet-tools.0.1/input/expansion/huis.txt";
         //String pathToInputFile = "oorzaak";
+        boolean UP = false;
         String pathToInputFile = "persoon";
         String posFilter = "";
         WordnetData wordnetData = new WordnetData();
@@ -39,6 +41,9 @@ public class ExpandWord {
             }
             else if ((arg.equalsIgnoreCase("--lmf-file")) && args.length>i) {
                 pathToWordnetFile = args[i+1];
+            }
+            else if ((arg.equalsIgnoreCase("--up"))) {
+                UP = true;
             }
             else if ((arg.equalsIgnoreCase("--relations")) && args.length>i) {
                 pathToRelFile = args[i+1];
@@ -71,23 +76,52 @@ public class ExpandWord {
                 parser.parseFile(pathToWordnetFile);
                 wordnetData = parser.wordnetData;
                 wordnetData.buildSynsetIndex();
-                wordnetData.buildChildRelationsFromids();
-                System.out.println("wordnetData entryToSynsets = " + wordnetData.entryToSynsets.size());
-                System.out.println("wordnetData child relations = " + wordnetData.childRelations.size());
-                for (int i = 0; i < inputwords.size(); i++) {
-                    String word =  inputwords.get(i);
-                    String str ="word = " + word+"\n";
-                    System.out.println(word);
-                    fos.write(str.getBytes());
-                    ArrayList<String> sources = wordnetData.entryToSynsets.get(word);
-                    if ((sources!=null) && (sources.size()>0)) {
-                        for (int j = 0; j < sources.size(); j++) {
-                            String sourceId = sources.get(j);
-                            Util.writeTreeString(wordnetData,sourceId, 0, fos, new ArrayList<String>());
+                if (!UP) {
+                    wordnetData.buildChildRelationsFromids();
+                    System.out.println("wordnetData entryToSynsets = " + wordnetData.entryToSynsets.size());
+                    System.out.println("wordnetData child relations = " + wordnetData.childRelations.size());
+                    for (int i = 0; i < inputwords.size(); i++) {
+                        String word =  inputwords.get(i);
+                        String str ="word = " + word+"\n";
+                        System.out.println(word);
+                        fos.write(str.getBytes());
+                        ArrayList<String> sources = wordnetData.entryToSynsets.get(word);
+                        if ((sources!=null) && (sources.size()>0)) {
+                            for (int j = 0; j < sources.size(); j++) {
+                                String sourceId = sources.get(j);
+                                Util.writeTreeString(wordnetData,sourceId, 0, fos, new ArrayList<String>());
+                            }
+                        }
+                        else {
+                            System.out.println("Cannot find the word");
                         }
                     }
-                    else {
-                        System.out.println("Cannot find the word");
+                }
+                else {
+                    for (int i = 0; i < inputwords.size(); i++) {
+                        String word =  inputwords.get(i);
+                        System.out.println("word = " + word);
+                         if (wordnetData.entryToSynsets.containsKey(word)) {
+                             ArrayList<String> sources = wordnetData.entryToSynsets.get(word);
+                             for (int j = 0; j < sources.size(); j++) {
+                                 String s = sources.get(j);
+                                 ArrayList<ArrayList<String>> targetChains = new ArrayList<ArrayList<String>>();
+                                 wordnetData.getMultipleHyperChain(s, targetChains );
+                                 for (int k = 0; k < targetChains.size(); k++) {
+                                     ArrayList<String> strings = targetChains.get(k);
+                                     for (int l = 0; l < strings.size(); l++) {
+                                         String tab = "";
+                                         for (int m = 0; m < l; m++) {
+                                            tab+=" ";
+                                         }
+                                         String s1 = strings.get(l);
+                                         SynsetNode synsetNode = wordnetData.makeSynsetNode(s1);
+                                         System.out.println(tab+synsetNode.toString());
+                                     }
+                                 }
+                             }
+
+                         }
                     }
                 }
                 fos.close();

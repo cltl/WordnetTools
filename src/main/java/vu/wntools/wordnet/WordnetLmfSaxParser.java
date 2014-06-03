@@ -277,7 +277,7 @@ public class WordnetLmfSaxParser extends DefaultHandler {
             }
             else {
                 if (!pos.equalsIgnoreCase("n")) {
-                    System.out.println("pos = " + pos);
+                  //  System.out.println("pos = " + pos);
                 }
             }
         }
