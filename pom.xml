@@ -46,12 +46,12 @@
     </build>
 
     <dependencies>
-    <dependency>
-        <groupId>eu.kyotoproject.kaf</groupId>
-        <artifactId>KyotoKafSaxParser</artifactId>
-        <version>1.0</version>
-        <scope>compile</scope>
-    </dependency>
+
+        <dependency>
+            <groupId>KyotoKafSaxParser</groupId>
+            <artifactId>KyotoKafSaxParser</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
 </project>

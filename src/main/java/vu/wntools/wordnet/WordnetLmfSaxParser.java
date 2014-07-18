@@ -34,6 +34,42 @@ public class WordnetLmfSaxParser extends DefaultHandler {
     private ArrayList<String> synsets = new ArrayList<String>();
     private ArrayList<String> hypers = new ArrayList<String>();
     private ArrayList<String> others = new ArrayList<String>();
+    private ArrayList<String> directequivalences = new ArrayList<String>();
+    private ArrayList<String> nearequivalences = new ArrayList<String>();
+    private ArrayList<String> otherequivalences = new ArrayList<String>();
+
+    /**
+     *       <Synset id="nld-21-d_n-11517-n">
+     <SynsetRelations>
+     <SynsetRelation target="nld-21-d_n-10345-n" relType="HAS_HYPERONYM">
+     <Meta author="Paul" date="19961206" source="d_n-11517" confidence="0"/>
+     </SynsetRelation>
+     <SynsetRelation target="nld-21-d_n-40818-n" relType="HAS_MERO_PART">
+     <Meta author="Laura" date="1998026" source="d_n-11517" confidence="0"/>
+     </SynsetRelation>
+     </SynsetRelations>
+     <MonolingualExternalRefs>
+     <MonolingualExternalRef externalSystem="pwn-20"
+     externalReference="eng-20-05247300-n"
+     relType="EQ_NEAR_SYNONYM">
+     <Meta author="Irion Technologies"
+     date="20070622"
+     source="Irion Wordnet Aligner 1.0"
+     confidence="43"/>
+     </MonolingualExternalRef>
+     <MonolingualExternalRef externalSystem="pwn-30"
+     externalReference="eng-30-05565696-n"
+     relType="EQ_NEAR_SYNONYM">
+     <Meta author="Irion Technologies"
+     date="20070622"
+     source="Irion Wordnet Aligner 1.0"
+     confidence="43"/>
+     </MonolingualExternalRef>
+
+     <MonolingualExternalRef externalSystem="wordnet_domain" externalReference="anatomy"/>
+     </MonolingualExternalRefs>
+     </Synset>
+     */
 
 
     public WordnetLmfSaxParser() {
@@ -52,6 +88,30 @@ public class WordnetLmfSaxParser extends DefaultHandler {
     public void setPos (String pos) {
         posFilter = pos;
         posMatch = false;
+    }
+
+    public ArrayList<String> getDirectEquivalences() {
+        return directequivalences;
+    }
+
+    public void setDirectequivalences(ArrayList<String> equivalences) {
+        this.directequivalences = equivalences;
+    }
+
+    public ArrayList<String> getNearEquivalences() {
+        return nearequivalences;
+    }
+
+    public void setNearEquivalences(ArrayList<String> nearequivalences) {
+        this.nearequivalences = nearequivalences;
+    }
+
+    public ArrayList<String> getOtherEquivalences() {
+        return otherequivalences;
+    }
+
+    public void setOtherEquivalences(ArrayList<String> otherequivalences) {
+        this.otherequivalences = otherequivalences;
     }
 
     public void parseFile(String filePath) {
@@ -144,6 +204,9 @@ public class WordnetLmfSaxParser extends DefaultHandler {
             sourceId = "";
             others = new ArrayList<String>();
             hypers = new ArrayList<String>();
+            directequivalences = new ArrayList<String>();
+            nearequivalences = new ArrayList<String>();
+            otherequivalences = new ArrayList<String>();
             for (int i = 0; i < attributes.getLength(); i++) {
                 if (attributes.getQName(i).equalsIgnoreCase("id")) {
                     sourceId = attributes.getValue(i).trim();
@@ -244,6 +307,39 @@ public class WordnetLmfSaxParser extends DefaultHandler {
             }
 
         }
+        else if (qName.equalsIgnoreCase("MonolingualExternalRef")) {
+
+            /*            <MonolingualExternalRef externalSystem="pwn-20"
+            externalReference="eng-20-05247300-n"
+            relType="EQ_NEAR_SYNONYM">
+            <Meta author="Irion Technologies"
+            date="20070622"
+            source="Irion Wordnet Aligner 1.0"
+            confidence="43"/>
+            </MonolingualExternalRef>*/
+            type = "";
+            targetId = "";
+            for (int i = 0; i < attributes.getLength(); i++) {
+                if (attributes.getQName(i).equalsIgnoreCase("externalReference")) {
+                    targetId = attributes.getValue(i).trim();
+                }
+                else if (attributes.getQName(i).equalsIgnoreCase("relType")) {
+                    type = attributes.getValue(i).trim();
+                }
+
+            }
+
+            if (type.equalsIgnoreCase("eq_synonym")) {
+                    if (!targetId.isEmpty()) directequivalences.add(targetId);
+            }
+            else if (type.equalsIgnoreCase("eq_near_synonym")) {
+                if (!targetId.isEmpty()) nearequivalences.add(targetId);
+            }
+            else if (type.toLowerCase().startsWith("eq_")) {
+                if (!targetId.isEmpty()) otherequivalences.add(targetId);
+            }
+
+        }
         else {
         }
         value = "";
@@ -266,9 +362,21 @@ public class WordnetLmfSaxParser extends DefaultHandler {
                 if ((!sourceId.isEmpty()) && others.size()>0) {
                     wordnetData.addOtherRelations(sourceId, others);
                 }
+                if ((!sourceId.isEmpty()) && directequivalences.size()>0) {
+                    wordnetData.addSynsetToDirectEquiSynsets(sourceId, directequivalences);
+                }
+                if ((!sourceId.isEmpty()) && nearequivalences.size()>0) {
+                    wordnetData.addSynsetToNearEquiSynsets(sourceId, nearequivalences);
+                }
+                if ((!sourceId.isEmpty()) && otherequivalences.size()>0) {
+                    wordnetData.addSynsetToOtherEquiSynsets(sourceId, otherequivalences);
+                }
                 sourceId = "";
                 others = new ArrayList<String>();
                 hypers = new ArrayList<String>();
+                directequivalences = new ArrayList<String>();
+                nearequivalences = new ArrayList<String>();
+                otherequivalences = new ArrayList<String>();
 
 
     /*            if (wordnetData.getHyperRelations().size()%1000==0) {

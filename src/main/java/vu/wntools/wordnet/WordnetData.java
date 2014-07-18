@@ -17,7 +17,9 @@ public class WordnetData {
     public HashMap<String, ArrayList<String>> hyperRelations = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> otherRelations = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> entryToSynsets = new HashMap<String, ArrayList<String>>();
-    public HashMap<String, ArrayList<String>> entryToEquiSynsets = new HashMap<String, ArrayList<String>>();
+    public HashMap<String, ArrayList<String>> synsetToDirectEquiSynsets = new HashMap<String, ArrayList<String>>();
+    public HashMap<String, ArrayList<String>> synsetToNearEquiSynsets = new HashMap<String, ArrayList<String>>();
+    public HashMap<String, ArrayList<String>> synsetToOtherEquiSynsets = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> synsetToEntries = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> childRelations = new HashMap<String, ArrayList<String>>();
     private int nAverageNounDepth = 0;
@@ -33,7 +35,9 @@ public class WordnetData {
         hyperRelations = new HashMap<String, ArrayList<String>>();
         otherRelations = new HashMap<String, ArrayList<String>>();
         entryToSynsets = new HashMap<String, ArrayList<String>>();
-        entryToEquiSynsets = new HashMap<String, ArrayList<String>>();
+        synsetToDirectEquiSynsets = new HashMap<String, ArrayList<String>>();
+        synsetToNearEquiSynsets = new HashMap<String, ArrayList<String>>();
+        synsetToOtherEquiSynsets = new HashMap<String, ArrayList<String>>();
         synsetToEntries = new HashMap<String, ArrayList<String>>();
         childRelations = new HashMap<String, ArrayList<String>>();
         nAverageNounDepth = 0;
@@ -90,6 +94,29 @@ public class WordnetData {
         this.otherRelations.put(sourceId, targetIds);
     }
 
+    public HashMap<String, ArrayList<String>> getSynsetToDirectEquiSynsets() {
+        return synsetToDirectEquiSynsets;
+    }
+
+    public void addSynsetToDirectEquiSynsets(String synsetID, ArrayList<String> synsetToDirectEquiSynsets) {
+        this.synsetToDirectEquiSynsets.put(synsetID, synsetToDirectEquiSynsets);
+    }
+
+    public HashMap<String, ArrayList<String>> getSynsetToNearEquiSynsets() {
+        return synsetToNearEquiSynsets;
+    }
+
+    public void addSynsetToNearEquiSynsets(String synsetID, ArrayList<String> synsetToNearEquiSynsets) {
+        this.synsetToNearEquiSynsets.put(synsetID, synsetToNearEquiSynsets);
+    }
+
+    public HashMap<String, ArrayList<String>> getSynsetToOtherEquiSynsets() {
+        return synsetToOtherEquiSynsets;
+    }
+
+    public void addSynsetToOtherEquiSynsets(String synsetID, ArrayList<String> synsetToOtherEquiSynsets) {
+        this.synsetToOtherEquiSynsets.put(synsetID, synsetToOtherEquiSynsets);
+    }
 
     public ArrayList<String> getTopNodes () {
         ArrayList<String> topNodes = new ArrayList<String>();
