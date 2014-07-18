@@ -26,6 +26,7 @@ import java.util.*;
  */
 public class ProjectPredicateMatrix {
     static HashMap<String, ArrayList<ArrayList<String>>> wordNetPredicateMap = new HashMap<String,ArrayList<ArrayList<String>>>();
+    static boolean REDUCE = true;
 
     static public void main (String[] args) {
         //String pathToPredicateMatrixFile = args[0];
@@ -46,6 +47,9 @@ public class ProjectPredicateMatrix {
             else if (arg.equalsIgnoreCase("--wn-name") && ((i+1)>args.length)) {
                 wordnetName = args[i+1];
             }
+            else if (arg.equalsIgnoreCase("--reduce")) {
+                REDUCE = true;
+            }
         }
         processMatrixFileWithWordnetSynset(pathToPredicateMatrixFile);
         WordnetLmfSaxParser wordnetLmfSaxParser = new WordnetLmfSaxParser();
@@ -57,17 +61,37 @@ public class ProjectPredicateMatrix {
         System.out.println("wordNetPredicateMap.size() = " + wordNetPredicateMap.size());
         HashMap<String, ArrayList<ArrayList<String>>> projectedPredicateMapDirect = createMapping(wordnetLmfSaxParser.wordnetData.getSynsetToDirectEquiSynsets());
         String key = wordnetName+"-eq_synonym";
-        outputMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapDirect, pathToPredicateMatrixFile+"."+key, wordnetName, key);
+        if (REDUCE) {
+            outputReducedMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapDirect, pathToPredicateMatrixFile+"."+key, wordnetName, key);
+        }
+        else {
+            outputMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapDirect, pathToPredicateMatrixFile+"."+key, wordnetName, key);
+        }
         HashMap<String, ArrayList<ArrayList<String>>> projectedPredicateMapNear =createMapping(wordnetLmfSaxParser.wordnetData.getSynsetToNearEquiSynsets());
         key = wordnetName+"-eq_near_synonym";
-        outputMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapNear, pathToPredicateMatrixFile+"."+key, wordnetName, key);
+        if (REDUCE) {
+            outputReducedMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapNear, pathToPredicateMatrixFile+"."+key, wordnetName, key);
+        }
+        else {
+            outputMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapNear, pathToPredicateMatrixFile+"."+key, wordnetName, key);
+        }
         HashMap<String, ArrayList<ArrayList<String>>> projectedPredicateMapOther =createMapping(wordnetLmfSaxParser.wordnetData.getSynsetToOtherEquiSynsets());
         key = wordnetName+"-eq_other";
-        outputMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapOther, pathToPredicateMatrixFile+"."+key, wordnetName, key);
+        if (REDUCE) {
+            outputReducedMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapOther, pathToPredicateMatrixFile+"."+key, wordnetName, key);
+        }
+        else {
+            outputMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapOther, pathToPredicateMatrixFile+"."+key, wordnetName, key);
+        }
         HashMap<String, ArrayList<ArrayList<String>>> projectedPredicateMapParent =createHyperonymMappings(wordnetLmfSaxParser.wordnetData,
                 projectedPredicateMapDirect, projectedPredicateMapNear, projectedPredicateMapOther);
         key = wordnetName+"-eq_parent";
-        outputMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapParent, pathToPredicateMatrixFile+"."+key, wordnetName, key);
+        if (REDUCE) {
+            outputReducedMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapParent, pathToPredicateMatrixFile+"."+key, wordnetName, key);
+        }
+        else {
+            outputMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapParent, pathToPredicateMatrixFile+"."+key, wordnetName, key);
+        }
     }
 
     static void outputMappings (WordnetData wordnetData, HashMap<String, ArrayList<ArrayList<String>>> projectedPredicateMap, String filePath, String wordnetName, String prefix) {
@@ -80,17 +104,55 @@ public class ProjectPredicateMatrix {
             while (keys.hasNext()) {
                 String key = (String) keys.next();
                 ArrayList<ArrayList<String>> mappings = projectedPredicateMap.get(key);
+                ArrayList<String> uniqueMaps = new ArrayList<String>();
                 for (int m = 0; m < mappings.size(); m++) {
                     ArrayList<String> mapping =  mappings.get(m);
                     str = prefix+":"+key;
                     String synsetString = wordnetData.getSynsetString(key);
                     str += " "+wordnetName+"-synset:"+synsetString;
                     for (int i = 0; i < mapping.size(); i++) {
-                        str += " "+mapping.get(i);
+                        String map = mapping.get(i);
+                        str += " "+map;
                     }
                     str += "\n";
                     fos.write(str.getBytes());
                 }
+            }
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
+
+    static void outputReducedMappings (WordnetData wordnetData, HashMap<String, ArrayList<ArrayList<String>>> projectedPredicateMap, String filePath, String wordnetName, String prefix) {
+        System.out.println("projectedPredicateMap = " + projectedPredicateMap.size());
+        try {
+            FileOutputStream fos = new FileOutputStream(filePath);
+            Set keySet = projectedPredicateMap.keySet();
+            Iterator keys = keySet.iterator();
+            String str = "";
+            while (keys.hasNext()) {
+                String key = (String) keys.next();
+                str = prefix+":"+key;
+                String synsetString = wordnetData.getSynsetString(key);
+                str += " "+wordnetName+"-synset:"+synsetString;
+                ArrayList<ArrayList<String>> mappings = projectedPredicateMap.get(key);
+                ArrayList<String> uniqueMaps = new ArrayList<String>();
+                for (int m = 0; m < mappings.size(); m++) {
+                    ArrayList<String> mapping =  mappings.get(m);
+                    for (int i = 0; i < mapping.size(); i++) {
+                        String map = mapping.get(i);
+                        if (!uniqueMaps.contains(map)) {
+                            uniqueMaps.add(map);
+                        }
+                    }
+                }
+                for (int i = 0; i < uniqueMaps.size(); i++) {
+                    String map = uniqueMaps.get(i);
+                    str += " "+map;
+                }
+                str += "\n";
+                fos.write(str.getBytes());
             }
             fos.close();
         } catch (IOException e) {

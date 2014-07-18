@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2f7d334f-39d1-479f-b2c3-380c841d0151" name="Default" comment="- Added a ExpandWord function that draws a tree for a word depending on the set of relations given">
+    <list default="true" id="2f7d334f-39d1-479f-b2c3-380c841d0151" name="Default" comment="- PredicateMatrix projection">
       <change type="DELETED" beforePath="$PROJECT_DIR$/release/wordnet-tools.0.1.zip" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/resources/inherit.gif" afterPath="$PROJECT_DIR$/java-doc/resources/inherit.gif" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wn-sim-nl.xls" afterPath="$PROJECT_DIR$/wn-sim-nl.xls" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/measures/BaseLines.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/measures/BaseLines.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/main/BestCommonSubsumerHierarchy.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/main/BestCommonSubsumerHierarchy.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/COPYING-GPL.TXT" afterPath="$PROJECT_DIR$/COPYING-GPL.TXT" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wordnet/CdbSynSaxParser.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wordnet/CdbSynSaxParser.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/corpus/CumulateCorpusFrequency.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/corpus/CumulateCorpusFrequency.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/main/GetAverageDepth.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/main/GetAverageDepth.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/measures/JiangConrath.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/measures/JiangConrath.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LICENSESOFTWARE.TXT" afterPath="$PROJECT_DIR$/LICENSESOFTWARE.TXT" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/measures/LeacockChodorow.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/measures/LeacockChodorow.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/measures/Lin.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/measures/Lin.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/main/MostCommonSubsumerHierarchy.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/main/MostCommonSubsumerHierarchy.html" />
@@ -20,8 +17,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/vu/wntools/util/ProjectPredicateMatrix.java" afterPath="$PROJECT_DIR$/src/main/java/vu/wntools/util/ProjectPredicateMatrix.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/main/ProjectTypes.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/main/ProjectTypes.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wordnet/PwnSaxParser.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wordnet/PwnSaxParser.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.TXT" afterPath="$PROJECT_DIR$/README.TXT" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/measures/Resnik.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/measures/Resnik.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/main/Similarity.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/main/Similarity.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/measures/SimilarityPair.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/measures/SimilarityPair.html" />
@@ -30,14 +25,10 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/main/TagKafFilesWithSynsets.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/main/TagKafFilesWithSynsets.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/corpus/WordData.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/corpus/WordData.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wordnet/WordnetData.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wordnet/WordnetData.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/WordnetData.java" afterPath="$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/WordnetData.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/domains/WordnetDomainVersioning.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/domains/WordnetDomainVersioning.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wordnet/WordnetLmfSaxParser.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wordnet/WordnetLmfSaxParser.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/WordnetLmfSaxParser.java" afterPath="$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/WordnetLmfSaxParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/util/WordnetOverlap.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/util/WordnetOverlap.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/WordnetSimilarityApi.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/WordnetSimilarityApi.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WordnetTools.iml" afterPath="$PROJECT_DIR$/WordnetTools.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WordnetTools.ipr" afterPath="$PROJECT_DIR$/WordnetTools.ipr" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WordnetTools.iws" afterPath="$PROJECT_DIR$/WordnetTools.iws" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/measures/WuPalmer.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/measures/WuPalmer.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/allclasses-frame.html" afterPath="$PROJECT_DIR$/java-doc/allclasses-frame.html" />
@@ -93,7 +84,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/main/package-tree.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/main/package-tree.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/measures/package-tree.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wnsimilarity/measures/package-tree.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/vu/wntools/wordnet/package-tree.html" afterPath="$PROJECT_DIR$/java-doc/vu/wntools/wordnet/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/java-doc/stylesheet.css" afterPath="$PROJECT_DIR$/java-doc/stylesheet.css" />
     </list>
     <ignored path="WordnetTools.iws" />
@@ -148,8 +138,8 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
-    <breakpoint_rules converted="true" />
     <ui_properties converted="true" />
+    <breakpoint_rules converted="true" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
@@ -160,18 +150,9 @@
       <file leaf-file-name="WordnetData.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/WordnetData.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.1153846" vertical-offset="6201" max-vertical-offset="9720">
+            <state vertical-scroll-proportion="0.0" vertical-offset="6645" max-vertical-offset="10005">
               <caret line="443" column="35" selection-start-line="443" selection-start-column="16" selection-end-line="443" selection-end-column="35" />
-              <folding>
-                <element signature="e#421#448#0" expanded="true" />
-                <element signature="e#526#553#0" expanded="true" />
-                <element signature="e#3581#3582#0" expanded="true" />
-                <element signature="e#3629#3630#0" expanded="true" />
-                <element signature="e#3904#3905#0" expanded="true" />
-                <element signature="e#3950#3951#0" expanded="true" />
-                <element signature="e#4218#4219#0" expanded="true" />
-                <element signature="e#4265#4266#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -179,16 +160,17 @@
       <file leaf-file-name="ProjectPredicateMatrix.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/util/ProjectPredicateMatrix.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.58474576" vertical-offset="1140" max-vertical-offset="4005">
-              <caret line="99" column="4" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.53731346" vertical-offset="0" max-vertical-offset="4935">
+              <caret line="12" column="20" selection-start-line="12" selection-start-column="20" selection-end-line="12" selection-end-column="20" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1133#1170#0" expanded="true" />
-                <element signature="e#6441#6479#0" expanded="true" />
-                <element signature="e#6918#6926#0" expanded="true" />
-                <element signature="e#8408#8446#0" expanded="true" />
-                <element signature="e#13653#13661#0" expanded="true" />
-                <element signature="e#14546#14565#0" expanded="true" />
+                <element signature="e#6202#6210#0" expanded="true" />
+                <element signature="e#7898#7906#0" expanded="true" />
+                <element signature="e#9294#9332#0" expanded="true" />
+                <element signature="e#9771#9779#0" expanded="true" />
+                <element signature="e#11261#11299#0" expanded="true" />
+                <element signature="e#16506#16514#0" expanded="true" />
+                <element signature="e#17399#17418#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -197,29 +179,9 @@
       <file leaf-file-name="WordnetLmfSaxParser.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/WordnetLmfSaxParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="4611" max-vertical-offset="6795">
+            <state vertical-scroll-proportion="0.0" vertical-offset="5085" max-vertical-offset="6945">
               <caret line="339" column="13" selection-start-line="339" selection-start-column="13" selection-end-line="339" selection-end-column="13" />
-              <folding>
-                <element signature="e#933#941#0" expanded="true" />
-                <element signature="e#998#1006#0" expanded="true" />
-                <element signature="e#1062#1070#0" expanded="true" />
-                <element signature="e#2590#2591#0" expanded="true" />
-                <element signature="e#2637#2638#0" expanded="true" />
-                <element signature="e#2684#2685#0" expanded="true" />
-                <element signature="e#2716#2717#0" expanded="true" />
-                <element signature="e#2777#2778#0" expanded="true" />
-                <element signature="e#2819#2820#0" expanded="true" />
-                <element signature="e#2972#2973#0" expanded="true" />
-                <element signature="e#3013#3014#0" expanded="true" />
-                <element signature="e#3086#3087#0" expanded="true" />
-                <element signature="e#3140#3141#0" expanded="true" />
-                <element signature="e#3194#3195#0" expanded="true" />
-                <element signature="e#3233#3234#0" expanded="true" />
-                <element signature="e#3308#3309#0" expanded="true" />
-                <element signature="e#3364#3365#0" expanded="true" />
-                <element signature="e#3419#3420#0" expanded="true" />
-                <element signature="e#3459#3460#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -336,10 +298,9 @@
     <option name="runMavenInBackground" value="false" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="14" />
-    <option name="y" value="29" />
+    <option name="y" value="22" />
     <option name="width" value="1841" />
-    <option name="height" value="1029" />
+    <option name="height" value="774" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -372,30 +333,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WordnetTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WordnetTools" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -478,6 +415,30 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="wntools" />
               <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WordnetTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WordnetTools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -598,27 +559,6 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
-      <module name="" />
-      <option name="TESTING_TYPE" value="0" />
-      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
-      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="USE_COMMAND_LINE" value="true" />
-      <option name="COMMAND_LINE" value="" />
-      <option name="WIPE_USER_DATA" value="false" />
-      <option name="DISABLE_BOOT_ANIMATION" value="false" />
-      <option name="NETWORK_SPEED" value="full" />
-      <option name="NETWORK_LATENCY" value="none" />
-      <option name="CLEAR_LOGCAT" value="false" />
-      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
-      <option name="FILTER_LOGCAT_AUTOMATICALLY" value="true" />
-      <method />
-    </configuration>
     <configuration default="true" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -641,12 +581,46 @@
       </MavenSettings>
       <method />
     </configuration>
+    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
+      <module name="" />
+      <option name="TESTING_TYPE" value="0" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="USE_COMMAND_LINE" value="true" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="FILTER_LOGCAT_AUTOMATICALLY" value="true" />
+      <method />
+    </configuration>
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
       <option name="SHMEM_ADDRESS" value="javadebug" />
       <option name="HOST" value="localhost" />
       <option name="PORT" value="5005" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="C:/Program Files/IntelliJ-IDEA-4.5/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
@@ -674,19 +648,6 @@
       <envs />
       <properties />
       <listeners />
-      <method />
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="C:/Program Files/IntelliJ-IDEA-4.5/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -1040,11 +1001,15 @@
       <created>1405671734111</created>
       <updated>1405671734111</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="- PredicateMatrix projection">
+      <created>1405683780780</created>
+      <updated>1405683780780</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="14" y="29" width="1841" height="1029" extended-state="6" />
+    <frame x="0" y="22" width="1841" height="774" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1052,7 +1017,6 @@
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2718941" sideWeight="0.9884275" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="14" side_tool="true" content_ui="tabs" />
@@ -1064,14 +1028,15 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.061922867" sideWeight="0.6865672" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21021184" sideWeight="0.6865672" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.34064785" sideWeight="0.99584717" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21021184" sideWeight="0.6865672" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.46438748" sideWeight="0.99584717" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="SVN Repositories" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20465116" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven-2 Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2718941" sideWeight="0.9884275" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="EJB" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="JSON Formatter" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
@@ -1107,7 +1072,8 @@
     <MESSAGE value="- label-base-conceptfile" />
     <MESSAGE value="- Bug fix on the POS filter. It was not filtering the relations on the right POS for synsets. Synsets have no POS attribute so it needs to be matched with the ID" />
     <MESSAGE value="- Added a ExpandWord function that draws a tree for a word depending on the set of relations given" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Added a ExpandWord function that draws a tree for a word depending on the set of relations given" />
+    <MESSAGE value="- PredicateMatrix projection" />
+    <option name="LAST_COMMIT_MESSAGE" value="- PredicateMatrix projection" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1124,7 +1090,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="9945" max-vertical-offset="11205">
           <caret line="663" column="9" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1175,7 +1140,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="11205">
           <caret line="663" column="9" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1198,7 +1162,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="1695">
           <caret line="86" column="51" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1235,7 +1198,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="9945" max-vertical-offset="11205">
           <caret line="663" column="9" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1258,7 +1220,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="1695">
           <caret line="86" column="51" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1295,7 +1256,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="9945" max-vertical-offset="11205">
           <caret line="663" column="9" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1318,7 +1278,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="1695">
           <caret line="86" column="51" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1403,7 +1362,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1882" max-vertical-offset="11070">
           <caret line="663" column="9" selection-start-line="663" selection-start-column="9" selection-end-line="663" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1411,7 +1369,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1081" max-vertical-offset="1995">
           <caret line="102" column="61" selection-start-line="102" selection-start-column="61" selection-end-line="102" selection-end-column="61" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1419,7 +1376,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="274" max-vertical-offset="1260">
           <caret line="78" column="48" selection-start-line="78" selection-start-column="48" selection-end-line="78" selection-end-column="48" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1427,7 +1383,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="120" max-vertical-offset="1215">
           <caret line="60" column="35" selection-start-line="60" selection-start-column="35" selection-end-line="60" selection-end-column="35" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1435,7 +1390,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="109" max-vertical-offset="900">
           <caret line="53" column="43" selection-start-line="53" selection-start-column="43" selection-end-line="53" selection-end-column="43" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1443,7 +1397,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="855" max-vertical-offset="975">
           <caret line="57" column="5" selection-start-line="16" selection-start-column="4" selection-end-line="57" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1451,7 +1404,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="3135" max-vertical-offset="9105">
           <caret line="209" column="66" selection-start-line="185" selection-start-column="40" selection-end-line="209" selection-end-column="66" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1459,7 +1411,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="726" max-vertical-offset="1680">
           <caret line="86" column="15" selection-start-line="86" selection-start-column="15" selection-end-line="86" selection-end-column="15" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1467,7 +1418,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="2040">
           <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="18" selection-end-column="45" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1475,27 +1425,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="4611" max-vertical-offset="6795">
           <caret line="339" column="13" selection-start-line="339" selection-start-column="13" selection-end-line="339" selection-end-column="13" />
-          <folding>
-            <element signature="e#933#941#0" expanded="true" />
-            <element signature="e#998#1006#0" expanded="true" />
-            <element signature="e#1062#1070#0" expanded="true" />
-            <element signature="e#2590#2591#0" expanded="true" />
-            <element signature="e#2637#2638#0" expanded="true" />
-            <element signature="e#2684#2685#0" expanded="true" />
-            <element signature="e#2716#2717#0" expanded="true" />
-            <element signature="e#2777#2778#0" expanded="true" />
-            <element signature="e#2819#2820#0" expanded="true" />
-            <element signature="e#2972#2973#0" expanded="true" />
-            <element signature="e#3013#3014#0" expanded="true" />
-            <element signature="e#3086#3087#0" expanded="true" />
-            <element signature="e#3140#3141#0" expanded="true" />
-            <element signature="e#3194#3195#0" expanded="true" />
-            <element signature="e#3233#3234#0" expanded="true" />
-            <element signature="e#3308#3309#0" expanded="true" />
-            <element signature="e#3364#3365#0" expanded="true" />
-            <element signature="e#3419#3420#0" expanded="true" />
-            <element signature="e#3459#3460#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1509,33 +1439,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/wordnet/WordnetData.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.1153846" vertical-offset="6201" max-vertical-offset="9720">
+        <state vertical-scroll-proportion="0.0" vertical-offset="6645" max-vertical-offset="10005">
           <caret line="443" column="35" selection-start-line="443" selection-start-column="16" selection-end-line="443" selection-end-column="35" />
-          <folding>
-            <element signature="e#421#448#0" expanded="true" />
-            <element signature="e#526#553#0" expanded="true" />
-            <element signature="e#3581#3582#0" expanded="true" />
-            <element signature="e#3629#3630#0" expanded="true" />
-            <element signature="e#3904#3905#0" expanded="true" />
-            <element signature="e#3950#3951#0" expanded="true" />
-            <element signature="e#4218#4219#0" expanded="true" />
-            <element signature="e#4265#4266#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/vu/wntools/util/ProjectPredicateMatrix.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.58474576" vertical-offset="1140" max-vertical-offset="4005">
-          <caret line="99" column="4" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.53731346" vertical-offset="0" max-vertical-offset="4935">
+          <caret line="12" column="20" selection-start-line="12" selection-start-column="20" selection-end-line="12" selection-end-column="20" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1133#1170#0" expanded="true" />
-            <element signature="e#6441#6479#0" expanded="true" />
-            <element signature="e#6918#6926#0" expanded="true" />
-            <element signature="e#8408#8446#0" expanded="true" />
-            <element signature="e#13653#13661#0" expanded="true" />
-            <element signature="e#14546#14565#0" expanded="true" />
+            <element signature="e#6202#6210#0" expanded="true" />
+            <element signature="e#7898#7906#0" expanded="true" />
+            <element signature="e#9294#9332#0" expanded="true" />
+            <element signature="e#9771#9779#0" expanded="true" />
+            <element signature="e#11261#11299#0" expanded="true" />
+            <element signature="e#16506#16514#0" expanded="true" />
+            <element signature="e#17399#17418#0" expanded="true" />
           </folding>
         </state>
       </provider>
