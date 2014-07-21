@@ -31,7 +31,7 @@ public class ProjectPredicateMatrix {
     static public void main (String[] args) {
         //String pathToPredicateMatrixFile = args[0];
         //String pathToCdbSynsetFile = args[1];
-        String pathToPredicateMatrixFile = "/Code/vu/WordnetTools/resources/PredicateMatrix.v1.1/PredicateMatrix.v1.1.txt";
+        String pathToPredicateMatrixFile = "/Code/vu/WordnetTools/resources/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.txt";
         //String pathToPredicateMatrixFile = "/Tools/ontotagger-v1.0/resources/predicate-matrix/PredicateMatrix.v0.txt";
         String pathToWordnetLmfFile = "/Code/vu/WordnetTools/resources/cornetto2.1.lmf.xml";
         //String pathToWordnetLmfFile = "/Code/vu/WordnetTools/resources/odwn1.0.lmf";
@@ -276,15 +276,19 @@ vn:accept-77	vn:77	vn:NULL	vn:NULL	vn:accept	vn:Agent	wn:accept%2:31:01	mcr:ili-
             while (in.ready()&&(inputLine = in.readLine()) != null) {
                 if (inputLine.trim().length()>0) {
                     String[] fields = inputLine.split("\t");
-                    //System.out.println("fields = " + fields);
+                   // System.out.println("fields = " + fields.length);
+                    if (fields.length==1) {
+                        fields = inputLine.split(" ");
+                    }
+                   // System.out.println("fields = " + fields.length);
                     synset = getILI(fields);
                     if (synset.isEmpty()) {
                         continue;
                     }
                     ArrayList<String> sourceFields = new ArrayList<String>();
                     for (int i = 0; i < fields.length; i++) {
-                        String field = fields[i];
-                        if (field.toLowerCase().indexOf("null")==-1) {
+                        String field = fields[i].trim();
+                        if (!field.isEmpty() && (field.toLowerCase().indexOf("null")==-1)) {
                             sourceFields.add(field);
                         }
                     }
