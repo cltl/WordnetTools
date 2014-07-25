@@ -10,9 +10,7 @@ import java.util.ArrayList;
  * To change this template use File | Settings | File Templates.
  */
 public class LeacockChodorow {
-
     public static String match = "";
-
     /**
      *  Calculates the distance according to Leacock & Chodorow by
      * @param averageDepth
@@ -21,7 +19,7 @@ public class LeacockChodorow {
      * @return
      */
     public static double GetDistance(int averageDepth, ArrayList<String> hyp1, ArrayList<String> hyp2) {
-        /// Adapated Leacock Chodorow algorithm (1988). Average depth can be based on the depth of the words in the document,
+        /// Adapted Leacock Chodorow algorithm (1988). Average depth can be based on the depth of the words in the document,
         //// average of all wordnet or of the two synsets compared
         double distance = -1;
         match = "";
@@ -38,13 +36,8 @@ public class LeacockChodorow {
             }
         }
         if (distance>-1) {
-         //   System.out.println("distance = " + distance);
-         //   System.out.println("averageDepth = " + averageDepth);
             distance = - Math.log(distance/(2*averageDepth));
         }
         return distance;
     }
-
-
-
 }

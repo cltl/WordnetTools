@@ -31,7 +31,7 @@ public class ProjectPredicateMatrix {
     static public void main (String[] args) {
         //String pathToPredicateMatrixFile = args[0];
         //String pathToCdbSynsetFile = args[1];
-        String pathToPredicateMatrixFile = "/Code/vu/WordnetTools/resources/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.txt";
+        String pathToPredicateMatrixFile = "/Code/vu/WordnetTools/resources/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.en";
         //String pathToPredicateMatrixFile = "/Tools/ontotagger-v1.0/resources/predicate-matrix/PredicateMatrix.v0.txt";
         String pathToWordnetLmfFile = "/Code/vu/WordnetTools/resources/cornetto2.1.lmf.xml";
         //String pathToWordnetLmfFile = "/Code/vu/WordnetTools/resources/odwn1.0.lmf";
@@ -62,7 +62,8 @@ public class ProjectPredicateMatrix {
         HashMap<String, ArrayList<ArrayList<String>>> projectedPredicateMapDirect = createMapping(wordnetLmfSaxParser.wordnetData.getSynsetToDirectEquiSynsets());
         String key = wordnetName+"-eq_synonym";
         if (REDUCE) {
-            outputReducedMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapDirect, pathToPredicateMatrixFile+"."+key, wordnetName, key);
+           // outputReducedMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapDirect, pathToPredicateMatrixFile+"."+key, wordnetName, key);
+            outputMergedMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapDirect, pathToPredicateMatrixFile+"."+key, wordnetName, key);
         }
         else {
             outputMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapDirect, pathToPredicateMatrixFile+"."+key, wordnetName, key);
@@ -70,7 +71,8 @@ public class ProjectPredicateMatrix {
         HashMap<String, ArrayList<ArrayList<String>>> projectedPredicateMapNear =createMapping(wordnetLmfSaxParser.wordnetData.getSynsetToNearEquiSynsets());
         key = wordnetName+"-eq_near_synonym";
         if (REDUCE) {
-            outputReducedMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapNear, pathToPredicateMatrixFile+"."+key, wordnetName, key);
+            //outputReducedMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapNear, pathToPredicateMatrixFile+"."+key, wordnetName, key);
+            outputMergedMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapNear, pathToPredicateMatrixFile+"."+key, wordnetName, key);
         }
         else {
             outputMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapNear, pathToPredicateMatrixFile+"."+key, wordnetName, key);
@@ -78,7 +80,8 @@ public class ProjectPredicateMatrix {
         HashMap<String, ArrayList<ArrayList<String>>> projectedPredicateMapOther =createMapping(wordnetLmfSaxParser.wordnetData.getSynsetToOtherEquiSynsets());
         key = wordnetName+"-eq_other";
         if (REDUCE) {
-            outputReducedMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapOther, pathToPredicateMatrixFile+"."+key, wordnetName, key);
+            //outputReducedMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapOther, pathToPredicateMatrixFile+"."+key, wordnetName, key);
+            outputMergedMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapOther, pathToPredicateMatrixFile+"."+key, wordnetName, key);
         }
         else {
             outputMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapOther, pathToPredicateMatrixFile+"."+key, wordnetName, key);
@@ -87,7 +90,8 @@ public class ProjectPredicateMatrix {
                 projectedPredicateMapDirect, projectedPredicateMapNear, projectedPredicateMapOther);
         key = wordnetName+"-eq_parent";
         if (REDUCE) {
-            outputReducedMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapParent, pathToPredicateMatrixFile+"."+key, wordnetName, key);
+           // outputReducedMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapParent, pathToPredicateMatrixFile+"."+key, wordnetName, key);
+            outputMergedMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapParent, pathToPredicateMatrixFile+"."+key, wordnetName, key);
         }
         else {
             outputMappings(wordnetLmfSaxParser.wordnetData, projectedPredicateMapParent, pathToPredicateMatrixFile+"."+key, wordnetName, key);
@@ -125,6 +129,101 @@ public class ProjectPredicateMatrix {
     }
 
     static void outputReducedMappings (WordnetData wordnetData, HashMap<String, ArrayList<ArrayList<String>>> projectedPredicateMap, String filePath, String wordnetName, String prefix) {
+        System.out.println("projectedPredicateMap = " + projectedPredicateMap.size());
+        try {
+            FileOutputStream fos = new FileOutputStream(filePath);
+            Set keySet = projectedPredicateMap.keySet();
+            Iterator keys = keySet.iterator();
+            String str = "";
+            while (keys.hasNext()) {
+                String key = (String) keys.next();
+                str = prefix+":"+key;
+                String synsetString = wordnetData.getSynsetString(key);
+                str += " "+wordnetName+"-synset:"+synsetString;
+                ArrayList<ArrayList<String>> mappings = projectedPredicateMap.get(key);
+                ArrayList<String> uniqueMaps = new ArrayList<String>();
+                for (int m = 0; m < mappings.size(); m++) {
+                    ArrayList<String> mapping =  mappings.get(m);
+                    for (int i = 0; i < mapping.size(); i++) {
+                        String map = mapping.get(i);
+                        if (!uniqueMaps.contains(map)) {
+                            uniqueMaps.add(map);
+                        }
+                    }
+                }
+                for (int i = 0; i < uniqueMaps.size(); i++) {
+                    String map = uniqueMaps.get(i);
+                    str += " "+map;
+                }
+                str += "\n";
+                fos.write(str.getBytes());
+            }
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
+
+    static void outputMergedMappings (WordnetData wordnetData, HashMap<String, ArrayList<ArrayList<String>>> projectedPredicateMap, String filePath, String wordnetName, String prefix) {
+        System.out.println("projectedPredicateMap = " + projectedPredicateMap.size());
+        try {
+            FileOutputStream fos = new FileOutputStream(filePath);
+            Set keySet = projectedPredicateMap.keySet();
+            Iterator keys = keySet.iterator();
+            String str = "";
+            String matrixString = "";
+            while (keys.hasNext()) {
+                String key = (String) keys.next();
+                matrixString = prefix+":"+key;
+                String synsetString = wordnetData.getSynsetString(key);
+                matrixString += " "+wordnetName+"-synset:"+synsetString;
+                ArrayList<ArrayList<String>> mappings = projectedPredicateMap.get(key);
+                HashMap<String, ArrayList<String>> frameMaps = new HashMap<String, ArrayList<String>>();
+                for (int m = 0; m < mappings.size(); m++) {
+                    ArrayList<String> mapping =  mappings.get(m);
+                    String frame = "fn:NoFrame";
+                    for (int i = 0; i < mapping.size(); i++) {
+                        String map = mapping.get(i);
+                        if (map.startsWith("fn:")) {
+                            frame = map;
+                            break;
+                        }
+                    }
+                    if (frameMaps.containsKey(frame)) {
+                        ArrayList<String> frameMappings = frameMaps.get(frame);
+                        for (int i = 0; i < mapping.size(); i++) {
+                            String s = mapping.get(i);
+                            if (!frameMappings.contains(s)) {
+                                frameMappings.add(s);
+                            }
+                        }
+                        frameMaps.put(frame, frameMappings);
+                    }
+                    else {
+                        frameMaps.put(frame,mapping);
+                    }
+                }
+                Set framekeySet = frameMaps.keySet();
+                Iterator frameKeys = framekeySet.iterator();
+                while (frameKeys.hasNext()) {
+                    String frame = (String) frameKeys.next();
+                    ArrayList<String> frameMappings = frameMaps.get(frame);
+                    str = matrixString;
+                    for (int i = 0; i < frameMappings.size(); i++) {
+                        String s = frameMappings.get(i);
+                        str += " "+s;
+                    }
+                    str += "\n";
+                    fos.write(str.getBytes());
+                }
+            }
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
+
+    static void outputReducedMappingsSets (WordnetData wordnetData, HashMap<String, ArrayList<ArrayList<String>>> projectedPredicateMap, String filePath, String wordnetName, String prefix) {
         System.out.println("projectedPredicateMap = " + projectedPredicateMap.size());
         try {
             FileOutputStream fos = new FileOutputStream(filePath);
