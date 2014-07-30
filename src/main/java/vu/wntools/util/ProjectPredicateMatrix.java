@@ -26,6 +26,7 @@ import java.util.*;
  */
 public class ProjectPredicateMatrix {
     static HashMap<String, ArrayList<ArrayList<String>>> wordNetPredicateMap = new HashMap<String,ArrayList<ArrayList<String>>>();
+    static ArrayList<String> preEmpted = new ArrayList<String>();
     static boolean REDUCE = true;
 
     static public void main (String[] args) {
@@ -174,6 +175,12 @@ public class ProjectPredicateMatrix {
             String matrixString = "";
             while (keys.hasNext()) {
                 String key = (String) keys.next();
+                if (preEmpted.contains(key)) {
+                    continue;
+                }
+                else {
+                    preEmpted.add(key);
+                }
                 matrixString = prefix+":"+key;
                 String synsetString = wordnetData.getSynsetString(key);
                 matrixString += " "+wordnetName+"-synset:"+synsetString;
@@ -384,11 +391,37 @@ vn:accept-77	vn:77	vn:NULL	vn:NULL	vn:accept	vn:Agent	wn:accept%2:31:01	mcr:ili-
                     if (synset.isEmpty()) {
                         continue;
                     }
+                    ArrayList<String> roleFields = new ArrayList<String>();
                     ArrayList<String> sourceFields = new ArrayList<String>();
                     for (int i = 0; i < fields.length; i++) {
                         String field = fields[i].trim();
                         if (!field.isEmpty() && (field.toLowerCase().indexOf("null")==-1)) {
-                            sourceFields.add(field);
+                            if (field.indexOf("-role:")>-1) {
+                                roleFields.add(field);
+                            }
+                            else {
+                                sourceFields.add(field);
+                            }
+                        }
+                    }
+                    for (int i = 0; i < roleFields.size(); i++) {
+                        String s = roleFields.get(i);
+                        if (s.startsWith("fn-role:")) {
+                            boolean paired = false;
+                            for (int j = 0; j < roleFields.size(); j++) {
+                                if (j!=i) {
+                                    String s1 = roleFields.get(j);
+                                    if (s1.startsWith("pb-role:")) {
+                                        paired = true;
+                                        String role = "fn-pb-role:"+s.substring(8)+"#"+s1.substring(8);
+                                        sourceFields.add(role);
+                                    }
+                                }
+
+                            }
+                            if (!paired) {
+                                sourceFields.add(s);
+                            }
                         }
                     }
                     if (sourceFields.size()>0) {
