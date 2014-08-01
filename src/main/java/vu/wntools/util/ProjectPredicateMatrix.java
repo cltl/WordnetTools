@@ -56,6 +56,8 @@ public class ProjectPredicateMatrix {
         WordnetLmfSaxParser wordnetLmfSaxParser = new WordnetLmfSaxParser();
         wordnetLmfSaxParser.parseFile(pathToWordnetLmfFile);
         wordnetLmfSaxParser.wordnetData.buildSynsetIndex();
+        System.out.println("wordnetLmfSaxParser.wordnetData.hyperRelations.size; = " + wordnetLmfSaxParser.wordnetData.hyperRelations.size());
+        System.out.println("wordnetLmfSaxParser.wordnetData.otherRelations.size; = " + wordnetLmfSaxParser.wordnetData.otherRelations.size());
         System.out.println("DirectEquiSynsets().size() = " + wordnetLmfSaxParser.wordnetData.getSynsetToDirectEquiSynsets().size());
         System.out.println("NearEquiSynsets().size() = " + wordnetLmfSaxParser.wordnetData.getSynsetToNearEquiSynsets().size());
         System.out.println("OtherEquiSynsets().size() = " + wordnetLmfSaxParser.wordnetData.getSynsetToOtherEquiSynsets().size());
@@ -281,23 +283,59 @@ public class ProjectPredicateMatrix {
                 ArrayList<String> parentChain = new ArrayList<String>();
                 //System.out.println("key = " + key);
                 wordnetData.getSingleHyperChain(key, parentChain);
+                if (key.endsWith("d_n-31318-n")) {
+                    System.out.println("hyper parentChain.toString() = " + parentChain.toString());
+                }
+                boolean match = false;
                 for (int i = 0; i < parentChain.size(); i++) {
                     // break at the most specific level
                     String parentSynset = parentChain.get(i);
                     if (projectedPredicateMapDirect.containsKey(parentSynset)) {
                         ArrayList<ArrayList<String>> pmMaps = projectedPredicateMapDirect.get(parentSynset);
                         pmMappings.put(key, pmMaps);
+                        match = true;
                         break;
                     }
                     else if (projectedPredicateMapNear.containsKey(parentSynset)) {
                         ArrayList<ArrayList<String>> pmMaps = projectedPredicateMapNear.get(parentSynset);
                         pmMappings.put(key, pmMaps);
+                        match = true;
                         break;
                     }
                     else if (projectedPredicateMapOther.containsKey(parentSynset)) {
                         ArrayList<ArrayList<String>> pmMaps = projectedPredicateMapOther.get(parentSynset);
                         pmMappings.put(key, pmMaps);
+                        match = true;
                         break;
+                    }
+                }
+                if (!match) {
+                    parentChain = new ArrayList<String>();
+                    wordnetData.getXposRelationChain(key, parentChain);
+                    if (key.endsWith("d_n-31318-n")) {
+                        System.out.println("other parentChain.toString() = " + parentChain.toString());
+                    }
+                    for (int i = 0; i < parentChain.size(); i++) {
+                        // break at the most specific level
+                        String parentSynset = parentChain.get(i);
+                        if (projectedPredicateMapDirect.containsKey(parentSynset)) {
+                            ArrayList<ArrayList<String>> pmMaps = projectedPredicateMapDirect.get(parentSynset);
+                            pmMappings.put(key, pmMaps);
+                            match = true;
+                            break;
+                        }
+                        else if (projectedPredicateMapNear.containsKey(parentSynset)) {
+                            ArrayList<ArrayList<String>> pmMaps = projectedPredicateMapNear.get(parentSynset);
+                            pmMappings.put(key, pmMaps);
+                            match = true;
+                            break;
+                        }
+                        else if (projectedPredicateMapOther.containsKey(parentSynset)) {
+                            ArrayList<ArrayList<String>> pmMaps = projectedPredicateMapOther.get(parentSynset);
+                            pmMappings.put(key, pmMaps);
+                            match = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -311,10 +349,14 @@ public class ProjectPredicateMatrix {
         Iterator keys = keySet.iterator();
         while (keys.hasNext()) {
             String key = (String) keys.next();
+
             //System.out.println("key = " + key);
             ArrayList<String> equivalences = equivalenceMappings.get(key);
             for (int i = 0; i < equivalences.size(); i++) {
                 String target = equivalences.get(i).toLowerCase();
+                if (key.endsWith("d_n-31318-n"))   {
+                    System.out.println("target = " + target);
+                }
                 if (wordNetPredicateMap.containsKey(target)) {
                     ArrayList<ArrayList<String>> mappings = wordNetPredicateMap.get(target);
                     if (pmMappings.containsKey(key)) {
