@@ -9,6 +9,7 @@ import vu.wntools.util.Pos;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 
@@ -116,6 +117,10 @@ public class WordnetLmfSaxParser extends DefaultHandler {
 
     public void parseFile(String filePath) {
         System.out.println("filePath = " + filePath);
+        if (!(new File(filePath)).exists()) {
+            System.out.println("Cannot find file");
+            return;
+        }
         String myerror = "";
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -194,9 +199,29 @@ public class WordnetLmfSaxParser extends DefaultHandler {
             }
         }
         else if (qName.equalsIgnoreCase("Sense")) {
+            String synsetId = "";
+            String lexicalUnitId = "";
             for (int i = 0; i < attributes.getLength(); i++) {
                 if (attributes.getQName(i).equalsIgnoreCase("synset")) {
-                    synsets.add(attributes.getValue(i).trim());
+                    synsetId = attributes.getValue(i).trim();
+                    synsets.add(synsetId);
+                }
+                if (attributes.getQName(i).equalsIgnoreCase("senseId")) {
+                    lexicalUnitId = attributes.getValue(i).trim();
+                }
+            }
+            if (!synsetId.isEmpty() && !lexicalUnitId.isEmpty()) {
+                if (wordnetData.synsetToLexicalUnits.containsKey(synsetId)) {
+                   ArrayList<String> lus = wordnetData.synsetToLexicalUnits.get(synsetId);
+                   if (!lus.contains(lexicalUnitId)) {
+                       lus.add(lexicalUnitId);
+                       wordnetData.synsetToLexicalUnits.put(synsetId, lus);
+                   }
+                }
+                else {
+                    ArrayList<String> lus = new ArrayList<String>();
+                    lus.add(lexicalUnitId);
+                    wordnetData.synsetToLexicalUnits.put(synsetId, lus);
                 }
             }
         }

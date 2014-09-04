@@ -28,13 +28,15 @@ public class ProjectPredicateMatrix {
     static HashMap<String, ArrayList<ArrayList<String>>> wordNetPredicateMap = new HashMap<String,ArrayList<ArrayList<String>>>();
     static ArrayList<String> preEmpted = new ArrayList<String>();
     static boolean REDUCE = true;
+    static boolean LU = true;
 
     static public void main (String[] args) {
         //String pathToPredicateMatrixFile = args[0];
         //String pathToCdbSynsetFile = args[1];
         String pathToPredicateMatrixFile = "/Code/vu/WordnetTools/resources/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.en";
         //String pathToPredicateMatrixFile = "/Tools/ontotagger-v1.0/resources/predicate-matrix/PredicateMatrix.v0.txt";
-        String pathToWordnetLmfFile = "/Code/vu/WordnetTools/resources/cornetto2.1.lmf.xml";
+        String pathToWordnetLmfFile = "/Tools/wordnet-tools.0.1/resources/cornetto2.1.lmf.xml";
+
         //String pathToWordnetLmfFile = "/Code/vu/WordnetTools/resources/odwn1.0.lmf";
         String wordnetName = "odwn";
         for (int i = 0; i < args.length; i++) {
@@ -217,13 +219,41 @@ public class ProjectPredicateMatrix {
                 while (frameKeys.hasNext()) {
                     String frame = (String) frameKeys.next();
                     ArrayList<String> frameMappings = frameMaps.get(frame);
-                    str = matrixString;
-                    for (int i = 0; i < frameMappings.size(); i++) {
-                        String s = frameMappings.get(i);
-                        str += " "+s;
+                    if (LU) {
+                      if (wordnetData.synsetToLexicalUnits.containsKey(key)) {
+                          ArrayList<String> lus = wordnetData.synsetToLexicalUnits.get(key);
+                          for (int u = 0; u < lus.size(); u++) {
+                              String lu = lus.get(u);
+                              matrixString = prefix+":"+lu;
+                              str = matrixString;
+                              for (int i = 0; i < frameMappings.size(); i++) {
+                                  String s = frameMappings.get(i);
+                                  str += " "+s;
+                              }
+                              str += "\n";
+                              fos.write(str.getBytes());
+                          }
+                      }
+                      else {
+
+                          str = matrixString;
+                          for (int i = 0; i < frameMappings.size(); i++) {
+                              String s = frameMappings.get(i);
+                              str += " " + s;
+                          }
+                          str += "\n";
+                          fos.write(str.getBytes());
+                      }
                     }
-                    str += "\n";
-                    fos.write(str.getBytes());
+                    else {
+                        str = matrixString;
+                        for (int i = 0; i < frameMappings.size(); i++) {
+                            String s = frameMappings.get(i);
+                            str += " " + s;
+                        }
+                        str += "\n";
+                        fos.write(str.getBytes());
+                    }
                 }
             }
             fos.close();

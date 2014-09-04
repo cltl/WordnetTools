@@ -17,6 +17,7 @@ public class WordnetData {
     public HashMap<String, ArrayList<String>> hyperRelations = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> otherRelations = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> entryToSynsets = new HashMap<String, ArrayList<String>>();
+    public HashMap<String, ArrayList<String>> synsetToLexicalUnits = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> synsetToDirectEquiSynsets = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> synsetToNearEquiSynsets = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> synsetToOtherEquiSynsets = new HashMap<String, ArrayList<String>>();
@@ -35,6 +36,7 @@ public class WordnetData {
         hyperRelations = new HashMap<String, ArrayList<String>>();
         otherRelations = new HashMap<String, ArrayList<String>>();
         entryToSynsets = new HashMap<String, ArrayList<String>>();
+        synsetToLexicalUnits = new HashMap<String, ArrayList<String>>();
         synsetToDirectEquiSynsets = new HashMap<String, ArrayList<String>>();
         synsetToNearEquiSynsets = new HashMap<String, ArrayList<String>>();
         synsetToOtherEquiSynsets = new HashMap<String, ArrayList<String>>();
