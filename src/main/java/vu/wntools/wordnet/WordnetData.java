@@ -17,6 +17,7 @@ public class WordnetData {
     public HashMap<String, ArrayList<String>> hyperRelations = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> otherRelations = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> entryToSynsets = new HashMap<String, ArrayList<String>>();
+    public HashMap<String, ArrayList<String>> lexicalUnitsToSynsets = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> synsetToLexicalUnits = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> synsetToDirectEquiSynsets = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> synsetToNearEquiSynsets = new HashMap<String, ArrayList<String>>();
@@ -40,6 +41,7 @@ public class WordnetData {
         synsetToDirectEquiSynsets = new HashMap<String, ArrayList<String>>();
         synsetToNearEquiSynsets = new HashMap<String, ArrayList<String>>();
         synsetToOtherEquiSynsets = new HashMap<String, ArrayList<String>>();
+        lexicalUnitsToSynsets = new HashMap<String, ArrayList<String>>();
         synsetToEntries = new HashMap<String, ArrayList<String>>();
         childRelations = new HashMap<String, ArrayList<String>>();
         nAverageNounDepth = 0;
@@ -214,6 +216,28 @@ public class WordnetData {
                     ArrayList<String> synonyms = new ArrayList<String>();
                     synonyms.add(entry);
                     synsetToEntries.put(synsetId, synonyms);
+                }
+            }
+        }
+    }
+
+    public void buildLexicalUnitIndex () {
+        Set keyHyperSet = synsetToLexicalUnits.keySet();
+        Iterator entries = keyHyperSet.iterator();
+        while(entries.hasNext()) {
+            String synset = (String) entries.next();
+            ArrayList<String> luIds = synsetToLexicalUnits.get(synset);
+            for (int i = 0; i < luIds.size(); i++) {
+                String luId = luIds.get(i);
+                if (lexicalUnitsToSynsets.containsKey(luId)) {
+                   ArrayList<String> synsets = lexicalUnitsToSynsets.get(luId);
+                    synsets.add(synset);
+                    lexicalUnitsToSynsets.put(luId, synsets);
+                }
+                else {
+                    ArrayList<String> synsets = new ArrayList<String>();
+                    synsets.add(synset);
+                    lexicalUnitsToSynsets.put(luId, synsets);
                 }
             }
         }

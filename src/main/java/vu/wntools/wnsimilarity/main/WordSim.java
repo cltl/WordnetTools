@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class WordSim {
 
-    static String match = "";
+    static public String match = "";
 
     static public double getWordSimLC(WordnetData wordnetData, String source, String target) {
 
