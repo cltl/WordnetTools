@@ -425,11 +425,11 @@ public class WordnetSimilarityApi {
         ArrayList<SimilarityPair> similarityPairArrayList = new ArrayList<SimilarityPair>();
         boolean knownWords = true;
         if (!wordnetData.entryToSynsets.containsKey(word1)) {
-            System.out.println("Unknown word = " + word1);
+           // System.out.println("Unknown word = " + word1);
             knownWords= false;
         }
         if (!wordnetData.entryToSynsets.containsKey(word2)) {
-            System.out.println("Unknown word = " + word2);
+           // System.out.println("Unknown word = " + word2);
             knownWords= false;
         }
         if (knownWords) {
@@ -459,6 +459,10 @@ public class WordnetSimilarityApi {
                            // System.out.println("similarityPair = " + similarityPair.getScore());
                             if (score>similarityPair.getScore()) {
                                 similarityPair.setMatch(LeacockChodorow.match);
+/*                                if (LeacockChodorow.match.isEmpty()) {
+                                    System.out.println("hyperSource = " + hyperSource.toString());
+                                    System.out.println("hyperTarget = " + hyperTarget.toString());
+                                }*/
                                 similarityPair.setScore(score);
                                 similarityPair.setSourceTree(hyperSource);
                                 similarityPair.setTargetTree(hyperTarget);

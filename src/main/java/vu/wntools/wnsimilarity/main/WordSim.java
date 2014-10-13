@@ -21,11 +21,9 @@ public class WordSim {
 
         SimilarityPair topPair = new SimilarityPair();
         ArrayList<SimilarityPair> similarityPairArrayList = new ArrayList<SimilarityPair>();
-
-        LeacockChodorow.match = "";
         similarityPairArrayList = WordnetSimilarityApi.wordLeacockChodorowSimilarity(wordnetData, source, target);
         topPair = WordnetSimilarityApi.getTopScoringSimilarityPair(similarityPairArrayList);
-        match = LeacockChodorow.match;
+        match = topPair.getMatch();
 
         return topPair.getScore();
     }

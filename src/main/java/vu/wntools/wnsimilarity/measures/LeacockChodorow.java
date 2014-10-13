@@ -32,7 +32,7 @@ public class LeacockChodorow {
                 break;
             }
             else {
-                //// there is no intersection so the distance remain -1
+                //// there is no intersection so the distance remains -1
             }
         }
         if (distance>-1) {
