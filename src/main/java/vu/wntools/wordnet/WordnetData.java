@@ -1,5 +1,7 @@
 package vu.wntools.wordnet;
 
+import eu.kyotoproject.kaf.KafSense;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -27,6 +29,8 @@ public class WordnetData {
     private int nAverageNounDepth = 0;
     private int nAverageVerbDepth = 0;
     private int nAverageAdjectiveDepth = 0;
+    private String resource;
+    private String version;
 
 
     public WordnetData() {
@@ -47,6 +51,8 @@ public class WordnetData {
         nAverageNounDepth = 0;
         nAverageVerbDepth = 0;
         nAverageAdjectiveDepth = 0;
+        resource = "";
+        version = "";
     }
 
     public HashMap<String, ArrayList<String>> getHyperRelations() {
@@ -120,6 +126,22 @@ public class WordnetData {
 
     public void addSynsetToOtherEquiSynsets(String synsetID, ArrayList<String> synsetToOtherEquiSynsets) {
         this.synsetToOtherEquiSynsets.put(synsetID, synsetToOtherEquiSynsets);
+    }
+
+    public String getResource() {
+        return resource;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     public ArrayList<String> getTopNodes () {
@@ -683,5 +705,123 @@ public class WordnetData {
     }
     //[bombard,     eng-30-01507914-v, eng-30-05045208-n, eng-30-10413429-n, eng-30-01508368-v, eng-30-00104539-n, eng-30-10709529-n, eng-30-01511706-v, eng-30-00045250-n, eng-30-00104249-n, eng-30-00809790-a, eng-30-00842550-a, eng-30-03563460-n, eng-30-04011827-n, eng-30-14691822-n, eng-30-01850315-v, eng-30-00279835-n, eng-30-00280586-n, eng-30-01523724-a, eng-30-01526062-a, eng-30-08478482-n, eng-30-10336234-n]
     //[bombardment, eng-30-00978413-n, eng-30-01131902-v, eng-30-00972621-n, eng-30-01118449-v, eng-30-01119169-v, eng-30-00955060-n, eng-30-01109863-v, eng-30-00407535-n, eng-30-00927373-a, eng-30-01515280-a, eng-30-00030358-n, eng-30-01643657-v, eng-30-01649999-v, eng-30-02367363-v, eng-30-00029378-n, eng-30-00023100-n, eng-30-00002137-n, eng-30-00692329-v, eng-30-00001740-n]
+
+    static void addToCount (ArrayList<Integer> levelCount, int i) {
+        while (i>=levelCount.size()) {
+            levelCount.add(0);
+        }
+        Integer cnt = levelCount.get(i);
+        cnt++;
+        levelCount.set(i, cnt);
+    }
+
+    public KafSense GetLowestCommonSubsumer (ArrayList<String> synsets) {
+        KafSense lcs = null;
+        boolean DEBUG = false;
+       /* if (synsets.contains("eng-30-00941990-v")) {
+            DEBUG = true;
+        }*/
+        HashMap<String, ArrayList<Integer>> synsetCount = new HashMap<String, ArrayList<Integer>>();
+        for (int i = 0; i < synsets.size(); i++) {
+            String synset = synsets.get(i);
+            if (DEBUG) System.out.println("synset = " + synset);
+            ArrayList<String> coveredHypers = new ArrayList<String>();
+            ArrayList<ArrayList<String>> hyperChains = new ArrayList<ArrayList<String>>();
+            getMultipleHyperChain(synset, hyperChains);
+            if (DEBUG) {
+                for (int j = 0; j < hyperChains.size(); j++) {
+                    ArrayList<String> strings = hyperChains.get(j);
+                    System.out.println("hypers = " + strings);
+                }
+            }
+                ///breadth first
+            ///makes sure the lowest occurrences of a hyper is counted
+            boolean hasMoreHypers = true;
+            int level = 0;
+            while (hasMoreHypers) {
+                hasMoreHypers = false;
+                for (int j = 0; j < hyperChains.size(); j++) {
+                    ArrayList<String> strings = hyperChains.get(j);
+                    if (level < strings.size()) {
+                        String hyper = strings.get(level);
+                        if (!coveredHypers.contains(hyper)) {
+                            coveredHypers.add(hyper); /// make sure every hyper is counted once
+                            if (synsetCount.containsKey(hyper)) {
+                                ArrayList<Integer> levelCounts = synsetCount.get(hyper);
+                                addToCount(levelCounts, level);
+                                synsetCount.put(hyper, levelCounts);
+                            } else {
+                                ArrayList<Integer> levelCounts = new ArrayList<Integer>();
+                                addToCount(levelCounts, level);
+                                synsetCount.put(hyper, levelCounts);
+                            }
+                        }
+                        if (strings.size()>level+1) {
+                            hasMoreHypers = true;
+                        }
+                    }
+                }
+                level++;
+            }
+            ///depth first
+            /*for (int j = 0; j < hyperChains.size(); j++) {
+                ArrayList<String> strings = hyperChains.get(j);
+                for (int k = 0; k < strings.size(); k++) {
+                    String hyper = strings.get(k);
+                    if (!coveredHypers.contains(hyper)) {
+                        coveredHypers.add(hyper); /// make sure every hyper is counted once
+                        if (synsetCount.containsKey(hyper)) {
+                            ArrayList<Integer> levelCounts = synsetCount.get(hyper);
+                            addToCount(levelCounts, k);
+                            synsetCount.put(hyper, levelCounts);
+                        } else {
+                            ArrayList<Integer> levelCounts = new ArrayList<Integer>();
+                            levelCounts.add(1);
+                            synsetCount.put(hyper, levelCounts);
+                        }
+                    }
+                }
+            }*/
+        }
+        int lowestLevel = -1;
+        String lcsHyper = "";
+        Set keySet = synsetCount.keySet();
+        Iterator<String> keys = keySet.iterator() ;
+        while (keys.hasNext()) {
+            String key = keys.next();
+            ArrayList<Integer> levelCount = synsetCount.get(key);
+            if (DEBUG) {
+                System.out.println("hyper = " + key);
+                System.out.println("levelCount.toString() = " + levelCount.toString());
+            }
+            for (int i = 0; i < levelCount.size(); i++) {
+                Integer integer = levelCount.get(i);
+                if (integer.equals(synsets.size())) {
+                    /// this is a hyper that occurs for all the synsets
+                    if (lcsHyper.isEmpty()) {
+                        lowestLevel = i;
+                        lcsHyper = key;
+                    }
+                    else if (i<lowestLevel) {
+                        lowestLevel = i;
+                        lcsHyper = key;
+                    }
+                }
+            }
+        }
+        if (!lcsHyper.isEmpty()) {
+            lcs = new KafSense();
+            lcs.setResource(resource);
+            lcs.setSensecode(lcsHyper);
+            lcs.setConfidence(1.0 / (lowestLevel+1));
+            if (DEBUG) {
+                System.out.println("lcs.getSensecode() = " + lcs.getSensecode());
+                System.out.println("lcs.getConfidence() = " + lcs.getConfidence());
+                System.out.println("lowestLevel = " + lowestLevel);
+            }
+        }
+
+        return lcs;
+    }
 
 }

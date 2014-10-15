@@ -116,7 +116,7 @@ public class WordnetLmfSaxParser extends DefaultHandler {
     }
 
     public void parseFile(String filePath) {
-        System.out.println("filePath = " + filePath);
+        //System.out.println("filePath = " + filePath);
         if (!(new File(filePath)).exists()) {
             System.out.println("Cannot find file");
             return;
@@ -144,7 +144,7 @@ public class WordnetLmfSaxParser extends DefaultHandler {
             myerror += "\nException --" + eee.getMessage();
             System.out.println("myerror = " + myerror);
         }
-        System.out.println("myerror = " + myerror);
+      //  System.out.println("myerror = " + myerror);
     }//--c
 
 
@@ -170,8 +170,19 @@ public class WordnetLmfSaxParser extends DefaultHandler {
                              String qName, Attributes attributes)
             throws SAXException {
 
+        //<Lexicon label="Princeton WordNet 3.0" language="eng" languageCoding="ISO 639-3" owner="KYOTO project" version="3.0">
 
-        if (qName.equalsIgnoreCase("LexicalEntry")) {
+        if (qName.equalsIgnoreCase("Lexicon")) {
+
+            for (int i = 0; i < attributes.getLength(); i++) {
+                if (attributes.getQName(i).equalsIgnoreCase("label")) {
+                    wordnetData.setResource(attributes.getValue(i).trim());
+                } else if (attributes.getQName(i).equalsIgnoreCase("version")) {
+                    wordnetData.setVersion(attributes.getValue(i).trim());
+                }
+            }
+        }
+        else if (qName.equalsIgnoreCase("LexicalEntry")) {
             entry = "";
             pos = "";
             synsets = new ArrayList<String>();
