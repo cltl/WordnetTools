@@ -21,14 +21,14 @@ public class ExpandWord {
 
 
     static public void main (String[] args) {
-        String pathToWordnetFile = "/Tools/wordnet-tools.0.1/resources/cornetto2.1.lmf.xml";
+        String pathToWordnetFile = "";
         //String pathToWordnetFile = "/Tools/wordnet-tools.0.1/resources/wneng-30.lmf.xml";
-        String pathToRelFile = "/Tools/wordnet-tools.0.1/resources/relations2.txt";
+        String pathToRelFile = "";
         //String pathToInputFile = "/Tools/wordnet-tools.0.1/input/expansion/smell.txt";
         //String pathToInputFile = "/Tools/wordnet-tools.0.1/input/expansion/huis.txt";
         //String pathToInputFile = "oorzaak";
         boolean UP = false;
-        String pathToInputFile = "persoon";
+        String pathToInputFile = "";
         String posFilter = "";
         WordnetData wordnetData = new WordnetData();
         ArrayList<String> relations = new ArrayList<String>();
@@ -39,7 +39,7 @@ public class ExpandWord {
             if ((arg.equalsIgnoreCase("--input")) && args.length>i) {
                 pathToInputFile = args[i+1];
             }
-            else if ((arg.equalsIgnoreCase("--lmf-file")) && args.length>i) {
+            else if ((arg.equalsIgnoreCase("--wn-lmf")) && args.length>i) {
                 pathToWordnetFile = args[i+1];
             }
             else if ((arg.equalsIgnoreCase("--up"))) {
@@ -64,7 +64,7 @@ public class ExpandWord {
                 inputwords.add(pathToInputFile);
             }
         }
-        if (pathToRelFile.isEmpty()) {
+        if (!pathToRelFile.isEmpty()) {
             relations = Util.readRelationsFile(pathToRelFile);
         }
         if (!pathToWordnetFile.isEmpty()) {
@@ -85,15 +85,21 @@ public class ExpandWord {
                         String str ="word = " + word+"\n";
                         System.out.println(word);
                         fos.write(str.getBytes());
-                        ArrayList<String> sources = wordnetData.entryToSynsets.get(word);
-                        if ((sources!=null) && (sources.size()>0)) {
-                            for (int j = 0; j < sources.size(); j++) {
-                                String sourceId = sources.get(j);
-                                Util.writeTreeString(wordnetData,sourceId, 0, fos, new ArrayList<String>());
+                        if (wordnetData.entryToSynsets.containsKey(word)) {
+                            ArrayList<String> sources = wordnetData.entryToSynsets.get(word);
+                            if ((sources != null) && (sources.size() > 0)) {
+                                for (int j = 0; j < sources.size(); j++) {
+                                    String sourceId = sources.get(j);
+                                    Util.writeTreeString(wordnetData, sourceId, 0, fos, new ArrayList<String>());
+                                    str = "\n"; fos.write(str.getBytes());
+                                    Util.writeWordString(wordnetData, sourceId, 0, fos, new ArrayList<String>());
+                                    str = "\n";
+                                    str = "\n"; fos.write(str.getBytes());
+                                }
                             }
                         }
                         else {
-                            System.out.println("Cannot find the word");
+                            System.out.println("Cannot find the word:"+word);
                         }
                     }
                 }

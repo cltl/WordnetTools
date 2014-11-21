@@ -281,6 +281,9 @@ public class WordnetLmfSaxParser extends DefaultHandler {
                 else if (type.equalsIgnoreCase("xpos_near_synonym")) {
                     if (!targetId.isEmpty()) others.add(targetId);
                 }
+                else if (type.equalsIgnoreCase("event")) {
+                    if (!targetId.isEmpty()) others.add(targetId);
+                }
                 else if (type.equalsIgnoreCase("xpos_near_hyperonym")) {
                     if (!targetId.isEmpty()) others.add(targetId);
                 }
@@ -427,7 +430,6 @@ public class WordnetLmfSaxParser extends DefaultHandler {
         }
         else if (qName.equalsIgnoreCase("LexicalEntry")) {
             if (!entry.isEmpty()) {
-                //System.out.println("entry = " + entry);
                 if ((posFilter.isEmpty()) || pos.isEmpty() || (pos.equalsIgnoreCase(posFilter))) {
                     //System.out.println("pos = " + pos);
                     //System.out.println("posFilter = " + posFilter);
@@ -471,21 +473,28 @@ public class WordnetLmfSaxParser extends DefaultHandler {
 
     static public void main (String[] args) {
         //String pathToFile = args[0];
-        String pathToFile = "/Releases/wordnetsimilarity_v.0.1/resources/cornetto2.0.lmf.xml";
+       // String pathToFile = "/Releases/wordnetsimilarity_v.0.1/resources/cornetto2.0.lmf.xml";
+        String pathToFile = "/Tools/wordnet-tools.0.1/resources/wneng-30.lmf.xml";
         ArrayList<String> relations = new ArrayList<String>();
         //relations.add("NEAR_SYNONYM");
         //relations.add("HAS_HYPERONYM");
-        relations.add("HAS_MERO_PART");
-        relations.add("HAS_HOLO_PART");
+        //relations.add("HAS_MERO_PART");
+        //relations.add("HAS_HOLO_PART");
 
         WordnetLmfSaxParser parser = new WordnetLmfSaxParser();
-        parser.setPos("v");
-        parser.setRelations(relations);
+        //parser.setPos("v");
+        //parser.setRelations(relations);
 
         parser.parseFile(pathToFile);
+/*
         int depth = parser.wordnetData.getAverageDepthByWord();
         System.out.println("depth = " + depth);
-        System.out.println("parser.wordnetData.entryToSynsets.size() = " + parser.wordnetData.entryToSynsets.size());
+*/
+        parser.wordnetData.buildSynsetIndex();
+        if (parser.wordnetData.entryToSynsets.containsKey("person")) {
+            System.out.println("HAS IT");
+        }
+            System.out.println("parser.wordnetData.entryToSynsets.size() = " + parser.wordnetData.entryToSynsets.size());
         System.out.println("parser.wordnetData.getHyperRelations().size() = " + parser.wordnetData.getHyperRelations().size());
         System.out.println("parser.wordnetData.getOtherRelations().size() = " + parser.wordnetData.getOtherRelations().size());
 

@@ -21,9 +21,9 @@ public class NafLexicalUnitToSynsetReferences {
         static final String version = "1.0";
 
     static public void main (String[] args) {
-        String pathToKafFile = "/Tools/wordnet-tools.0.1/input/kaf-processing/example-lu.naf";
-        String pathToWnLmfFile = "/Tools/wordnet-tools.0.1/resources/cornetto2.1.lmf.xml";
-        String format = "naf";
+        String pathToKafFile = "";
+        String pathToWnLmfFile = "";
+        String format = "";
         for (int i = 0; i < args.length; i++) {
             String arg = args[i];
             if ((arg.equalsIgnoreCase("--kaf-file")) && (args.length>(i+1))) {

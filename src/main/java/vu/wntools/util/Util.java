@@ -132,6 +132,44 @@ public class Util {
         }
     }
 
+    static public void writeWordString (WordnetData wordnetData, String parent, int level, FileOutputStream fos, ArrayList<String> done) {
+        String str = "";
+        if (wordnetData.synsetToEntries.containsKey(parent)) {
+            ArrayList<String> entries = wordnetData.synsetToEntries.get(parent);
+            for (int j = 0; j < entries.size(); j++) {
+                String word = entries.get(j);
+                if (word.toLowerCase().equals(word)) {
+                    str += ";" + entries.get(j);
+                }
+            }
+        }
+
+        done.add(parent);
+        //  System.out.println("str = " + str);
+        try {
+            fos.write(str.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        if (wordnetData.childRelations.containsKey(parent)) {
+            ArrayList<String> children = wordnetData.childRelations.get(parent);
+            if (children.size()>0) {
+                for (int i = 0; i < children.size(); i++) {
+                    String child =  children.get(i);
+                    if (!done.contains(child)) {
+                        writeWordString(wordnetData, child, level+1, fos, done);
+                    }
+                }
+            }
+            else {
+                //     System.out.println("leaf node.getSynset() = " + node.getSynset());
+            }
+        }
+        else {
+           // System.out.println("No relations found");
+        }
+    }
+
 
 
     static public ArrayList<String> readRelationsFile (String pathToRelationFile) {
