@@ -48,12 +48,14 @@ public class NafLexicalUnitToSynsetReferences {
         KafSaxParser kafSaxParser = new KafSaxParser();
         if (pathToKafFile.isEmpty()) {
             kafSaxParser.parseFile(System.in);
+           // System.out.println("kafSaxParser.kafTermList.size() = " + kafSaxParser.kafTermList.size());
         }
         else {
             kafSaxParser.parseFile(pathToKafFile);
         }
         for (int i = 0; i < kafSaxParser.kafTermList.size(); i++) {
             KafTerm kafTerm = kafSaxParser.kafTermList.get(i);
+            ArrayList<KafSense> synsetsList = new ArrayList<KafSense>();
             for (int j = 0; j < kafTerm.getSenseTags().size(); j++) {
                 KafSense kafSense = kafTerm.getSenseTags().get(j);
                 if (wordnetLmfSaxParser.wordnetData.lexicalUnitsToSynsets.containsKey(kafSense.getSensecode())) {
@@ -64,10 +66,12 @@ public class NafLexicalUnitToSynsetReferences {
                         synset.setSensecode(synsetId);
                         synset.setConfidence(kafSense.getConfidence());
                         synset.setResource(kafSense.getResource());
-                        kafTerm.addSenseTag(synset);
+                        synsetsList.add(synset);
+                       // kafTerm.addSenseTag(synset);
                     }
                 }
             }
+            kafTerm.setSenseTags(synsetsList);
         }
 
         strEndDate = eu.kyotoproject.util.DateUtil.createTimestamp();
