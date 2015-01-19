@@ -33,7 +33,8 @@ public class ProjectPredicateMatrix {
     static public void main (String[] args) {
         //String pathToPredicateMatrixFile = args[0];
         //String pathToCdbSynsetFile = args[1];
-        String pathToPredicateMatrixFile = "/Code/vu/WordnetTools/resources/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.en";
+        String pathToPredicateMatrixFile = "/Code/vu/WordnetTools/resources/PredicateMatrix_withESO.v0.2.txt.role";
+        //String pathToPredicateMatrixFile = "/Code/vu/WordnetTools/resources/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.en";
         //String pathToPredicateMatrixFile = "/Tools/ontotagger-v1.0/resources/predicate-matrix/PredicateMatrix.v0.txt";
         String pathToWordnetLmfFile = "/Tools/wordnet-tools.0.1/resources/cornetto2.1.lmf.xml";
 
