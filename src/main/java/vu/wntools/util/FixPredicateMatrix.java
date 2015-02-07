@@ -73,9 +73,65 @@ vn:accept-77	vn:77	vn:NULL	vn:NULL	vn:accept	vn:Agent	wn:accept%2:31:01	mcr:ili-
                     }
                     String str = "";
                     if (fields.length>1) {
+                        /**
+                         * 0 id:eng
+                         * 1 id:v
+                         * 2 id:abandon.01
+                         * 3 id:A0
+                         * 4 vn:leave-51.2
+                         * 5 vn:51.2
+                         * 6 vn:NULL
+                         * 7 vn:NULL
+                         * 8 vn:abandon
+                         * 9 vn:Theme		-> role
+                         * 10 wn:abandon%2:38:00
+                         * 11 mcr:ili-30-02076676-v
+                         * 12 fn:Departing
+                         * 13 fn:abandon.v
+                         * 14 fn:Theme	-> role
+                         * 15 pb:abandon.01
+                         * 16 pb:0		-> role
+                         * 17 mcr:0
+                         * 18 mcr:factotum
+                         * 19 mcr:Removing
+                         * 20 mcr:BoundedEvent;Location;
+                         * 21 mcr:motion
+                         * 22 mcr:leave%2:38:01
+                         * 23 wn:6
+                         * 24 wn:002
+                         * 25 eso:Leaving
+                         * 26 eso:NULL	   	-> role
+                         * 27 SEMLINK;PREDICATE_MAPPING;ESO3
+
+                         */
+
+
+                        fields[0] = "pm-id:"+fields[0].substring(3);
+                        fields[1] = "pm-pos-id:"+fields[1].substring(3);
+                        fields[2] = "pm-sense-id:"+fields[2].substring(3);
+                        fields[3] = "pm-role:"+fields[3].substring(3);
+                        fields[4] = "vn-class:"+fields[4].substring(3);
+                        fields[5] = "vn-class-nr:"+fields[5].substring(3);
+                        fields[6] = "vn-subclass:"+fields[6].substring(3);
+                        fields[7] = "vn-subclass-nr:"+fields[7].substring(3);
+                        fields[8] = "vn-lemma:"+fields[8].substring(3);
                         fields[9] = "vn-role:"+fields[9].substring(3);
+                        //fields[10] = "wn-sense:"+fields[10].substring(3);
+                        //fields[11] = "mcr-ili:"+fields[11].substring(4);
+                        //fields[12] = "fn-frame:"+fields[12].substring(3);
+                        fields[13] = "fn-entry:"+fields[13].substring(3);
                         fields[14] = "fn-role:"+fields[14].substring(3);
+                        fields[15] = "pb-sense:"+fields[15].substring(3);
                         fields[16] = "pb-role:"+fields[16].substring(3);
+                        fields[17] = "mcr-class:"+fields[17].substring(4);
+                        fields[18] = "mcr-class:"+fields[18].substring(4);
+                        fields[19] = "mcr-class:"+fields[19].substring(4);
+                        fields[20] = "mcr-class:"+fields[20].substring(4);
+                        fields[21] = "mcr-sumo:"+fields[21].substring(4);
+                        fields[22] = "mcr-sense:"+fields[22].substring(4);
+                        fields[23] = "wn-file:"+fields[23].substring(3);
+                        fields[24] = "wn-sense-nr:"+fields[24].substring(3);
+                        //fields[25] = "eso-class:"+fields[25].substring(4);
                         if (fields.length>=27) {
                             fields[26] = "eso-role:" + fields[26].substring(4);
                         }
