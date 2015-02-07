@@ -225,7 +225,12 @@ public class ProjectPredicateMatrix {
                           ArrayList<String> lus = wordnetData.synsetToLexicalUnits.get(key);
                           for (int u = 0; u < lus.size(); u++) {
                               String lu = lus.get(u);
-                              matrixString = prefix+":"+lu;
+                              matrixString = "";
+                              if (wordnetData.lexicalUnitsToLemmas.containsKey(lu)) {
+                                  String lemma = "lu-lemma" + ":" + wordnetData.lexicalUnitsToLemmas.get(lu);
+                                  matrixString = lemma+" ";
+                              }
+                              matrixString += prefix+":"+lu;
                               str = matrixString;
                               for (int i = 0; i < frameMappings.size(); i++) {
                                   String s = frameMappings.get(i);

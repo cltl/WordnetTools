@@ -235,6 +235,9 @@ public class WordnetLmfSaxParser extends DefaultHandler {
                     wordnetData.synsetToLexicalUnits.put(synsetId, lus);
                 }
             }
+            if (!lexicalUnitId.isEmpty() && !entry.isEmpty()) {
+                wordnetData.lexicalUnitsToLemmas.put(lexicalUnitId, entry);
+            }
         }
         else if (qName.equalsIgnoreCase("Synset")) {
             sourceId = "";

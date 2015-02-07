@@ -20,6 +20,7 @@ public class WordnetData {
     public HashMap<String, ArrayList<String>> otherRelations = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> entryToSynsets = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> lexicalUnitsToSynsets = new HashMap<String, ArrayList<String>>();
+    public HashMap<String, String> lexicalUnitsToLemmas = new HashMap<String, String>();
     public HashMap<String, ArrayList<String>> synsetToLexicalUnits = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> synsetToDirectEquiSynsets = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> synsetToNearEquiSynsets = new HashMap<String, ArrayList<String>>();
@@ -48,6 +49,7 @@ public class WordnetData {
         lexicalUnitsToSynsets = new HashMap<String, ArrayList<String>>();
         synsetToEntries = new HashMap<String, ArrayList<String>>();
         childRelations = new HashMap<String, ArrayList<String>>();
+        lexicalUnitsToLemmas = new HashMap<String, String>();
         nAverageNounDepth = 0;
         nAverageVerbDepth = 0;
         nAverageAdjectiveDepth = 0;
