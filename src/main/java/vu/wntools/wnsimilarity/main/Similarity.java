@@ -217,7 +217,29 @@ public class Similarity {
                         String logString2 = "";
                         String match = "";
                         if (pairs.equalsIgnoreCase("words")) {
-                            if (!method.equals("all")) {
+                            String unknown = "";
+                            if (!wordnetData.entryToSynsets.containsKey(source)) {
+                                if (!wordnetData.entryToSynsets.containsKey(target)) {
+                                    unknown = source + separator + "unknown"+separator+target+separator+"unknown"+"\n";
+                                }
+                                else {
+                                    unknown = source + separator + "unknown"+separator+target+separator+"known"+"\n";
+                                }
+                            }
+                            else if (!wordnetData.entryToSynsets.containsKey(target)) {
+                                unknown = source + separator + "known"+separator+target+separator+"unknown"+"\n";
+                            }
+                            if (!unknown.isEmpty()) {
+                                logString = "Method = " + method + "\n";
+                                logString += unknown;
+                                if (!logString2.isEmpty()) {
+                                    logString += logString2;
+                                }
+                                log.write(logString.getBytes());
+                                inputLine = unknown;
+                                fos.write(inputLine.getBytes());
+                            }
+                            else if (!method.equals("all")) {
                                 ArrayList<SimilarityPair> similarityPairArrayList = new ArrayList<SimilarityPair>();
                                 SimilarityPair topPair = new SimilarityPair();
                                 if (method.equalsIgnoreCase("leacock-chodorow")) {
