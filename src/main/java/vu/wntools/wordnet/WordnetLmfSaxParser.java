@@ -477,10 +477,11 @@ public class WordnetLmfSaxParser extends DefaultHandler {
     static public void main (String[] args) {
         //String pathToFile = args[0];
        // String pathToFile = "/Releases/wordnetsimilarity_v.0.1/resources/cornetto2.0.lmf.xml";
+        //String pathToFile = "/Tools/wordnet-tools.0.1/resources/cornetto2.1.lmf.xml";
         String pathToFile = "/Tools/wordnet-tools.0.1/resources/wneng-30.lmf.xml";
         ArrayList<String> relations = new ArrayList<String>();
         //relations.add("NEAR_SYNONYM");
-        //relations.add("HAS_HYPERONYM");
+        relations.add("HAS_HYPERONYM");
         //relations.add("HAS_MERO_PART");
         //relations.add("HAS_HOLO_PART");
 
@@ -494,12 +495,15 @@ public class WordnetLmfSaxParser extends DefaultHandler {
         System.out.println("depth = " + depth);
 */
         parser.wordnetData.buildSynsetIndex();
+/*
         if (parser.wordnetData.entryToSynsets.containsKey("person")) {
             System.out.println("HAS IT");
         }
+*/
             System.out.println("parser.wordnetData.entryToSynsets.size() = " + parser.wordnetData.entryToSynsets.size());
         System.out.println("parser.wordnetData.getHyperRelations().size() = " + parser.wordnetData.getHyperRelations().size());
         System.out.println("parser.wordnetData.getOtherRelations().size() = " + parser.wordnetData.getOtherRelations().size());
-
     }
+
+
 }
