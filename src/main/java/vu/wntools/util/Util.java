@@ -157,7 +157,7 @@ public class Util {
                 for (int i = 0; i < children.size(); i++) {
                     String child =  children.get(i);
                     if (!done.contains(child)) {
-                        writeWordString(wordnetData, child, level+1, fos, done);
+                        writeWordString(wordnetData, child, level + 1, fos, done);
                     }
                 }
             }
@@ -170,7 +170,28 @@ public class Util {
         }
     }
 
-
+    static public ArrayList<String> readTextToWordArray (String textFile) {
+        ArrayList<String> words = new ArrayList<String>();
+        try {
+            FileInputStream fis = new FileInputStream(textFile);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader in = new BufferedReader(isr);
+            String inputLine;
+            while (in.ready()&&(inputLine = in.readLine()) != null) {
+                if (!inputLine.trim().isEmpty()) {
+                    String [] substrings = inputLine.split(" ");
+                    for (int i = 0; i < substrings.length; i++) {
+                        String substring = substrings[i];
+                        words.add(substring.toLowerCase());
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            //To change body of catch statement use File | Settings | File Templates.
+        }
+        return words;
+    }
 
     static public ArrayList<String> readRelationsFile (String pathToRelationFile) {
         ArrayList<String> relations = new ArrayList<String>();

@@ -378,6 +378,28 @@ public class WordnetData {
          return depth;
     }
 
+    public int getAverageDepthForWord (String word) {
+         int depth = 0;
+         int nSynsets = 0;
+         if (entryToSynsets.containsKey(word)) {
+             ArrayList<String> wordSynsets = entryToSynsets.get(word);
+             nSynsets = wordSynsets.size();
+             for (int w = 0; w < wordSynsets.size(); w++) {
+                 String wordSynset =  wordSynsets.get(w);
+                 ArrayList<ArrayList<String>> targetChains = new ArrayList<ArrayList<String>>();
+                 getMultipleHyperChain(wordSynset, targetChains);
+                 for (int i = 0; i < targetChains.size(); i++) {
+                     ArrayList<String> targetChain =  targetChains.get(i);
+                     depth+= targetChain.size();
+                 }
+             }
+         }
+         if (nSynsets>0) {
+             depth = depth/nSynsets;
+         }
+         return depth;
+    }
+
     public int getMaxDepthBySynset () {
          int maxDepth = 0;
          Set keySet = hyperRelations.keySet();
