@@ -23,6 +23,7 @@ public class FrameNetFrameReader extends DefaultHandler {
     static public ArrayList<String> supers = new ArrayList<String>();
     public HashMap<String, ArrayList<String>> subToSuperFrame = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> superToSubFrame = new HashMap<String, ArrayList<String>>();
+    public HashMap<String, ArrayList<String>> otherFrame = new HashMap<String, ArrayList<String>>();
     String subFrame = "";
     String superFrame = "";
     String value = "";
@@ -286,7 +287,15 @@ public class FrameNetFrameReader extends DefaultHandler {
     }
 
     //    <frameRelation subID="171" supID="82" subFrameName="Commerce_buy" superFrameName="Commerce_scenario" ID="360">
+    /*
+        <frameRelationType subFrameName="Component" superFrameName="Complex" name="Subframe" ID="2">
+        <frameRelation subID="314" supID="303" subFrameName="Precipitation" superFrameName="Weather" ID="233">
+            <FERelation subID="2736" supID="3557" subFEName="Place" superFEName="Place" ID="7295"/>
+            <FERelation subID="2738" supID="3558" subFEName="Time" superFEName="Time" ID="7296"/>
+        </frameRelation>
+        <frameRelation subID="297" supID="200" subFrameName="Sentencing" superFrameName="Criminal_process" ID="236">
 
+     */
     public void startElement(String uri, String localName,
                              String qName, Attributes attributes)
             throws SAXException {
