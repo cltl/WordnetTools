@@ -36,7 +36,12 @@ public class FrameNetFrameReader extends DefaultHandler {
         String fnPath = "/Users/piek/Desktop/NWR/timeline/vua-naf2jsontimeline_2015/resources/frRelation.xml";
         FrameNetFrameReader frameNetFrameReader = new FrameNetFrameReader();
         frameNetFrameReader.parseFile(fnPath);
-        frameNetFrameReader.flatRelations(2);
+        ArrayList<String> topFrames = frameNetFrameReader.getTopsFrameNetTree();
+        for (int i = 0; i < topFrames.size(); i++) {
+            String topFrame = topFrames.get(i);
+            System.out.println("topFrame = " + topFrame);
+        }
+        /*frameNetFrameReader.flatRelations(2);
         Set keySet = frameNetFrameReader.superToSubFrame.keySet();
         Iterator<String> keys = keySet.iterator();
         while (keys.hasNext()) {
@@ -44,7 +49,7 @@ public class FrameNetFrameReader extends DefaultHandler {
             ArrayList<String> frames = frameNetFrameReader.superToSubFrame.get(key);
             if (frames.size()>0)
                 System.out.println(key+" = " + frames.toString());
-        }
+        }*/
         // frameNetReader.printFrameNetTree();
        /* ArrayList<String> tops = frameNetReader.getTopsFrameNetTree();
         ArrayList<String> levelFrames = new ArrayList<String>();
@@ -103,7 +108,7 @@ public class FrameNetFrameReader extends DefaultHandler {
         Iterator<String> keys = keySet.iterator();
         while (keys.hasNext()) {
             String key = keys.next();
-            if (subToSuperFrame.containsKey(key)) {
+            if (!subToSuperFrame.containsKey(key)) {
                 tops.add(key);
             }
         }
