@@ -29,33 +29,12 @@ public class AnnotateTextWithFrameNet {
         FrameNetLuReader frameNetLuReader = new FrameNetLuReader();
         frameNetLuReader.parseFile(pathToFrameNetLuFile);
         String labeledText = "";
-        CatParser catParser = new CatParser();
+        CatParser catParser = new CatParser("ANNOTATION");
         catParser.parseFile(pathToTextFile);
         for (int i = 0; i < catParser.kafWordFormArrayList.size(); i++) {
             KafWordForm kafWordForm = catParser.kafWordFormArrayList.get(i);
-            ArrayList<String>  frames = new ArrayList<String>();
             String word = kafWordForm.getWf();
-            if (frameNetLuReader.lexicalUnitFrameMap.containsKey(word)) {
-                 frames = frameNetLuReader.lexicalUnitFrameMap.get(word);
-            }
-            else if (word.length()>3) {
-                word = word.substring(0, word.length()-1);
-                if (frameNetLuReader.lexicalUnitFrameMap.containsKey(word)) {
-                    frames = frameNetLuReader.lexicalUnitFrameMap.get(word);
-                }
-                else {
-                    word = word.substring(0, word.length()-1);
-                    if (frameNetLuReader.lexicalUnitFrameMap.containsKey(word)) {
-                        frames = frameNetLuReader.lexicalUnitFrameMap.get(word);
-                    }
-                    else if (word.length()>4) {
-                        word = word.substring(0, word.length() - 1);
-                        if (frameNetLuReader.lexicalUnitFrameMap.containsKey(word)) {
-                            frames = frameNetLuReader.lexicalUnitFrameMap.get(word);
-                        }
-                    }
-                }
-            }
+            ArrayList<String>  frames = frameNetLuReader.getFramesForWord(word);
             labeledText += kafWordForm.getWf();
             if (frames.size()>0) {
                 framedWords.add(word);

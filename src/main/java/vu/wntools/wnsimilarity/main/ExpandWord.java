@@ -19,6 +19,45 @@ import java.util.ArrayList;
  */
 public class ExpandWord {
 
+    static public ArrayList<SynsetNode> getWordHypernyms (WordnetData wordnetData, String word) {
+        ArrayList<SynsetNode> hypers = new ArrayList<SynsetNode>();
+        if (wordnetData.entryToSynsets.containsKey(word)) {
+            ArrayList<String> sources = wordnetData.entryToSynsets.get(word);
+            for (int j = 0; j < sources.size(); j++) {
+                String s = sources.get(j);
+                ArrayList<ArrayList<String>> targetChains = new ArrayList<ArrayList<String>>();
+                wordnetData.getMultipleHyperChain(s, targetChains );
+                for (int k = 0; k < targetChains.size(); k++) {
+                    ArrayList<String> strings = targetChains.get(k);
+                    if (strings.size()>1) {
+                        SynsetNode synsetNode = wordnetData.makeSynsetNode(strings.get(1));
+                        hypers.add(synsetNode);
+                    }
+                }
+            }
+        }
+        return hypers;
+
+    }
+    static public ArrayList<SynsetNode> getWordHypernymsMinimalDepth (WordnetData wordnetData, String word, int depth) {
+            ArrayList<SynsetNode> hypers = new ArrayList<SynsetNode>();
+            if (wordnetData.entryToSynsets.containsKey(word)) {
+                ArrayList<String> sources = wordnetData.entryToSynsets.get(word);
+                for (int j = 0; j < sources.size(); j++) {
+                    String s = sources.get(j);
+                    ArrayList<ArrayList<String>> targetChains = new ArrayList<ArrayList<String>>();
+                    wordnetData.getMultipleHyperChain(s, targetChains );
+                    for (int k = 0; k < targetChains.size(); k++) {
+                        ArrayList<String> strings = targetChains.get(k);
+                        if (strings.size()>depth) {
+                            SynsetNode synsetNode = wordnetData.makeSynsetNode(strings.get(1));
+                            hypers.add(synsetNode);
+                        }
+                    }
+                }
+            }
+            return hypers;
+        }
 
     static public void main (String[] args) {
         String pathToWordnetFile = "";

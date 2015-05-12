@@ -16,6 +16,22 @@ import java.util.ArrayList;
  */
 public class GetDepthForWords {
 
+    static public int getAverageDepthForWord (WordnetData wordnetData, String word) {
+        int averageDepth = -1;
+        if (wordnetData.entryToSynsets.containsKey(word)) {
+            ArrayList<String> synsetIds = wordnetData.entryToSynsets.get(word);
+            for (int i = 0; i < synsetIds.size(); i++) {
+                String s = synsetIds.get(i);
+                int depth = wordnetData.getAverageDepthBySynset(s);
+                averageDepth+= depth;
+            }
+            if (synsetIds.size()>0) {
+                averageDepth = averageDepth / synsetIds.size();
+            }
+        }
+        return averageDepth;
+    }
+
     static public void main (String[] args) {
         WordnetData wordnetData = new WordnetData();
         String pathToWordnetFile = "/Tools/wordnet-tools.0.1/resources/cornetto2.1.lmf.xml";

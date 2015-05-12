@@ -3,8 +3,6 @@ package vu.wntools.util;
 import eu.kyotoproject.kaf.KafWordForm;
 import vu.wntools.wordnet.WordnetLmfSaxParser;
 
-import java.util.ArrayList;
-
 /**
  * Created by piek on 16/04/15.
  */
@@ -23,7 +21,7 @@ public class AnnotateTextWithDepth {
         wordnetLmfSaxParser.parseFile(pathToWnLmfFile);
         String labeledText = "";
         int nDepth = 0;
-        CatParser catParser = new CatParser();
+        CatParser catParser = new CatParser("ANNOTATION");
         catParser.parseFile(pathToTextFile);
         for (int i = 0; i < catParser.kafWordFormArrayList.size(); i++) {
             KafWordForm kafWordForm = catParser.kafWordFormArrayList.get(i);

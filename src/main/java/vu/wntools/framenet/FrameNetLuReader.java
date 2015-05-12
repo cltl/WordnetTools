@@ -102,4 +102,31 @@ public class FrameNetLuReader extends DefaultHandler{
         value += new String(ch, start, length);
         // System.out.println("tagValue:"+value);
     }
+
+    public ArrayList<String> getFramesForWord (String word) {
+        ArrayList<String>  frames = new ArrayList<String>();
+        if (this.lexicalUnitFrameMap.containsKey(word)) {
+            frames = lexicalUnitFrameMap.get(word);
+        }
+        else if (word.length()>3) {
+            word = word.substring(0, word.length()-1);
+            if (lexicalUnitFrameMap.containsKey(word)) {
+                frames = lexicalUnitFrameMap.get(word);
+            }
+            else {
+                word = word.substring(0, word.length()-1);
+                if (lexicalUnitFrameMap.containsKey(word)) {
+                    frames = lexicalUnitFrameMap.get(word);
+                }
+                else if (word.length()>4) {
+                    word = word.substring(0, word.length() - 1);
+                    if (lexicalUnitFrameMap.containsKey(word)) {
+                        frames = lexicalUnitFrameMap.get(word);
+                    }
+                }
+            }
+        }
+        return frames;
+    }
+
 }

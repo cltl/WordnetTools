@@ -541,6 +541,10 @@ public class WordnetSimilarityApi {
                 ArrayList<String> hyperTarget = hyperChainsTarget.get(j);
                 int D = 1+(hyperSource.size()+hyperTarget.size())/2;
                 double score = vu.wntools.wnsimilarity.measures.LeacockChodorow.GetDistance(D, hyperSource, hyperTarget);
+
+                /*System.out.println("score = " + score);
+                System.out.println("hyperSource = " + hyperSource.toString());
+                System.out.println("hyperTarget = " + hyperTarget.toString());*/
                 if (score>similarityPair.getScore()) {
                     similarityPair.setMatch(LeacockChodorow.match);
                     similarityPair.setScore(score);
