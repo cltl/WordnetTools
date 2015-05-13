@@ -313,13 +313,16 @@ public class WordnetData {
 
     public int getAverageDepthBySynset () {
          int depth = 0;
-         Set keySet = hyperRelations.keySet();
+        int nSynsets = 0;
+
+        Set keySet = hyperRelations.keySet();
          Iterator keys = keySet.iterator();
          while (keys.hasNext()) {
              String key = (String) keys.next();
              ArrayList<ArrayList<String>> targetChains = new ArrayList<ArrayList<String>>();
              getMultipleHyperChain(key, targetChains);
              for (int i = 0; i < targetChains.size(); i++) {
+                 nSynsets++;
                  ArrayList<String> targetChain =  targetChains.get(i);
                  depth+= targetChain.size();
              }
@@ -328,7 +331,7 @@ public class WordnetData {
             depth = 1;
          }
          else {
-            depth = depth/keySet.size();
+            depth = depth/(keySet.size()+nSynsets);
          }
          return depth;
     }
@@ -354,7 +357,9 @@ public class WordnetData {
 
     public int getAverageDepthByWord () {
          int depth = 0;
-         Set keySet = entryToSynsets.keySet();
+        int nSynsets = 0;
+
+        Set keySet = entryToSynsets.keySet();
          Iterator keys = keySet.iterator();
          while (keys.hasNext()) {
              String key = (String) keys.next(); ///word
@@ -364,6 +369,7 @@ public class WordnetData {
                  ArrayList<ArrayList<String>> targetChains = new ArrayList<ArrayList<String>>();
                  getMultipleHyperChain(wordSynset, targetChains);
                  for (int i = 0; i < targetChains.size(); i++) {
+                     nSynsets++;  /// increment
                      ArrayList<String> targetChain =  targetChains.get(i);
                      depth+= targetChain.size();
                  }
@@ -373,7 +379,7 @@ public class WordnetData {
             depth = 1;
          }
          else {
-            depth = depth/keySet.size();
+            depth = depth/(keySet.size()+nSynsets);
          }
          return depth;
     }
@@ -389,12 +395,13 @@ public class WordnetData {
                  ArrayList<ArrayList<String>> targetChains = new ArrayList<ArrayList<String>>();
                  getMultipleHyperChain(wordSynset, targetChains);
                  for (int i = 0; i < targetChains.size(); i++) {
+                     nSynsets++;  /// increment
                      ArrayList<String> targetChain =  targetChains.get(i);
                      depth+= targetChain.size();
                  }
              }
          }
-         if (nSynsets>0) {
+        if (nSynsets>0) {
              depth = depth/nSynsets;
          }
          return depth;

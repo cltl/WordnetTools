@@ -17,10 +17,22 @@ public class AnnotateConllWithDepth {
 //        pathToTextFile = args[1];
         pathToWnLmfFile = "/Tools/wordnet-tools.0.1/resources/wneng-30.lmf.xml";
         pathToConll = "/Users/piek/Desktop/MasterLanguage/CAT_XML_std-off_export_2015-05-11_22_31_46/hobbit.txt.xml.csv";
+
+        for (int i = 0; i < args.length; i++) {
+            String arg = args[i];
+            if (arg.equals("--wn-lmf") && args.length>i+1) {
+                pathToWnLmfFile = args[i+1];
+            }
+            else if (arg.equals("--conll") && args.length>i+1) {
+                pathToConll = args[i+1];
+            }
+        }
+
         WordnetLmfSaxParser wordnetLmfSaxParser = new WordnetLmfSaxParser();
         wordnetLmfSaxParser.parseFile(pathToWnLmfFile);
         wordnetLmfSaxParser.wordnetData.buildLexicalUnitIndex();
         wordnetLmfSaxParser.wordnetData.buildSynsetIndex();
+
         int nDepth = 0;
         try {
             FileInputStream fis = new FileInputStream(pathToConll);
@@ -38,15 +50,31 @@ public class AnnotateConllWithDepth {
             BufferedReader in = new BufferedReader(isr);
             String inputLine;
             if (in.ready()&&(inputLine = in.readLine()) != null) {
-               inputLine += "\tWN-DEPTH"+"\n";
+               inputLine += "\tWN:DEPTH"+"\n";
                 fos.write(inputLine.getBytes());
             }
             while (in.ready()&&(inputLine = in.readLine()) != null) {
                 if (!inputLine.trim().isEmpty()) {
-                    String [] substrings = inputLine.split("\t");
+                    String[] substrings = inputLine.split("\t");
                     String word = substrings[1].trim();
-                   // System.out.println("word = " + word);
+                    // System.out.println("word = " + word);
                     int depth = wordnetLmfSaxParser.wordnetData.getAverageDepthForWord(word);
+                    if (depth == 0) {
+                        if (word.length() > 3) {
+                            word = word.substring(0, word.length() - 1);
+                            depth = wordnetLmfSaxParser.wordnetData.getAverageDepthForWord(word);
+                            if (depth==0) {
+                                word = word.substring(0, word.length() - 1);
+                                depth = wordnetLmfSaxParser.wordnetData.getAverageDepthForWord(word);
+                                if (depth ==0) {
+                                    if (word.length() > 4) {
+                                        word = word.substring(0, word.length() - 1);
+                                        depth = wordnetLmfSaxParser.wordnetData.getAverageDepthForWord(word);
+                                    }
+                                }
+                            }
+                        }
+                    }
                     if (depth>0) {
                       //  System.out.println("depth = " + depth);
                         nDepth++;

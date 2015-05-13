@@ -256,7 +256,7 @@ public class CatParser extends DefaultHandler {
             String str = "";
             Iterator<String> keys = attributeList.iterator();
             while (keys.hasNext()) {
-                str += "\t"+keys.next();
+                str += "\tCAT:"+keys.next();
             }
             return str;
         }

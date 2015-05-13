@@ -22,8 +22,23 @@ public class AnnotateConllWithFrameNet {
 //        pathToFrameNetFrameFile = args[0];
 //        pathToTextFile = args[1];
         pathToFrameNetLuFile = "/Resources/FrameNet/fndata-1.5/luIndex.xml";
+        pathToFrameNetLuFile = "/Resources/FrameNet/fndata-1.5/nl-luIndex.xml";
         pathToFrameNetFrameFile = "/Resources/FrameNet/fndata-1.5/frRelation.xml";
+        pathToFrameNetFrameFile = "/Resources/FrameNet/fndata-1.5/frHorizontalRelation.xml";
         pathToConll = "/Users/piek/Desktop/MasterLanguage/CAT_XML_std-off_export_2015-05-11_22_31_46/hobbit.txt.xml.csv";
+
+        for (int i = 0; i < args.length; i++) {
+            String arg = args[i];
+            if (arg.equals("--framenet-relations") && args.length>i+1) {
+                pathToFrameNetFrameFile = args[i+1];
+            }
+            else if (arg.equals("--framenet-lu") && args.length>i+1) {
+                pathToFrameNetLuFile = args[i+1];
+            }
+            else if (arg.equals("--conll") && args.length>i+1) {
+                pathToConll = args[i+1];
+            }
+        }
         FrameNetFrameReader frameNetFrameReader = new FrameNetFrameReader();
         frameNetFrameReader.parseFile(pathToFrameNetFrameFile);
         FrameNetLuReader frameNetLuReader = new FrameNetLuReader();
@@ -44,7 +59,7 @@ public class AnnotateConllWithFrameNet {
             BufferedReader in = new BufferedReader(isr);
             String inputLine;
             if (in.ready()&&(inputLine = in.readLine()) != null) {
-               inputLine += "\tFN-FRAME\tFN-RELATION"+"\n";
+               inputLine += "\tFN:FRAME\tFN:RELATION"+"\n";
                 fos.write(inputLine.getBytes());
             }
             ArrayList<String> lineArray = new ArrayList<String>();
@@ -53,7 +68,10 @@ public class AnnotateConllWithFrameNet {
                     String [] substrings = inputLine.split("\t");
                     String tokenId = substrings[0].trim();
                     String word = substrings[1].trim();
-                    ArrayList<String> frames = frameNetLuReader.getFramesForWord(word);
+                    ArrayList<String> frames = new ArrayList<String>();
+                    if (word.length()>2) {
+                        frames = frameNetLuReader.getFramesForWord(word);
+                    }
                     if (frames.size()>0) {
                         framedWords.add(tokenId);
                         frameWords.put(tokenId, frames);
