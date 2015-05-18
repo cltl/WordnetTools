@@ -89,7 +89,7 @@ public class CatParser extends DefaultHandler {
         public ArrayList<Relation> relationList;
         public TreeSet<String> attributeList;
         public String annotationName ="";
-        public String relationnName ="";
+        public String relationName ="";
         String source = "";
         String target = "";
         HashMap<String, ArrayList<String>> termToTokens;
@@ -203,15 +203,18 @@ public class CatParser extends DefaultHandler {
                     termToTokens.put(kafTerm.getTid(), tokens);
                 }
             }
-            else if (qName.equalsIgnoreCase("source")) {
-                source = attributes.getValue("m_id");
-            }
-            else if (qName.equalsIgnoreCase("target")) {
-                target = attributes.getValue("m_id");
-            }
-            else if (!relationnName.isEmpty()) {
-                if (qName.equalsIgnoreCase(relationnName)) {
+            else if (!relationName.isEmpty()) {
+                if (qName.equalsIgnoreCase(relationName)) {
+                    relationId = "";
+                    source = "";
+                    target = "";
                     relationId = attributes.getValue("r_id").trim();
+                }
+                else if (qName.equalsIgnoreCase("source")) {
+                    source = attributes.getValue("m_id");
+                }
+                else if (qName.equalsIgnoreCase("target")) {
+                    target = attributes.getValue("m_id");
                 }
             }
             else {
@@ -232,13 +235,15 @@ public class CatParser extends DefaultHandler {
                 kafTermArrayList.add(kafTerm);
                 annotations.put(kafTerm.getTid(), annotationArrayList);
             }
-            else if (!relationnName.isEmpty()) {
-                if (qName.equalsIgnoreCase(relationnName)) {
-                    Relation relation = new Relation();
-                    relation.setRelationId(relationId);
-                    relation.setSource(source);
-                    relation.setTarget(target);
-                    relationList.add(relation);
+            else if (!relationName.isEmpty()) {
+                if (qName.equalsIgnoreCase(relationName)) {
+                    if (!source.isEmpty() && !target.isEmpty()) {
+                        Relation relation = new Relation();
+                        relation.setRelationId(relationId);
+                        relation.setSource(source);
+                        relation.setTarget(target);
+                        relationList.add(relation);
+                    }
                 }
             }
         }

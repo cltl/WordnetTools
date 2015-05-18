@@ -25,7 +25,7 @@ public class CatToConll {
         }
         String labeledText = "";
         CatParser catParser = new CatParser("ANNOTATION");
-        catParser.relationnName = "COHERENCE";
+        catParser.relationName = "COHERENCE";
         catParser.parseFile(pathToTextFile);
         labeledText += "Tokenid\tWord"+catParser.attributeListToString()+"\tCAT:"+"COHERENCE\n";
         for (int i = 0; i < catParser.kafWordFormArrayList.size(); i++) {
