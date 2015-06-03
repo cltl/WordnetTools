@@ -58,32 +58,33 @@ public class AnnotateConllWithBrysbaert {
             while (in.ready()&&(inputLine = in.readLine()) != null) {
                 if (!inputLine.trim().isEmpty()) {
                     String [] substrings = inputLine.split("\t");
-                    String word = substrings[1].trim();
-                    if (!dict.containsKey(word))  {
-                        if (word.length() > 3) {
-                            word = word.substring(0, word.length() - 1);
-                            if  (!dict.containsKey(word)) {
+                    if (substrings.length>1) {
+                        String word = substrings[1].trim();
+                        if (!dict.containsKey(word)) {
+                            if (word.length() > 3) {
                                 word = word.substring(0, word.length() - 1);
-                                if  (!dict.containsKey(word)) {
-                                    if (word.length() > 4) {
-                                        word = word.substring(0, word.length() - 1);
+                                if (!dict.containsKey(word)) {
+                                    word = word.substring(0, word.length() - 1);
+                                    if (!dict.containsKey(word)) {
+                                        if (word.length() > 4) {
+                                            word = word.substring(0, word.length() - 1);
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                    if  (dict.containsKey(word)) {
-                        str = dict.get(word);
-                        inputLine += str.replace(";", "\t") + "\n";
+                        if (dict.containsKey(word)) {
+                            str = dict.get(word);
+                            inputLine += str.replace(";", "\t") + "\n";
 
-                    }
-                    else {
-                        for (int i = 0; i < nColumns; i++) {
-                          inputLine += "\t";
+                        } else {
+                            for (int i = 0; i < nColumns; i++) {
+                                inputLine += "\t";
+                            }
+                            inputLine += "\n";
                         }
-                        inputLine+= "\n";
+                        fos.write(inputLine.getBytes());
                     }
-                    fos.write(inputLine.getBytes());
                 }
             }
            // String str = "\n"+"AverageDepth = "+averageDepth/nDepth+"\n";

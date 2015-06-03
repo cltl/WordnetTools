@@ -9,8 +9,7 @@ import vu.wntools.util.Pos;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -30,9 +29,11 @@ public class WordnetLmfSaxParser extends DefaultHandler {
     private String entry = "";
     private String pos = "";
     private String posFilter = "";
+    public String provenanceFilter = "";
+    public String idFilter = "";
     private boolean posMatch = true;
     private ArrayList<String> relations = new ArrayList<String>();
-    private ArrayList<String> synsets = new ArrayList<String>();
+    public ArrayList<String> synsets = new ArrayList<String>();
     private ArrayList<String> hypers = new ArrayList<String>();
     private ArrayList<String> others = new ArrayList<String>();
     private ArrayList<String> directequivalences = new ArrayList<String>();
@@ -212,13 +213,33 @@ public class WordnetLmfSaxParser extends DefaultHandler {
         else if (qName.equalsIgnoreCase("Sense")) {
             String synsetId = "";
             String lexicalUnitId = "";
+            String definition = "";
             for (int i = 0; i < attributes.getLength(); i++) {
                 if (attributes.getQName(i).equalsIgnoreCase("synset")) {
                     synsetId = attributes.getValue(i).trim();
-                    synsets.add(synsetId);
+                    if (!synsetId.equalsIgnoreCase("unknown_000")) {
+                        synsets.add(synsetId);
+                        wordnetData.synsetArrayList.add(synsetId);
+                    }
                 }
                 if (attributes.getQName(i).equalsIgnoreCase("senseId")) {
                     lexicalUnitId = attributes.getValue(i).trim();
+                }
+                if (attributes.getQName(i).equalsIgnoreCase("definition")) {
+                    definition = attributes.getValue(i).trim();
+                }
+            }
+            if (!synsetId.isEmpty() && !definition.isEmpty()) {
+                if (wordnetData.synsetToGlosses.containsKey(synsetId)) {
+                    ArrayList<String> defs = wordnetData.synsetToGlosses.get(synsetId);
+                    if (!defs.contains(definition)) {
+                        defs.add(definition);
+                        wordnetData.synsetToGlosses.put(synsetId, defs);
+                    }
+                } else {
+                    ArrayList<String> defs = new ArrayList<String>();
+                    defs.add(definition);
+                    wordnetData.synsetToGlosses.put(synsetId, defs);
                 }
             }
             if (!synsetId.isEmpty() && !lexicalUnitId.isEmpty()) {
@@ -251,10 +272,16 @@ public class WordnetLmfSaxParser extends DefaultHandler {
                     sourceId = attributes.getValue(i).trim();
                 }
             }
+            if (!idFilter.isEmpty()) {
+                if (!sourceId.startsWith(idFilter)) {
+                   sourceId = "";
+                }
+            }
         }
         else if (qName.equalsIgnoreCase("SynsetRelation")) {
             type = "";
             targetId = "";
+            String provenance = "";
             for (int i = 0; i < attributes.getLength(); i++) {
                 if (attributes.getQName(i).equalsIgnoreCase("target")) {
                     targetId = attributes.getValue(i).trim();
@@ -262,90 +289,37 @@ public class WordnetLmfSaxParser extends DefaultHandler {
                 else if (attributes.getQName(i).equalsIgnoreCase("relType")) {
                     type = attributes.getValue(i).trim();
                 }
-
-            }
-
-            if (relations.size()==0) {
-                if (type.equalsIgnoreCase("hypernym")) {
-                    if (!targetId.isEmpty()) hypers.add(targetId);
-                }
-                else if (type.equalsIgnoreCase("has_hypernym")) {
-                    if (!targetId.isEmpty()) hypers.add(targetId);
-                }
-                else if (type.equalsIgnoreCase("has_hyperonym")) {
-                    if (!targetId.isEmpty()) hypers.add(targetId);
-                }
-                else if (type.equalsIgnoreCase("near_synonym")) {
-                    if (!targetId.isEmpty()) hypers.add(targetId);
-                }
-                else if (type.equalsIgnoreCase("eng_derivative")) {
-                    if (!targetId.isEmpty()) others.add(targetId);
-                }
-                else if (type.equalsIgnoreCase("xpos_near_synonym")) {
-                    if (!targetId.isEmpty()) others.add(targetId);
-                }
-                else if (type.equalsIgnoreCase("event")) {
-                    if (!targetId.isEmpty()) others.add(targetId);
-                }
-                else if (type.equalsIgnoreCase("xpos_near_hyperonym")) {
-                    if (!targetId.isEmpty()) others.add(targetId);
-                }
-                else if (type.equalsIgnoreCase("xpos_near_hypernym")) {
-                    if (!targetId.isEmpty()) others.add(targetId);
-                }
-            }
-            else if (relations.contains(type)) {
-                if (!targetId.isEmpty()) hypers.add(targetId);
-            }
-            else {
-                if (!targetId.isEmpty()) others.add(targetId);
-            }
-
-        }
-        else if (qName.equalsIgnoreCase("SynsetRelation")) {
-            type = "";
-            targetId = "";
-            for (int i = 0; i < attributes.getLength(); i++) {
-                if (attributes.getQName(i).equalsIgnoreCase("target")) {
-                    targetId = attributes.getValue(i).trim();
-                }
-                else if (attributes.getQName(i).equalsIgnoreCase("relType")) {
-                    type = attributes.getValue(i).trim();
+                else if (attributes.getQName(i).equalsIgnoreCase("provenance")) {
+                    provenance = attributes.getValue(i).trim();
                 }
 
             }
-
-            if (relations.size()==0) {
-                if (type.equalsIgnoreCase("hypernym")) {
+            if (provenanceFilter.isEmpty() || provenanceFilter.equalsIgnoreCase(provenance)) {
+                if (relations.size() == 0) {
+                    if (type.equalsIgnoreCase("hypernym")) {
+                        if (!targetId.isEmpty()) hypers.add(targetId);
+                    } else if (type.equalsIgnoreCase("has_hypernym")) {
+                        if (!targetId.isEmpty()) hypers.add(targetId);
+                    } else if (type.equalsIgnoreCase("has_hyperonym")) {
+                        if (!targetId.isEmpty()) hypers.add(targetId);
+                    } else if (type.equalsIgnoreCase("near_synonym")) {
+                        if (!targetId.isEmpty()) hypers.add(targetId);
+                    } else if (type.equalsIgnoreCase("eng_derivative")) {
+                        if (!targetId.isEmpty()) others.add(targetId);
+                    } else if (type.equalsIgnoreCase("xpos_near_synonym")) {
+                        if (!targetId.isEmpty()) others.add(targetId);
+                    } else if (type.equalsIgnoreCase("event")) {
+                        if (!targetId.isEmpty()) others.add(targetId);
+                    } else if (type.equalsIgnoreCase("xpos_near_hyperonym")) {
+                        if (!targetId.isEmpty()) others.add(targetId);
+                    } else if (type.equalsIgnoreCase("xpos_near_hypernym")) {
+                        if (!targetId.isEmpty()) others.add(targetId);
+                    }
+                } else if (relations.contains(type)) {
                     if (!targetId.isEmpty()) hypers.add(targetId);
-                }
-                else if (type.equalsIgnoreCase("has_hypernym")) {
-                    if (!targetId.isEmpty()) hypers.add(targetId);
-                }
-                else if (type.equalsIgnoreCase("has_hyperonym")) {
-                    if (!targetId.isEmpty()) hypers.add(targetId);
-                }
-                else if (type.equalsIgnoreCase("near_synonym")) {
-                    if (!targetId.isEmpty()) hypers.add(targetId);
-                }
-                else if (type.equalsIgnoreCase("eng_derivative")) {
+                } else {
                     if (!targetId.isEmpty()) others.add(targetId);
                 }
-                else if (type.equalsIgnoreCase("xpos_near_synonym")) {
-                    if (!targetId.isEmpty()) others.add(targetId);
-                }
-                else if (type.equalsIgnoreCase("xpos_near_hyperonym")) {
-                    if (!targetId.isEmpty()) others.add(targetId);
-                }
-                else if (type.equalsIgnoreCase("xpos_near_hypernym")) {
-                    if (!targetId.isEmpty()) others.add(targetId);
-                }
-            }
-            else if (relations.contains(type)) {
-                if (!targetId.isEmpty()) hypers.add(targetId);
-            }
-            else {
-                if (!targetId.isEmpty()) others.add(targetId);
             }
 
         }
@@ -425,11 +399,6 @@ public class WordnetLmfSaxParser extends DefaultHandler {
                     System.out.println("wordnetData.getHyperRelations().size() = " + wordnetData.getHyperRelations().size());
                 }*/
             }
-            else {
-                if (!pos.equalsIgnoreCase("n")) {
-                  //  System.out.println("pos = " + pos);
-                }
-            }
         }
         else if (qName.equalsIgnoreCase("LexicalEntry")) {
             if (!entry.isEmpty()) {
@@ -478,31 +447,79 @@ public class WordnetLmfSaxParser extends DefaultHandler {
         //String pathToFile = args[0];
        // String pathToFile = "/Releases/wordnetsimilarity_v.0.1/resources/cornetto2.0.lmf.xml";
         //String pathToFile = "/Tools/wordnet-tools.0.1/resources/cornetto2.1.lmf.xml";
-        String pathToFile = "/Tools/wordnet-tools.0.1/resources/wneng-30.lmf.xml";
+        String  pathToFile = "";
+        pathToFile = "/Code/vu/WordnetTools/resources/odwn1.0.lmf.test";
+        String pathToPwnFile = "/Tools/wordnet-tools.0.1/resources/wneng-30.lmf.xml";
+
         ArrayList<String> relations = new ArrayList<String>();
         //relations.add("NEAR_SYNONYM");
         relations.add("HAS_HYPERONYM");
+        relations.add("HAS_HYPERNYM");
+        relations.add("HYPERNYM");
         //relations.add("HAS_MERO_PART");
         //relations.add("HAS_HOLO_PART");
 
         WordnetLmfSaxParser parser = new WordnetLmfSaxParser();
+        WordnetLmfSaxParser pwnparser = new WordnetLmfSaxParser();
         //parser.setPos("v");
-        //parser.setRelations(relations);
-
+        parser.setRelations(relations);
+        //parser.provenanceFilter = "pwn";
         parser.parseFile(pathToFile);
+        pwnparser.parseFile(pathToPwnFile);
 /*
         int depth = parser.wordnetData.getAverageDepthByWord();
         System.out.println("depth = " + depth);
 */
         parser.wordnetData.buildSynsetIndex();
+        pwnparser.wordnetData.buildSynsetIndex();
 /*
         if (parser.wordnetData.entryToSynsets.containsKey("person")) {
             System.out.println("HAS IT");
         }
 */
-            System.out.println("parser.wordnetData.entryToSynsets.size() = " + parser.wordnetData.entryToSynsets.size());
+        System.out.println("parser.wordnetData.entryToSynsets.size() = " + parser.wordnetData.entryToSynsets.size());
         System.out.println("parser.wordnetData.getHyperRelations().size() = " + parser.wordnetData.getHyperRelations().size());
         System.out.println("parser.wordnetData.getOtherRelations().size() = " + parser.wordnetData.getOtherRelations().size());
+        ArrayList<String> tops = parser.wordnetData.getTopNodes();
+        try {
+            OutputStream fos = new FileOutputStream(pathToFile+".tops");
+            for (int i = 0; i < tops.size(); i++) {
+                String synsetId = tops.get(i);
+                String syns = parser.wordnetData.getSynsetString(synsetId)+"\t";
+                if (synsetId.startsWith("eng")) {
+                    syns += pwnparser.wordnetData.getSynsetString(synsetId);
+                }
+                String str = "synsetId = " + synsetId+":"+syns+"\n";
+                fos.write(str.getBytes());
+            }
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            OutputStream fos = new FileOutputStream(pathToFile+".odwn-new");
+            for (int i = 0; i < parser.wordnetData.synsetArrayList.size(); i++) {
+                String synsetId = parser.wordnetData.synsetArrayList.get(i);
+                if (synsetId.startsWith("odwn")) {
+                    ArrayList<String> hypers = new ArrayList<String>();
+                    parser.wordnetData.getSingleHyperChain(synsetId, hypers);
+                    String hyper = "";
+                    for (int j = hypers.size()-1; j >=0 ; j--) {
+                        String hyperId = hypers.get(j);
+                        if (hyperId.startsWith("eng")) {
+                            hyper += hyperId + ":" + pwnparser.wordnetData.getSynsetString(hyperId)+"\t";
+                          //  break;
+                        }
+                    }
+                    String syns = parser.wordnetData.getSynsetString(synsetId);
+                    String str = hyper + "odwn = " + synsetId + ":" + syns + "\n";
+                    fos.write(str.getBytes());
+                }
+            }
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

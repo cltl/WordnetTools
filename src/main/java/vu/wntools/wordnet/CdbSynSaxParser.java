@@ -8,7 +8,10 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 /**
@@ -19,13 +22,14 @@ import java.util.ArrayList;
  * To change this template use File | Settings | File Templates.
  */
 public class CdbSynSaxParser extends DefaultHandler{
-
+    static OutputStream fos;
     public WordnetData wordnetData;
     private String value = "";
     private String aValue = "";
     private String aName = "";
     private String sourceId = "";
     private String targetId= "";
+    private String relationSource= "";
     private String targetRelation= "";
     private String posFilter = "";
     private String pos  = "";
@@ -132,15 +136,23 @@ public class CdbSynSaxParser extends DefaultHandler{
                 if (IR) {
                     targetRelation="";
                     targetId = "";
+                    relationSource ="";
                     aValue = attributes.getValue("relation_name");
                     if (aValue!=null) {
                         targetRelation = aValue;
                     }
+                    relationSource = attributes.getValue("source");
                     aValue = attributes.getValue("target");
                     if (aValue!=null) {
                         targetId = aValue;
                     }
                     if (!targetId.isEmpty()) {
+                        String str = sourceId+"#"+targetId+"#"+relationSource+"\n";
+                        try {
+                            fos.write(str.getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         if (relations.size()==0) {
                             if ((targetRelation.equalsIgnoreCase("HAS_HYPERONYM"))      ||
                                 (targetRelation.equalsIgnoreCase("NEAR_SYNONYM"))) {
@@ -309,7 +321,8 @@ public class CdbSynSaxParser extends DefaultHandler{
 
     static public void main (String[] args) {
         //String pathToFile = args[0];
-        String pathToFile = "/Releases/wordnetsimilarity_v.0.1/resources/cdbsyn-latest.xml";
+       // String pathToFile = "/Releases/wordnetsimilarity_v.0.1/resources/cdbsyn-latest.xml";
+        String pathToFile = "/Code/vu/WordnetTools/resources/odwn_1.0.xml";
         ArrayList<String> relations = new ArrayList<String>();
         //relations.add("NEAR_SYNONYM");
         //relations.add("HAS_HYPERONYM");
@@ -317,13 +330,21 @@ public class CdbSynSaxParser extends DefaultHandler{
         relations.add("HAS_HOLO_PART");
 
         CdbSynSaxParser parser = new CdbSynSaxParser();
-        parser.setPos("a");
-        parser.setRelations(relations);
-        parser.parseFile(pathToFile);
+//        parser.setPos("a");
+//        parser.setRelations(relations);
+        try {
+            fos = new FileOutputStream(pathToFile+".relations");
+            parser.parseFile(pathToFile);
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+/*
         int depth = parser.wordnetData.getAverageDepthByWord();
         System.out.println("depth = " + depth);
         System.out.println("parser.wordnetData.entryToSynsets.size() = " + parser.wordnetData.entryToSynsets.size());
         System.out.println("parser.wordnetData.getHyperRelations().size() = " + parser.wordnetData.getHyperRelations().size());
         System.out.println("parser.wordnetData.getOtherRelations().size() = " + parser.wordnetData.getOtherRelations().size());
+*/
     }
 }

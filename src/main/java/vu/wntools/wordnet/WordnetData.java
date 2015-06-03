@@ -16,6 +16,7 @@ import java.util.Set;
  */
 public class WordnetData {
     public boolean DEBUG = false;
+    public HashMap<String, ArrayList<String>> synsetToGlosses = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> hyperRelations = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> otherRelations = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> entryToSynsets = new HashMap<String, ArrayList<String>>();
@@ -27,6 +28,7 @@ public class WordnetData {
     public HashMap<String, ArrayList<String>> synsetToOtherEquiSynsets = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> synsetToEntries = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> childRelations = new HashMap<String, ArrayList<String>>();
+    public ArrayList<String> synsetArrayList = new ArrayList<String>();
     private int nAverageNounDepth = 0;
     private int nAverageVerbDepth = 0;
     private int nAverageAdjectiveDepth = 0;
@@ -39,6 +41,8 @@ public class WordnetData {
     }
 
     public void init () {
+        synsetArrayList = new ArrayList<String>();
+        synsetToGlosses = new HashMap<String, ArrayList<String>>();
         hyperRelations = new HashMap<String, ArrayList<String>>();
         otherRelations = new HashMap<String, ArrayList<String>>();
         entryToSynsets = new HashMap<String, ArrayList<String>>();
@@ -233,8 +237,10 @@ public class WordnetData {
                 String synsetId = synsetIds.get(i);
                 if (synsetToEntries.containsKey(synsetId)) {
                    ArrayList<String> synonyms = synsetToEntries.get(synsetId);
-                   synonyms.add(entry);
-                   synsetToEntries.put(synsetId, synonyms);
+                    if (!synonyms.contains(entry)) {
+                        synonyms.add(entry);
+                        synsetToEntries.put(synsetId, synonyms);
+                    }
                 }
                 else {
                     ArrayList<String> synonyms = new ArrayList<String>();
