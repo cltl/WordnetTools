@@ -1,7 +1,5 @@
 package vu.wntools.util;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import vu.wntools.lmf.Gloss;
 
 import java.io.BufferedReader;
@@ -23,7 +21,7 @@ public class ReadGlosses {
 
     }
 
-    public void readGlossFile (String pathToILIfile, String language) {
+    public void readGlossFile (String pathToILIfile, String language, String owner) {
         try {
             FileInputStream fis = new FileInputStream(pathToILIfile);
             InputStreamReader isr = new InputStreamReader(fis);
@@ -42,7 +40,7 @@ eng-30-02797881-n# elk v.d. vaste plaatsen in het sportveld
                     // System.out.println("inputLine = " + inputLine);
                     String [] fields = inputLine.split("#");
                     if (fields.length>1) {
-                        String synset = fields[0];
+                        String synset = fields[0].trim();
                         String def = "";
                         for (int i = 1; i < fields.length; i++) {
                             String field = fields[i];
@@ -50,6 +48,7 @@ eng-30-02797881-n# elk v.d. vaste plaatsen in het sportveld
                         }
                         Gloss gloss = new Gloss();
                         gloss.setLanguage(language);
+                        gloss.setProvenance(owner);
                         gloss.setText(def.trim());
                         if (synsetToGlosses.containsKey(synset)) {
                             ArrayList<Gloss> defs = synsetToGlosses.get(synset);

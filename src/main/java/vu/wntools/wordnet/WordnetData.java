@@ -20,6 +20,7 @@ public class WordnetData {
     public HashMap<String, ArrayList<String>> hyperRelations = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> otherRelations = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> entryToSynsets = new HashMap<String, ArrayList<String>>();
+    public HashMap<String, ArrayList<String>> lemmaToSynsets = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> lexicalUnitsToSynsets = new HashMap<String, ArrayList<String>>();
     public HashMap<String, String> lexicalUnitsToLemmas = new HashMap<String, String>();
     public HashMap<String, ArrayList<String>> synsetToLexicalUnits = new HashMap<String, ArrayList<String>>();
@@ -51,6 +52,7 @@ public class WordnetData {
         synsetToNearEquiSynsets = new HashMap<String, ArrayList<String>>();
         synsetToOtherEquiSynsets = new HashMap<String, ArrayList<String>>();
         lexicalUnitsToSynsets = new HashMap<String, ArrayList<String>>();
+        lemmaToSynsets = new HashMap<String, ArrayList<String>>();
         synsetToEntries = new HashMap<String, ArrayList<String>>();
         childRelations = new HashMap<String, ArrayList<String>>();
         lexicalUnitsToLemmas = new HashMap<String, String>();
@@ -273,6 +275,28 @@ public class WordnetData {
         }
     }
 
+    public void buildLemmaIndex () {
+        for (int i = 0; i < synsetArrayList.size(); i++) {
+            String s = synsetArrayList.get(i);
+            ArrayList<String> lemmas = getSynonyms(s);
+            if (lemmas!=null) {
+                for (int j = 0; j < lemmas.size(); j++) {
+                    String lemma = lemmas.get(j);
+                    if (lemmaToSynsets.containsKey(lemma)) {
+                        ArrayList<String> synsets = lemmaToSynsets.get(lemma);
+                        synsets.add(s);
+                        lemmaToSynsets.put(lemma, synsets);
+                    }
+                    else {
+                        ArrayList<String> synsets = new ArrayList<String>();
+                        synsets.add(s);
+                        lemmaToSynsets.put(lemma, synsets);
+                    }
+                }
+            }
+        }
+    }
+
     public SynsetNode makeSynsetNode (String word, String synsetId) {
         SynsetNode synsetNode = new SynsetNode();
         synsetNode.setSynsetId(synsetId);
@@ -315,7 +339,13 @@ public class WordnetData {
         return synsetString;
     }
 
-
+    public ArrayList<String> getSynonyms (String synsetId) {
+        ArrayList<String> synonyms = new ArrayList<String>();
+        if (synsetToEntries.containsKey(synsetId)) {
+            synonyms = synsetToEntries.get(synsetId);
+        }
+        return synonyms;
+    }
 
     public int getAverageDepthBySynset () {
          int depth = 0;

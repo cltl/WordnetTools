@@ -473,4 +473,50 @@ public class Util {
         return sorter;
     }
 */
+    static public void main (String[] args) {
+        String pathToFile = "/Users/piek/Desktop/GWG/nl/translations";
+        ArrayList<String> files = makeFlatFileList(pathToFile, ".txt");
+        for (int i = 0; i < files.size(); i++) {
+            String filePath = files.get(i);
+            try {
+                FileInputStream fis = new FileInputStream(filePath);
+                InputStreamReader isr = new InputStreamReader(fis);
+                BufferedReader in = new BufferedReader(isr);
+                String inputLine = "";
+                String buffer = "";
+                int cnt = 0;
+                int fileCnt = 1;
+                while (in.ready()&&(inputLine = in.readLine()) != null) {
+                    if (inputLine.trim().length()>0) {
+                        cnt++;
+                        if (cnt==700) {
+                            try {
+                                OutputStream fos = new FileOutputStream(filePath+"."+fileCnt+".txt");
+                                fos.write(buffer.getBytes());
+                                fos.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            buffer = inputLine+"\n";
+                            cnt =0;
+                            fileCnt++;
+                        }
+                        else {
+                            buffer += inputLine+"\n";
+                        }
+                    }
+                }
+                try {
+                    OutputStream fos = new FileOutputStream(filePath+"."+fileCnt+".txt");
+                    fos.write(buffer.getBytes());
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

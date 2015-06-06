@@ -231,6 +231,9 @@ public class WordnetLmfDataSaxParser extends DefaultHandler {
                 else if (attributes.getQName(i).equalsIgnoreCase("relType")) {
                     synsetRelation.setRelType(attributes.getValue(i).trim());
                 }
+                else if (attributes.getQName(i).equalsIgnoreCase("provenance")) {
+                    synsetRelation.setProvenance(attributes.getValue(i).trim());
+                }
 
             }
             synset.addRelations(synsetRelation);
@@ -243,6 +246,9 @@ public class WordnetLmfDataSaxParser extends DefaultHandler {
                 }
                 else if (attributes.getQName(i).equalsIgnoreCase("gloss")) {
                     definition.setText(attributes.getValue(i).trim());
+                }
+                else if (attributes.getQName(i).equalsIgnoreCase("provenance")) {
+                    definition.setProvenance(attributes.getValue(i).trim());
                 }
             }
             synset.addDefinition(definition);
@@ -275,6 +281,7 @@ public class WordnetLmfDataSaxParser extends DefaultHandler {
     static public void main (String[] args) {
         try {
             String glossLanguage = "nl";
+            String glossOwner = "odwn";
             String pathToLmfFile = "/Code/vu/WordnetTools/resources/odwn1.0.lmf";
             String pathToGlossFile = "/Code/vu/WordnetTools/resources/odwn1.0.lmf.source-gloss";
             String pathToIliFile  = "/Users/piek/Desktop/GWG/ili.ttl";
@@ -282,7 +289,7 @@ public class WordnetLmfDataSaxParser extends DefaultHandler {
             readILI.readILIFile(pathToIliFile);
             System.out.println("readILI.synsetToILIMap.size() = " + readILI.synsetToILIMap.size());
             ReadGlosses readGlosses = new ReadGlosses();
-            readGlosses.readGlossFile(pathToGlossFile, glossLanguage);
+            readGlosses.readGlossFile(pathToGlossFile, glossLanguage, glossOwner);
             System.out.println("readGlosses.synsetToGlosses.size() = " + readGlosses.synsetToGlosses.size());
             WordnetLmfDataSaxParser wordnetLmfDataSaxParser = new WordnetLmfDataSaxParser();
             wordnetLmfDataSaxParser.parseFile(pathToLmfFile);

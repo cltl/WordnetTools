@@ -1,4 +1,4 @@
-package vu.wntools.wordnet;
+package vu.wntools.util;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -6,8 +6,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 import vu.wntools.lmf.*;
-import vu.wntools.util.ReadGlosses;
-import vu.wntools.util.ReadILI;
+import vu.wntools.wordnet.WordnetLmfData;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -232,6 +231,9 @@ public class ODWNtoGWG extends DefaultHandler {
                 else if (attributes.getQName(i).equalsIgnoreCase("relType")) {
                     synsetRelation.setRelType(attributes.getValue(i).trim());
                 }
+                else if (attributes.getQName(i).equalsIgnoreCase("provenance")) {
+                    synsetRelation.setProvenance(attributes.getValue(i).trim());
+                }
 
             }
             synset.addRelations(synsetRelation);
@@ -276,6 +278,7 @@ public class ODWNtoGWG extends DefaultHandler {
     static public void main (String[] args) {
         try {
             String glossLanguage = "nl";
+            String glossOwner = "odwn";
             String pathtorelationsource = "/Code/vu/WordnetTools/resources/odwn_1.0.xml.relations";
             String pathToLmfFile = "/Code/vu/WordnetTools/resources/odwn1.0.lmf";
             String pathToGlossFile = "/Code/vu/WordnetTools/resources/odwn1.0.lmf.source-gloss";
@@ -285,7 +288,7 @@ public class ODWNtoGWG extends DefaultHandler {
             readILI.readILIFile(pathToIliFile);
             System.out.println("readILI.synsetToILIMap.size() = " + readILI.synsetToILIMap.size());
             ReadGlosses readGlosses = new ReadGlosses();
-            readGlosses.readGlossFile(pathToGlossFile, glossLanguage);
+            readGlosses.readGlossFile(pathToGlossFile, glossLanguage, glossOwner);
             System.out.println("readGlosses.synsetToGlosses.size() = " + readGlosses.synsetToGlosses.size());
             ODWNtoGWG wordnetLmfDataSaxParser = new ODWNtoGWG();
             wordnetLmfDataSaxParser.parseFile(pathToLmfFile);

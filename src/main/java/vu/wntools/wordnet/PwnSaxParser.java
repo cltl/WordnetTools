@@ -8,7 +8,10 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 /**
@@ -19,7 +22,7 @@ import java.util.ArrayList;
  * To change this template use File | Settings | File Templates.
  */
 public class PwnSaxParser extends DefaultHandler {
-
+    static OutputStream fos = null;
     public WordnetData wordnetData;
     private String value = "";
     private String sourceId = "";
@@ -28,6 +31,7 @@ public class PwnSaxParser extends DefaultHandler {
     private String type = "";
     private String posFilter = "";
     private String pos = "";
+    private String definition = "";
     private boolean posMatch = true;
     private ArrayList<String> relations = new ArrayList<String>();
     private ArrayList<String> hypers = new ArrayList<String>();
@@ -90,6 +94,7 @@ public class PwnSaxParser extends DefaultHandler {
                 pos = "";
                 sourceId = "";
                 entry = "";
+                definition = "";
             }
             value = "";
         }//--startElement
@@ -179,6 +184,15 @@ public class PwnSaxParser extends DefaultHandler {
                     posMatch = true;
                 }
             }
+            else if (qName.equalsIgnoreCase("DEF")) {
+                definition = value.trim();
+                String str = sourceId+" # "+definition+"\n";
+                try {
+                    fos.write(str.getBytes());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             else if (qName.equalsIgnoreCase("ILR")) {
                     targetId = value.trim();
                     if (relations.size()==0) {
@@ -206,69 +220,6 @@ public class PwnSaxParser extends DefaultHandler {
 
         }
 
-/*      VERSION THAT FILTERS RELATIONS AND SYNSETS ON POS
-        public void endElement(String uri, String localName, String qName)
-                throws SAXException {
-            if (qName.equalsIgnoreCase("ID")) {
-                sourceId = value.trim();
-                if (!posFilter.isEmpty()) {
-                    //// ids needs to end with pos tag
-                    if (sourceId.endsWith("-"+posFilter)) {
-                        posMatch = true;
-                    }
-                    else {
-                        posMatch = false;
-                    }
-                }
-            }
-            else if (posMatch) {
-                if (qName.equalsIgnoreCase("ILR")) {
-                    targetId = value.trim();
-                    if (relations.size()==0) {
-                        if (type.equalsIgnoreCase("hypernym")) {
-                            hypers.add(targetId);
-                        }
-                        else if (type.equalsIgnoreCase("eng_derivative")) {
-                            others.add(targetId);
-                        }
-                    }
-                    else if (relations.contains(type)) {
-                        hypers.add(targetId);
-                    }
-                    else {
-                        others.add(targetId);
-                    }
-                    type = "";
-                }
-                else if (qName.equalsIgnoreCase("SYNSET")) {
-                    if ((!sourceId.isEmpty()) && hypers.size()>0) {
-                        wordnetData.addHyperRelation(sourceId, hypers);
-                    }
-                    if ((!sourceId.isEmpty()) && others.size()>0) {
-                        wordnetData.addOtherRelations(sourceId, others);
-                    }
-                    sourceId = "";
-                    others = new ArrayList<String>();
-                    hypers = new ArrayList<String>();
-                }
-                else if (qName.equalsIgnoreCase("LITERAL")) {
-                     entry = value.trim();
-                     if (wordnetData.entryToSynsets.containsKey(entry)) {
-                         ArrayList<String> synsets = wordnetData.entryToSynsets.get(entry);
-                         if (!synsets.contains(sourceId)) {
-                            synsets.add(sourceId);
-                             wordnetData.entryToSynsets.put(entry, synsets);
-                         }
-                     }
-                     else {
-                         ArrayList<String> synsets = new ArrayList<String>();
-                         synsets.add(sourceId);
-                         wordnetData.entryToSynsets.put(entry, synsets);
-                     }
-                }
-            }
-        }
-*/
 
         public void characters(char ch[], int start, int length)
                 throws SAXException {
@@ -278,7 +229,7 @@ public class PwnSaxParser extends DefaultHandler {
 
         static public void main (String[] args) {
             //String pathToFile = args[0];
-            String pathToFile = "/Releases/wordnetsimilarity_v.0.1/resources/wneng-30.gwg.xml";
+            String pathToFile = "/Tools/wordnet-tools.0.1/resources/wneng-30.gwg.xml";
             PwnSaxParser parser = new PwnSaxParser();
             ArrayList<String> relations = new ArrayList<String>();
             //relations.add("NEAR_SYNONYM");
@@ -286,17 +237,25 @@ public class PwnSaxParser extends DefaultHandler {
             //relations.add("HAS_MERO_PART");
             //relations.add("HAS_HOLO_PART");
             //relations.add("eng_derivative");
-            relations.add("hypernym");
+         //   relations.add("hypernym");
 
-            parser.setPos("n");
-            parser.setRelations(relations);
-            parser.parseFile(pathToFile);
+          //  parser.setPos("n");
+          //  parser.setRelations(relations);
+          //  parser.parseFile(pathToFile);
+/*
             int depth = parser.wordnetData.getAverageDepthByWord();
             System.out.println("depth = " + depth);
             System.out.println("parser.wordnetData.entryToSynsets.size() = " + parser.wordnetData.entryToSynsets.size());
             System.out.println("parser.wordnetData.getHyperRelations().size() = " + parser.wordnetData.getHyperRelations().size());
             System.out.println("parser.wordnetData.getOtherRelations().size() = " + parser.wordnetData.getOtherRelations().size());
-
+*/
+            try {
+                fos = new FileOutputStream("/Users/piek/Desktop/wn-eng-glosses");
+                parser.parseFile(pathToFile);
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
 }

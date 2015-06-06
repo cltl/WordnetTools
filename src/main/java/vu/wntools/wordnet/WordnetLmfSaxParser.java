@@ -35,6 +35,7 @@ public class WordnetLmfSaxParser extends DefaultHandler {
     private ArrayList<String> relations = new ArrayList<String>();
     public ArrayList<String> synsets = new ArrayList<String>();
     private ArrayList<String> hypers = new ArrayList<String>();
+    ArrayList<String> backupHypers = new ArrayList<String>();
     private ArrayList<String> others = new ArrayList<String>();
     private ArrayList<String> directequivalences = new ArrayList<String>();
     private ArrayList<String> nearequivalences = new ArrayList<String>();
@@ -264,6 +265,7 @@ public class WordnetLmfSaxParser extends DefaultHandler {
             sourceId = "";
             others = new ArrayList<String>();
             hypers = new ArrayList<String>();
+            backupHypers = new ArrayList<String>();
             directequivalences = new ArrayList<String>();
             nearequivalences = new ArrayList<String>();
             otherequivalences = new ArrayList<String>();
@@ -321,7 +323,21 @@ public class WordnetLmfSaxParser extends DefaultHandler {
                     if (!targetId.isEmpty()) others.add(targetId);
                 }
             }
-
+            else {
+                if (relations.size() == 0) {
+                    if (type.equalsIgnoreCase("hypernym")) {
+                        if (!targetId.isEmpty()) backupHypers.add(targetId);
+                    } else if (type.equalsIgnoreCase("has_hypernym")) {
+                        if (!targetId.isEmpty()) backupHypers.add(targetId);
+                    } else if (type.equalsIgnoreCase("has_hyperonym")) {
+                        if (!targetId.isEmpty()) backupHypers.add(targetId);
+                    } else if (type.equalsIgnoreCase("near_synonym")) {
+                        if (!targetId.isEmpty()) backupHypers.add(targetId);
+                    }
+                } else if (relations.contains(type)) {
+                    if (!targetId.isEmpty()) backupHypers.add(targetId);
+                }
+            }
         }
         else if (qName.equalsIgnoreCase("MonolingualExternalRef")) {
 
@@ -375,6 +391,9 @@ public class WordnetLmfSaxParser extends DefaultHandler {
                 if ((!sourceId.isEmpty()) && hypers.size()>0) {
                     wordnetData.addHyperRelation(sourceId, hypers);
                 }
+                else if (!sourceId.isEmpty() && backupHypers.size()>0) {
+                    wordnetData.addHyperRelation(sourceId, backupHypers);
+                }
                 if ((!sourceId.isEmpty()) && others.size()>0) {
                     wordnetData.addOtherRelations(sourceId, others);
                 }
@@ -390,6 +409,7 @@ public class WordnetLmfSaxParser extends DefaultHandler {
                 sourceId = "";
                 others = new ArrayList<String>();
                 hypers = new ArrayList<String>();
+                backupHypers = new ArrayList<String>();
                 directequivalences = new ArrayList<String>();
                 nearequivalences = new ArrayList<String>();
                 otherequivalences = new ArrayList<String>();
@@ -463,7 +483,7 @@ public class WordnetLmfSaxParser extends DefaultHandler {
         WordnetLmfSaxParser pwnparser = new WordnetLmfSaxParser();
         //parser.setPos("v");
         parser.setRelations(relations);
-        //parser.provenanceFilter = "pwn";
+        parser.provenanceFilter = "pwn";
         parser.parseFile(pathToFile);
         pwnparser.parseFile(pathToPwnFile);
 /*
@@ -471,6 +491,8 @@ public class WordnetLmfSaxParser extends DefaultHandler {
         System.out.println("depth = " + depth);
 */
         parser.wordnetData.buildSynsetIndex();
+        parser.wordnetData.buildLexicalUnitIndex();
+        parser.wordnetData.buildLemmaIndex();
         pwnparser.wordnetData.buildSynsetIndex();
 /*
         if (parser.wordnetData.entryToSynsets.containsKey("person")) {
@@ -497,26 +519,71 @@ public class WordnetLmfSaxParser extends DefaultHandler {
             e.printStackTrace();
         }
         try {
+            ArrayList<String> pureowdnIds = new ArrayList<String>();
+            ArrayList<String> owdnpwnIds = new ArrayList<String>();
+            ArrayList<String> pwnIds = new ArrayList<String>();
+
             OutputStream fos = new FileOutputStream(pathToFile+".odwn-new");
+            OutputStream fos1 = new FileOutputStream(pathToFile+".odwn-new-old");
             for (int i = 0; i < parser.wordnetData.synsetArrayList.size(); i++) {
                 String synsetId = parser.wordnetData.synsetArrayList.get(i);
                 if (synsetId.startsWith("odwn")) {
+                    ArrayList<String> synonyms = parser.wordnetData.getSynonyms(synsetId);
+                    boolean PWN = false;
+                    for (int j = 0; j < synonyms.size(); j++) {
+                        String synonym = synonyms.get(j);
+                        ArrayList<String> synsetIds = parser.wordnetData.lemmaToSynsets.get(synonym);
+                        if (synsetIds!=null) {
+                            for (int k = 0; k < synsetIds.size(); k++) {
+                                String id = synsetIds.get(k);
+                              //  System.out.println("id = " + id);
+                                if (id.startsWith("eng")) {
+                                    PWN = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (PWN == true) {
+                            break;
+                        }
+                    }
+
                     ArrayList<String> hypers = new ArrayList<String>();
                     parser.wordnetData.getSingleHyperChain(synsetId, hypers);
                     String hyper = "";
-                    for (int j = hypers.size()-1; j >=0 ; j--) {
+                    for (int j = hypers.size() - 1; j >= 0; j--) {
                         String hyperId = hypers.get(j);
                         if (hyperId.startsWith("eng")) {
-                            hyper += hyperId + ":" + pwnparser.wordnetData.getSynsetString(hyperId)+"\t";
-                          //  break;
+                            hyper += hyperId + ":" + pwnparser.wordnetData.getSynsetString(hyperId) + "\t";
+                            //  break;
                         }
                     }
                     String syns = parser.wordnetData.getSynsetString(synsetId);
                     String str = hyper + "odwn = " + synsetId + ":" + syns + "\n";
-                    fos.write(str.getBytes());
+                    if (!PWN) {
+                        if (!pureowdnIds.contains(synsetId)) {
+                            pureowdnIds.add(synsetId);
+                            fos.write(str.getBytes());
+                        }
+                    }
+                    else {
+                        if (!owdnpwnIds.contains(synsetId)) {
+                            owdnpwnIds.add(synsetId);
+                            fos1.write(str.getBytes());
+                        }
+                    }
+                }
+                else {
+                    if (!pwnIds.contains(synsetId)) {
+                        pwnIds.add(synsetId);
+                    }
                 }
             }
             fos.close();
+            fos1.close();
+            System.out.println("owdnpwnIds = " + owdnpwnIds.size());
+            System.out.println("pureowdnIds = " + pureowdnIds.size());
+            System.out.println("pwnIds = " + pwnIds.size());
         } catch (IOException e) {
             e.printStackTrace();
         }

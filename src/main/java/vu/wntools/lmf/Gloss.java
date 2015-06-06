@@ -9,10 +9,12 @@ import org.w3c.dom.Element;
 public class Gloss {
     private String language;
     private String text;
+    private String provenance;
 
     public Gloss() {
         this.language = "";
         this.text = "";
+        this.provenance = "";
     }
 
     public String getLanguage() {
@@ -31,10 +33,19 @@ public class Gloss {
         this.text = text;
     }
 
+    public String getProvenance() {
+        return provenance;
+    }
+
+    public void setProvenance(String provenance) {
+        this.provenance = provenance;
+    }
+
     public Element toXml (Document xmldoc) {
         Element defElement = xmldoc.createElement("Definition");
-        defElement.setAttribute("language", this.getLanguage());
+        if (!this.getLanguage().isEmpty()) defElement.setAttribute("language", this.getLanguage());
         defElement.setAttribute("gloss", this.getText());
+        if (!this.getProvenance().isEmpty()) defElement.setAttribute("provenance", this.getProvenance());
         return defElement;
 
     }
