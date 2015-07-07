@@ -174,6 +174,27 @@ public class WordnetLmfDataSaxParser extends DefaultHandler {
              </Sense>
              </LexicalEntry>
              */
+        /*
+         <LexicalEntry id="ANWB-kantoor-n-1" partOfSpeech="noun">
+      <Lemma writtenForm="ANWB-kantoor"/>
+      <WordForms>
+        <WordForm writtenForm="ANWB-kantoor" grammaticalNumber="singular" article="het"/>
+        <WordForm writtenForm="ANWB-kantoren" grammaticalNumber="plural" article="de"/>
+      </WordForms>
+      <Morphology morphoType="compound"/>
+      <MorphoSyntax pronominalAndGrammaticalGender="m_f"/>
+      <Sense senseId="r_n-3696" definition="kantoor v.d. ANWB" synset="odwn-10-107184172-n" origin="cdb2.2_None">
+        <SenseRelations/>
+        <Semantics-noun reference="common" countability="count" semanticType="artefact">
+          <semanticShifts-noun semanticType="artefact"/>
+          <semanticShifts-noun semanticType="place"/>
+        </Semantics-noun>
+        <Pragmatics>
+          <Domains domain="transport"/>
+        </Pragmatics>
+      </Sense>
+    </LexicalEntry>
+         */
         }
         else if (qName.equalsIgnoreCase("Lemma")) {
             for (int i = 0; i < attributes.getLength(); i++) {
@@ -191,14 +212,45 @@ public class WordnetLmfDataSaxParser extends DefaultHandler {
     <Sense id="clapboard_1" synset="eng-30-01337412-v"/>
 */
             for (int i = 0; i < attributes.getLength(); i++) {
-                if (attributes.getQName(i).equalsIgnoreCase("synset")) {
-                    lmfSense.setSynset(attributes.getValue(i).trim());
-                }
-                else if (attributes.getQName(i).equalsIgnoreCase("id")) {
+                if (attributes.getQName(i).equalsIgnoreCase("id")) {
                     lmfSense.setSenseId(attributes.getValue(i).trim());
                 }
                 else if (attributes.getQName(i).equalsIgnoreCase("senseId")) {
                     lmfSense.setSenseId(attributes.getValue(i).trim());
+                }
+                else if (attributes.getQName(i).equalsIgnoreCase("origin")) {
+                    lmfSense.setProvenance(attributes.getValue(i).trim());
+                }
+                else if (attributes.getQName(i).equalsIgnoreCase("provenance")) {
+                    lmfSense.setProvenance(attributes.getValue(i).trim());
+                }
+                else if (attributes.getQName(i).equalsIgnoreCase("synset")) {
+                    String synsetId = attributes.getValue(i).trim();
+                    lmfSense.setSynset(synsetId);
+                    if (wordnetData.synsetToEntriesMap.containsKey(synsetId)) {
+                        ArrayList<String> entries = wordnetData.synsetToEntriesMap.get(synsetId);
+                        if (!entries.contains(lmfEntry.getWrittenForm())) {
+                            entries.add(lmfEntry.getWrittenForm());
+                            wordnetData.synsetToEntriesMap.put(synsetId, entries);
+                        }
+                    }
+                    else {
+                        ArrayList<String> entries = new ArrayList<String>();
+                        entries.add(lmfEntry.getWrittenForm());
+                        wordnetData.synsetToEntriesMap.put(synsetId, entries);
+                    }
+                    if (wordnetData.entryToSynsetsMap.containsKey(lmfEntry.getWrittenForm())) {
+                        ArrayList<String> synsets = wordnetData.entryToSynsetsMap.get(lmfEntry.getWrittenForm());
+                        if (!synsets.contains(synsetId)) {
+                            synsets.add(synsetId);
+                            wordnetData.entryToSynsetsMap.put(lmfEntry.getWrittenForm(), synsets);
+                        }
+                    }
+                    else {
+                        ArrayList<String> synsets = new ArrayList<String>();
+                        synsets.add(synsetId);
+                        wordnetData.entryToSynsetsMap.put(lmfEntry.getWrittenForm(), synsets);
+                    }
                 }
                 else if (attributes.getQName(i).equalsIgnoreCase("definition")) {
                     lmfSense.setDefinition(attributes.getValue(i).trim());
@@ -234,7 +286,9 @@ public class WordnetLmfDataSaxParser extends DefaultHandler {
                 else if (attributes.getQName(i).equalsIgnoreCase("provenance")) {
                     synsetRelation.setProvenance(attributes.getValue(i).trim());
                 }
-
+                else if (attributes.getQName(i).equalsIgnoreCase("source")) {
+                    synsetRelation.setProvenance(attributes.getValue(i).trim());
+                }
             }
             synset.addRelations(synsetRelation);
         }
@@ -265,10 +319,28 @@ public class WordnetLmfDataSaxParser extends DefaultHandler {
 
 
         if (qName.equalsIgnoreCase("Synset")) {
-           wordnetData.addSynset(synset);
+            if (wordnetData.addSynset(synset)) {
+                /// if already there the info is merged and false is returned
+                /// otherwise it is added and we update the synsetMap.
+                wordnetData.synsetMap.put(synset.getSynsetId(), synset);
+            }
         }
         else if (qName.equalsIgnoreCase("LexicalEntry")) {
             wordnetData.addEntry(lmfEntry);
+            String writtenForm = lmfEntry.getWrittenForm();
+            if (writtenForm.isEmpty()) {
+                writtenForm = "empty";
+            }
+            if (wordnetData.entryMap.containsKey(writtenForm)) {
+                ArrayList<LmfEntry> lmfEntries = wordnetData.entryMap.get(writtenForm);
+                lmfEntries.add(lmfEntry);
+                wordnetData.entryMap.put(writtenForm,lmfEntries);
+            }
+            else {
+                ArrayList<LmfEntry> lmfEntries = new ArrayList<LmfEntry>();
+                lmfEntries.add(lmfEntry);
+                wordnetData.entryMap.put(writtenForm,lmfEntries);
+            }
         }
     }
 

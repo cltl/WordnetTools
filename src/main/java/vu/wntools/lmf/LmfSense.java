@@ -14,11 +14,21 @@ public class LmfSense {
     private String senseId;
     private String synset;
     private String definition;
+    private String provenance;
 
     public LmfSense() {
         this.senseId = "";
         this.synset = "";
         this.definition = "";
+        this.provenance = "";
+    }
+
+    public String getProvenance() {
+        return provenance;
+    }
+
+    public void setProvenance(String provenance) {
+        this.provenance = provenance;
     }
 
     public String getSenseId() {
@@ -49,6 +59,7 @@ public class LmfSense {
     {
         Element root = xmldoc.createElement("Sense");
         if (!senseId.isEmpty()) root.setAttribute("id", senseId);
+        if (!provenance.isEmpty()) root.setAttribute("provenance", provenance);
         if (!synset.isEmpty()) root.setAttribute("synset", synset);
         if (!definition.isEmpty()) root.setAttribute("definition", definition);
         return root;

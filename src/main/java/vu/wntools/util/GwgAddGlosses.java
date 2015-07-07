@@ -1,8 +1,8 @@
-package vu.wntools.wordnet;
+package vu.wntools.util;
 
 import vu.wntools.lmf.Gloss;
 import vu.wntools.lmf.Synset;
-import vu.wntools.util.ReadGlosses;
+import vu.wntools.wordnet.WordnetLmfDataSaxParser;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -26,9 +26,15 @@ public class GwgAddGlosses {
             String pathToGlossFile = "/Users/piek/Desktop/GWG/nl/odwn-translated-glosses.final";
 */
             String glossLanguage = "en";
+            String glossOwner = "google-translate";
+            String pathToLmfFile = "/Users/piek/Desktop/GWG/nl/startedFromOdwnRbnLmf/odwn_1.0.xml.lmf.pwn-glosses";
+            String pathToGlossFile = "/Users/piek/Desktop/GWG/nl/startedFromOdwnRbnLmf/translation/odwn-orbn.trans-gloss-cleaned";
+/*
+            String glossLanguage = "en";
             String glossOwner = "pwn";
-            String pathToLmfFile = "/Users/piek/Desktop/GWG/nl/odwn1.0.lmf.test.test";
+            String pathToLmfFile = "/Users/piek/Desktop/GWG/nl/startedFromOdwnRbnLmf/odwn_1.0.xml.lmf";
             String pathToGlossFile = "/Users/piek/Desktop/GWG/nl/wn-eng-glosses";
+*/
             ReadGlosses readGlosses = new ReadGlosses();
             readGlosses.readGlossFile(pathToGlossFile, glossLanguage, glossOwner);
             System.out.println("readGlosses.synsetToGlosses.size() = " + readGlosses.synsetToGlosses.size());
@@ -45,21 +51,12 @@ public class GwgAddGlosses {
                 }
             }
 
-            OutputStream fos = new FileOutputStream(pathToLmfFile+".test");
+            OutputStream fos = new FileOutputStream(pathToLmfFile+".google-glosses");
             wordnetLmfDataSaxParser.wordnetData.serialize(fos);
             fos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-/*  AD HOC TO FIX ODWN INPUT
-    wordnetLmfDataSaxParser.wordnetData.setGlobalLabel("ODWN.1.0");
-    wordnetLmfDataSaxParser.wordnetData.setLexiconLabel("ODWN.1.0");
-
-    for (int j = 0; j < synset.getDefinitions().size(); j++) {
-        Gloss gloss = synset.getDefinitions().get(j);
-        gloss.setProvenance("odwn");
-    }
-*/
 
 }

@@ -56,7 +56,7 @@ public class PrintOdwn {
 
         try {
             OutputStream fos = new FileOutputStream(pathToFile+".tree");
-            printTree(parserOdwn.wordnetData, parserWn.wordnetData,"n", fos);
+            printTree(parserOdwn.wordnetData, parserWn.wordnetData,"v", fos);
             fos.close();
         } catch (IOException e) {
             e.printStackTrace();

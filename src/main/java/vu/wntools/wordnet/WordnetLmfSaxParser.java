@@ -5,6 +5,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
+import vu.wntools.lmf.Gloss;
 import vu.wntools.util.Pos;
 
 import javax.xml.parsers.SAXParser;
@@ -230,7 +231,7 @@ public class WordnetLmfSaxParser extends DefaultHandler {
                     definition = attributes.getValue(i).trim();
                 }
             }
-            if (!synsetId.isEmpty() && !definition.isEmpty()) {
+            /*if (!synsetId.isEmpty() && !definition.isEmpty()) {
                 if (wordnetData.synsetToGlosses.containsKey(synsetId)) {
                     ArrayList<String> defs = wordnetData.synsetToGlosses.get(synsetId);
                     if (!defs.contains(definition)) {
@@ -242,7 +243,7 @@ public class WordnetLmfSaxParser extends DefaultHandler {
                     defs.add(definition);
                     wordnetData.synsetToGlosses.put(synsetId, defs);
                 }
-            }
+            }*/
             if (!synsetId.isEmpty() && !lexicalUnitId.isEmpty()) {
                 if (wordnetData.synsetToLexicalUnits.containsKey(synsetId)) {
                    ArrayList<String> lus = wordnetData.synsetToLexicalUnits.get(synsetId);
@@ -280,6 +281,30 @@ public class WordnetLmfSaxParser extends DefaultHandler {
                 }
             }
         }
+        else if (qName.equalsIgnoreCase("Definition")) {
+            Gloss gloss = new Gloss();
+            for (int i = 0; i < attributes.getLength(); i++) {
+                if (attributes.getQName(i).equalsIgnoreCase("gloss")) {
+                    gloss.setText(attributes.getValue(i).trim());
+                }
+                else if (attributes.getQName(i).equalsIgnoreCase("language")) {
+                    gloss.setLanguage(attributes.getValue(i).trim());
+                }
+                else if (attributes.getQName(i).equalsIgnoreCase("provenance")) {
+                    gloss.setProvenance(attributes.getValue(i).trim());
+                }
+            }
+            if (wordnetData.synsetToGlosses.containsKey(sourceId)) {
+                ArrayList<Gloss> glosses = wordnetData.synsetToGlosses.get(sourceId);
+                glosses.add(gloss);
+                wordnetData.synsetToGlosses.put(sourceId, glosses);
+            }
+            else {
+                ArrayList<Gloss> glosses = new ArrayList<Gloss>();
+                glosses.add(gloss);
+                wordnetData.synsetToGlosses.put(sourceId, glosses);
+            }
+        }
         else if (qName.equalsIgnoreCase("SynsetRelation")) {
             type = "";
             targetId = "";
@@ -299,43 +324,43 @@ public class WordnetLmfSaxParser extends DefaultHandler {
             if (provenanceFilter.isEmpty() || provenanceFilter.equalsIgnoreCase(provenance)) {
                 if (relations.size() == 0) {
                     if (type.equalsIgnoreCase("hypernym")) {
-                        if (!targetId.isEmpty()) hypers.add(targetId);
+                        if (!targetId.isEmpty()) if (!hypers.contains(targetId)) hypers.add(targetId);
                     } else if (type.equalsIgnoreCase("has_hypernym")) {
-                        if (!targetId.isEmpty()) hypers.add(targetId);
+                        if (!targetId.isEmpty()) if (!hypers.contains(targetId)) hypers.add(targetId);
                     } else if (type.equalsIgnoreCase("has_hyperonym")) {
-                        if (!targetId.isEmpty()) hypers.add(targetId);
+                        if (!targetId.isEmpty()) if (!hypers.contains(targetId)) hypers.add(targetId);
                     } else if (type.equalsIgnoreCase("near_synonym")) {
-                        if (!targetId.isEmpty()) hypers.add(targetId);
+                        if (!targetId.isEmpty()) if (!hypers.contains(targetId)) hypers.add(targetId);
                     } else if (type.equalsIgnoreCase("eng_derivative")) {
-                        if (!targetId.isEmpty()) others.add(targetId);
+                        if (!targetId.isEmpty()) if (!others.contains(targetId)) others.add(targetId);
                     } else if (type.equalsIgnoreCase("xpos_near_synonym")) {
-                        if (!targetId.isEmpty()) others.add(targetId);
+                        if (!targetId.isEmpty()) if (!others.contains(targetId)) others.add(targetId);
                     } else if (type.equalsIgnoreCase("event")) {
-                        if (!targetId.isEmpty()) others.add(targetId);
+                        if (!targetId.isEmpty()) if (!others.contains(targetId)) others.add(targetId);
                     } else if (type.equalsIgnoreCase("xpos_near_hyperonym")) {
-                        if (!targetId.isEmpty()) others.add(targetId);
+                        if (!targetId.isEmpty()) if (!others.contains(targetId)) others.add(targetId);
                     } else if (type.equalsIgnoreCase("xpos_near_hypernym")) {
-                        if (!targetId.isEmpty()) others.add(targetId);
+                        if (!targetId.isEmpty()) if (!others.contains(targetId)) others.add(targetId);
                     }
                 } else if (relations.contains(type)) {
-                    if (!targetId.isEmpty()) hypers.add(targetId);
+                    if (!targetId.isEmpty()) if (!hypers.contains(targetId)) hypers.add(targetId);
                 } else {
-                    if (!targetId.isEmpty()) others.add(targetId);
+                    if (!targetId.isEmpty()) if (!others.contains(targetId)) others.add(targetId);
                 }
             }
             else {
                 if (relations.size() == 0) {
                     if (type.equalsIgnoreCase("hypernym")) {
-                        if (!targetId.isEmpty()) backupHypers.add(targetId);
+                        if (!targetId.isEmpty()) if (!backupHypers.contains(targetId)) backupHypers.add(targetId);
                     } else if (type.equalsIgnoreCase("has_hypernym")) {
-                        if (!targetId.isEmpty()) backupHypers.add(targetId);
+                        if (!targetId.isEmpty()) if (!backupHypers.contains(targetId)) backupHypers.add(targetId);
                     } else if (type.equalsIgnoreCase("has_hyperonym")) {
-                        if (!targetId.isEmpty()) backupHypers.add(targetId);
+                        if (!targetId.isEmpty()) if (!backupHypers.contains(targetId)) backupHypers.add(targetId);
                     } else if (type.equalsIgnoreCase("near_synonym")) {
-                        if (!targetId.isEmpty()) backupHypers.add(targetId);
+                        if (!targetId.isEmpty()) if (!backupHypers.contains(targetId)) backupHypers.add(targetId);
                     }
-                } else if (relations.contains(type)) {
-                    if (!targetId.isEmpty()) backupHypers.add(targetId);
+                } else if (relations.contains(type.toLowerCase())) {
+                    if (!targetId.isEmpty()) if (!backupHypers.contains(targetId)) backupHypers.add(targetId);
                 }
             }
         }
@@ -468,14 +493,14 @@ public class WordnetLmfSaxParser extends DefaultHandler {
        // String pathToFile = "/Releases/wordnetsimilarity_v.0.1/resources/cornetto2.0.lmf.xml";
         //String pathToFile = "/Tools/wordnet-tools.0.1/resources/cornetto2.1.lmf.xml";
         String  pathToFile = "";
-        pathToFile = "/Code/vu/WordnetTools/resources/odwn1.0.lmf.test";
+        pathToFile = "/Users/piek/Desktop/GWG/nl/startedFromOdwnRbnLmf/odwn_1.0.xml.lmf.pwn-glosses.google-glosses.ili.lmf";
         String pathToPwnFile = "/Tools/wordnet-tools.0.1/resources/wneng-30.lmf.xml";
 
         ArrayList<String> relations = new ArrayList<String>();
         //relations.add("NEAR_SYNONYM");
-        relations.add("HAS_HYPERONYM");
-        relations.add("HAS_HYPERNYM");
-        relations.add("HYPERNYM");
+        relations.add("has_hyperonym");
+        relations.add("has_hypernym");
+        relations.add("hypernym");
         //relations.add("HAS_MERO_PART");
         //relations.add("HAS_HOLO_PART");
 

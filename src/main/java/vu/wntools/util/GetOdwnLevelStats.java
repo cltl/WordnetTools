@@ -25,15 +25,12 @@ public class GetOdwnLevelStats {
         String pathToFile = "";
         //pathToFile = "/Tools/wordnet-tools.0.1/resources/cornetto2.1.lmf.xml";
         //pathToFile = "/Tools/wordnet-tools.0.1/resources/wneng-30.lmf.xml";
-        pathToFile = "/Code/vu/WordnetTools/resources/odwn1.0.lmf.test";
+        pathToFile = "/Users/piek/Desktop/GWG/nl/startedFromOdwnRbnLmf/odwn_1.0.xml.lmf.pwn-glosses.google-glosses.ili.lmf";
         //pathToFile = "/Code/vu/WordnetTools/resources/odwn1.0.lmf";
         ArrayList<String> relations = new ArrayList<String>();
-        //relations.add("NEAR_SYNONYM");
-        relations.add("HAS_HYPERONYM");
-        relations.add("HAS_HYPERNYM");
-        relations.add("HYPERNYM");
-        //relations.add("HAS_MERO_PART");
-        //relations.add("HAS_HOLO_PART");
+        relations.add("has_hyperonym");
+        relations.add("has_hypernym");
+        relations.add("hypernym");
 
         WordnetLmfSaxParser parser = new WordnetLmfSaxParser();
         //parser.setPos("v");
@@ -42,25 +39,16 @@ public class GetOdwnLevelStats {
         parser.provenanceFilter = "pwn";
         parser.parseFile(pathToFile);
 
-/*
-        int depth = parser.wordnetData.getAverageDepthByWord();
-        System.out.println("depth = " + depth);
-*/
         parser.wordnetData.buildSynsetIndex();
-/*
-        if (parser.wordnetData.entryToSynsets.containsKey("person")) {
-            System.out.println("HAS IT");
-        }
-*/
         System.out.println("pathToFile = " + pathToFile);
         System.out.println("parser.wordnetData.entryToSynsets.size() = " + parser.wordnetData.entryToSynsets.size());
         System.out.println("parser.wordnetData.getHyperRelations().size() = " + parser.wordnetData.getHyperRelations().size());
         System.out.println("parser.wordnetData.getOtherRelations().size() = " + parser.wordnetData.getOtherRelations().size());
         parser.wordnetData.buildLexicalUnitIndex();
 
-        //getOdwnStatsAverageDepth(parser.wordnetData);
+        getOdwnStatsAverageDepth(parser.wordnetData);
        //
-       getStatsAverageDepth(parser.wordnetData);
+        getStatsAverageDepth(parser.wordnetData);
     }
 
     static public void getOdwnStatsAverageDepth (WordnetData wordnetData) {

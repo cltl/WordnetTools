@@ -1,6 +1,7 @@
 package vu.wntools.wordnet;
 
 import eu.kyotoproject.kaf.KafSense;
+import vu.wntools.lmf.Gloss;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +17,7 @@ import java.util.Set;
  */
 public class WordnetData {
     public boolean DEBUG = false;
-    public HashMap<String, ArrayList<String>> synsetToGlosses = new HashMap<String, ArrayList<String>>();
+    public HashMap<String, ArrayList<Gloss>> synsetToGlosses = new HashMap<String, ArrayList<Gloss>>();
     public HashMap<String, ArrayList<String>> hyperRelations = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> otherRelations = new HashMap<String, ArrayList<String>>();
     public HashMap<String, ArrayList<String>> entryToSynsets = new HashMap<String, ArrayList<String>>();
@@ -43,7 +44,7 @@ public class WordnetData {
 
     public void init () {
         synsetArrayList = new ArrayList<String>();
-        synsetToGlosses = new HashMap<String, ArrayList<String>>();
+        synsetToGlosses = new HashMap<String, ArrayList<Gloss>>();
         hyperRelations = new HashMap<String, ArrayList<String>>();
         otherRelations = new HashMap<String, ArrayList<String>>();
         entryToSynsets = new HashMap<String, ArrayList<String>>();
@@ -72,7 +73,19 @@ public class WordnetData {
     }
 
     public void addHyperRelation(String sourceId, ArrayList<String> targetIds) {
-        this.hyperRelations.put(sourceId, targetIds);
+        if (hyperRelations.containsKey(sourceId)) {
+            ArrayList<String> givenHypers = hyperRelations.get(sourceId);
+            for (int i = 0; i < targetIds.size(); i++) {
+                String target = targetIds.get(i);
+                if (!givenHypers.contains(target)) {
+                    givenHypers.add(target);
+                }
+            }
+            this.hyperRelations.put(sourceId, givenHypers);
+        }
+        else {
+            this.hyperRelations.put(sourceId, targetIds);
+        }
     }
 
 
@@ -109,7 +122,19 @@ public class WordnetData {
     }
 
     public void addOtherRelations(String sourceId, ArrayList<String> targetIds) {
-        this.otherRelations.put(sourceId, targetIds);
+        if (otherRelations.containsKey(sourceId)) {
+            ArrayList<String> givenHypers = otherRelations.get(sourceId);
+            for (int i = 0; i < targetIds.size(); i++) {
+                String target = targetIds.get(i);
+                if (!givenHypers.contains(target)) {
+                    givenHypers.add(target);
+                }
+            }
+            this.otherRelations.put(sourceId, givenHypers);
+        }
+        else {
+            this.otherRelations.put(sourceId, targetIds);
+        }
     }
 
     public HashMap<String, ArrayList<String>> getSynsetToDirectEquiSynsets() {
@@ -169,6 +194,23 @@ public class WordnetData {
         return topNodes;
     }
 
+    public ArrayList<String> getTopNodesFromIds () {
+        ArrayList<String> topNodes = new ArrayList<String>();
+        Set keyHyperSet = hyperRelations.keySet();
+        Iterator entries = keyHyperSet.iterator();
+        while(entries.hasNext()) {
+            String entry = (String) entries.next();
+            ArrayList<String> synsetIds = hyperRelations.get(entry);
+            for (int i = 0; i < synsetIds.size(); i++) {
+                String synsetId = synsetIds.get(i);
+                if (!hyperRelations.containsKey(synsetId)) {
+                   if (!topNodes.contains(synsetId)) topNodes.add(synsetId);
+                }
+            }
+        }
+        return topNodes;
+    }
+
     public void buildChildRelations () {
         Set keyHyperSet = entryToSynsets.keySet();
         Iterator entries = keyHyperSet.iterator();
@@ -217,8 +259,10 @@ public class WordnetData {
                 String hyper = hypers.get(i);
                 if (childRelations.containsKey(hyper)) {
                     ArrayList<String> children = childRelations.get(hyper);
-                    children.add(synsetId);
-                    childRelations.put(hyper, children);
+                    if (!children.contains(synsetId)) {
+                        children.add(synsetId);
+                        childRelations.put(hyper, children);
+                    }
                 }
                 else {
                     ArrayList<String> children = new ArrayList<String>();
@@ -329,11 +373,25 @@ public class WordnetData {
 
     public String getSynsetString (String synsetId) {
         String synsetString = "";
+
         if (synsetToEntries.containsKey(synsetId)) {
             ArrayList<String> synonyms = synsetToEntries.get(synsetId);
             for (int i = 0; i < synonyms.size(); i++) {
                 String s = synonyms.get(i);
                 synsetString += s+";";
+            }
+        }
+        return synsetString;
+    }
+    public String getFirstSynsetString (String synsetId) {
+        String synsetString = "";
+
+        if (synsetToEntries.containsKey(synsetId)) {
+            ArrayList<String> synonyms = synsetToEntries.get(synsetId);
+            for (int i = 0; i < synonyms.size(); i++) {
+                String s = synonyms.get(i);
+                synsetString += s;
+                break;
             }
         }
         return synsetString;
@@ -583,6 +641,39 @@ public class WordnetData {
             }
     }
 
+    /**
+     * Cuts the tree after the first hypernym
+     * @param source
+     */
+    public ArrayList<String> getSingleHyperChain (String source) {
+        ArrayList<String> targetChain = new ArrayList<String>();
+            if (hyperRelations.containsKey(source)) {
+                ArrayList<String> targets = hyperRelations.get(source);
+               // System.out.println("targets.toString() = " + targets.toString());
+                for (int i = 0; i < targets.size(); i++) {
+                    String target =  targets.get(i);
+                    if (!target.equals(source)) {
+                        if (!targetChain.contains(target)) {
+                            targetChain.add(target);
+                             //   System.out.println("source = " + source);
+                             //   System.out.println("target = " + target);
+                            getSingleHyperChain(target, targetChain);
+                        }
+                        else {
+                            ///circular
+                            break;
+                        }
+                    }
+                    else {
+                        /// circular
+                        break;
+                    }
+                    break;
+                }
+            }
+        return targetChain;
+    }
+
 
     /**
      * Cuts the tree after the first hypernym of the first synset
@@ -620,6 +711,24 @@ public class WordnetData {
         }
     }
 
+    public ArrayList<String> getHyperonymsForWord (String word) {
+        ArrayList<String> hypers = new ArrayList<String>();
+        ArrayList<String> synsetIds = entryToSynsets.get(word);
+        if (synsetIds!=null && synsetIds.size()>0) {
+            String source = synsetIds.get(0);
+            if (hyperRelations.containsKey(source)) {
+                ArrayList<String> targets = hyperRelations.get(source);
+                // System.out.println("targets.toString() = " + targets.toString());
+                for (int i = 0; i < targets.size(); i++) {
+                    String target =  targets.get(i);
+                    if (!hypers.contains(target)) {
+                        hypers.add(target);
+                    }
+                }
+            }
+        }
+        return hypers;
+    }
 
     public void getMultipleHyperChain (String source, ArrayList<ArrayList<String>> targetChain) {
         ArrayList<String> initChain = new ArrayList<String>();
@@ -727,6 +836,97 @@ public class WordnetData {
                 }
             }
         }
+    }
+
+
+    /**
+     * Retrieves the synsets from a set of words with the highest sharing factor.
+     * If different words are in the same synset, this synset gets preferred
+     * @param words
+     * @return
+     */
+    public ArrayList<String> getSharedSynsets (String [] words) {
+        ArrayList<String> sharedSynsets = new ArrayList<String>();
+        Integer topCount = 0;
+        HashMap<String, Integer> synsetMap = new HashMap<String, Integer>();
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            ArrayList<String> synsetIds = entryToSynsets.get(word);
+            if (synsetIds==null) {
+                synsetIds = entryToSynsets.get(word.replaceAll(" ", "-"));
+            }
+            if (synsetIds==null) {
+                synsetIds = entryToSynsets.get(word.replaceAll(" ", "_"));
+            }
+            if (synsetIds==null) {
+                synsetIds = entryToSynsets.get(word.replaceAll(" ", ""));
+            }
+            if (synsetIds!=null) {
+            for (int j = 0; j < synsetIds.size(); j++) {
+                String synsetId = synsetIds.get(j);
+                if (synsetMap.containsKey(synsetId)) {
+                    Integer cnt = synsetMap.get(synsetId);
+                    cnt++;
+                    if (cnt > topCount) {
+                        topCount = cnt;
+                    }
+                    synsetMap.put(synsetId, cnt);
+                } else {
+                    if (1 > topCount) {
+                        topCount = 1;
+                    }
+                    synsetMap.put(synsetId, 1);
+                }
+            }
+            }
+        }
+        Set keysSet = synsetMap.keySet();
+        Iterator<String> keys = keysSet.iterator();
+        while (keys.hasNext()) {
+            String synsetid = keys.next();
+            Integer cnt = synsetMap.get(synsetid);
+            if (cnt==topCount) {
+                sharedSynsets.add(synsetid);
+            }
+        }
+        return sharedSynsets;
+    }
+
+    public ArrayList<String> getSharedHypers (String [] words) {
+        ArrayList<String> sharedHypers = new ArrayList<String>();
+        Integer topCount = 0;
+        HashMap<String, Integer> hyperMap = new HashMap<String, Integer>();
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            ArrayList<String> synsetIds = getHyperonymsForWord(word);
+            for (int j = 0; j < synsetIds.size(); j++) {
+                String synsetId = synsetIds.get(j);
+                if (hyperMap.containsKey(synsetId)) {
+                    Integer cnt = hyperMap.get(synsetId);
+                    cnt++;
+                    if (cnt>topCount) {
+                        topCount = cnt;
+                    }
+                    hyperMap.put(synsetId, cnt);
+                }
+                else {
+                    if (1>topCount) {
+                        topCount = 1;
+                    }
+                    hyperMap.put(synsetId,1);
+                }
+            }
+        }
+        Set keysSet = hyperMap.keySet();
+        Iterator<String> keys = keysSet.iterator();
+        while (keys.hasNext()) {
+            String synsetid = keys.next();
+            Integer cnt = hyperMap.get(synsetid);
+            if (cnt==topCount) {
+                sharedHypers.add(synsetid);
+            }
+        }
+        return sharedHypers;
     }
 
 /*    public String getFirstEntryForSynset (String synset) {

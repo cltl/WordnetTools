@@ -18,7 +18,9 @@ public class GwgOdwnFixProvenance {
 
     static public void main (String[] args) {
         try {
-            String pathToLmfFile = "/Users/piek/Desktop/GWG/nl/odwn1.0.lmf.test.test";
+
+            String pathToLmfFile = "";
+            pathToLmfFile = "/Users/piek/Desktop/GWG/nl/startedFromOdwn-lmf-Jul-2014/odwn1.0.glossed.lmf.xml";
             WordnetLmfDataSaxParser wordnetLmfDataSaxParser = new WordnetLmfDataSaxParser();
             wordnetLmfDataSaxParser.parseFile(pathToLmfFile);
 
@@ -27,17 +29,20 @@ public class GwgOdwnFixProvenance {
                 for (int j = 0; j < synset.getRelations().size(); j++) {
                     SynsetRelation synsetRelation = synset.getRelations().get(j);
                     if (synsetRelation.getProvenance().isEmpty()) {
+                        synsetRelation.setProvenance("odwn");
+/*
                         if (synsetRelation.getTarget().startsWith("odwn-")) {
                             synsetRelation.setProvenance("odwn");
                         }
                         else if (synset.getSynsetId().startsWith("odwn-")) {
                             synsetRelation.setProvenance("odwn");
                         }
+*/
                     }
                 }
             }
 
-            OutputStream fos = new FileOutputStream(pathToLmfFile+".test");
+            OutputStream fos = new FileOutputStream(pathToLmfFile+".fix");
             wordnetLmfDataSaxParser.wordnetData.serialize(fos);
             fos.close();
         } catch (IOException e) {

@@ -2,6 +2,7 @@ package vu.wntools.lmf;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import vu.wntools.wordnet.WordnetLmfData;
 
 import java.util.ArrayList;
 
@@ -25,6 +26,20 @@ public class Synset {
         this.relations = new ArrayList<SynsetRelation>();
         this.iliId = "";
         this.synsetId = "";
+    }
+
+    public void merge(Synset synset) {
+        if (this.iliId.isEmpty()) {
+            this.iliId = synset.iliId;
+        }
+        for (int i = 0; i < synset.getDefinitions().size(); i++) {
+            Gloss gloss = synset.getDefinitions().get(i);
+            definitions.add(gloss);
+        }
+        for (int i = 0; i < synset.getRelations().size(); i++) {
+            SynsetRelation synsetRelation = synset.getRelations().get(i);
+            this.relations.add(synsetRelation);
+        }
     }
 
     public ArrayList<Gloss> getDefinitions() {
@@ -64,7 +79,19 @@ public class Synset {
     }
 
     public void addRelations(SynsetRelation relation) {
-        this.relations.add(relation);
+        boolean hasRelation = false;
+        for (int i = 0; i < relations.size(); i++) {
+            SynsetRelation synsetRelation = relations.get(i);
+            if (synsetRelation.getTarget().equals(relation.getTarget())
+                    &&
+                    synsetRelation.getRelType().equals(relation.getRelType())) {
+                hasRelation = true;
+                break;
+            }
+        }
+        if (!hasRelation) {
+            this.relations.add(relation);
+        }
     }
 
     public Element toLmfXml(Document xmldoc) {
@@ -84,5 +111,81 @@ public class Synset {
             root.appendChild(synsetRelation.toLmfXML(xmldoc));
         }
         return root;
+    }
+
+    public String toString (WordnetLmfData wordnetLmfData) {
+        String str = this.getSynsetId()+"\t[";
+        ArrayList<String> syns = wordnetLmfData.getSynonyms(this);
+        for (int i = 0; i < syns.size(); i++) {
+            String s = syns.get(i);
+            str += s;
+            if (i+1<syns.size()) {
+                str+=",";
+            }
+        }
+        str +="][";
+
+        for (int i = 0; i < definitions.size(); i++) {
+            Gloss gloss = definitions.get(i);
+            str += gloss.getText();
+            if (i+1<definitions.size()) {
+                str+=",";
+            }
+        }
+        str +="][";
+        for (int i = 0; i < relations.size(); i++) {
+            SynsetRelation synsetRelation = relations.get(i);
+            str += synsetRelation.getRelType()+":"+synsetRelation.getTarget();
+            if (i+1<relations.size()) {
+                str+=",";
+            }
+        }
+        str +="]";
+        return str;
+    }
+
+    public String toStringWithoutRelations (WordnetLmfData wordnetLmfData) {
+        String str = this.getSynsetId()+"\t[";
+        ArrayList<String> syns = wordnetLmfData.getSynonyms(this);
+        for (int i = 0; i < syns.size(); i++) {
+            String s = syns.get(i);
+            str += s;
+            if (i+1<syns.size()) {
+                str+=",";
+            }
+        }
+        str +="][";
+
+        for (int i = 0; i < definitions.size(); i++) {
+            Gloss gloss = definitions.get(i);
+            str += gloss.getText();
+            if (i+1<definitions.size()) {
+                str+=",";
+            }
+        }
+        str +="]";
+        return str;
+    }
+
+    public String toStringWithoutRelations (ArrayList<String> syns) {
+        String str = this.getSynsetId()+"\t[";
+        for (int i = 0; i < syns.size(); i++) {
+            String s = syns.get(i);
+            str += s;
+            if (i+1<syns.size()) {
+                str+=",";
+            }
+        }
+        str +="][";
+
+        for (int i = 0; i < definitions.size(); i++) {
+            Gloss gloss = definitions.get(i);
+            str += gloss.getText();
+            if (i+1<definitions.size()) {
+                str+=",";
+            }
+        }
+        str +="]";
+        return str;
     }
 }

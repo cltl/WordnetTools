@@ -21,7 +21,7 @@ import java.util.HashMap;
  * Time: 3:16 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ODWNtoGWG extends DefaultHandler {
+public class OdwnLmftoGWG extends DefaultHandler {
 
     public WordnetLmfData wordnetData;
     private String value = "";
@@ -64,7 +64,7 @@ public class ODWNtoGWG extends DefaultHandler {
      */
 
 
-    public ODWNtoGWG() {
+    public OdwnLmftoGWG() {
         wordnetData = new WordnetLmfData();
     }
 
@@ -290,7 +290,7 @@ public class ODWNtoGWG extends DefaultHandler {
             ReadGlosses readGlosses = new ReadGlosses();
             readGlosses.readGlossFile(pathToGlossFile, glossLanguage, glossOwner);
             System.out.println("readGlosses.synsetToGlosses.size() = " + readGlosses.synsetToGlosses.size());
-            ODWNtoGWG wordnetLmfDataSaxParser = new ODWNtoGWG();
+            OdwnLmftoGWG wordnetLmfDataSaxParser = new OdwnLmftoGWG();
             wordnetLmfDataSaxParser.parseFile(pathToLmfFile);
 
             for (int i = 0; i < wordnetLmfDataSaxParser.wordnetData.getSynsets().size(); i++) {

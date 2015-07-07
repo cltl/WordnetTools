@@ -1,4 +1,7 @@
-package vu.wntools.wordnet;
+package vu.wntools.util;
+
+import vu.wntools.wordnet.WordnetData;
+import vu.wntools.wordnet.WordnetLmfSaxParser;
 
 import java.util.ArrayList;
 import java.util.HashMap;

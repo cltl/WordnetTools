@@ -1,7 +1,7 @@
-package vu.wntools.wordnet;
+package vu.wntools.util;
 
 import vu.wntools.lmf.Synset;
-import vu.wntools.util.ReadILI;
+import vu.wntools.wordnet.WordnetLmfDataSaxParser;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,8 +16,7 @@ public class GwgAddILI {
 
     static public void main (String[] args) {
         try {
-            String glossLanguage = "en";
-            String pathToLmfFile = "/Code/vu/WordnetTools/resources/odwn1.0.lmf";
+            String pathToLmfFile = "/Users/piek/Desktop/GWG/nl/startedFromOdwnRbnLmf/odwn_1.0.xml.lmf.pwn-glosses.google-glosses";
             String pathToIliFile  = "/Users/piek/Desktop/GWG/ili.ttl";
             ReadILI readILI = new ReadILI();
             readILI.readILIFile(pathToIliFile);
@@ -38,7 +37,7 @@ public class GwgAddILI {
                 }
             }
 
-            OutputStream fos = new FileOutputStream(pathToLmfFile+".test");
+            OutputStream fos = new FileOutputStream(pathToLmfFile+".ili.lmf");
             wordnetLmfDataSaxParser.wordnetData.serialize(fos);
             fos.close();
         } catch (IOException e) {
