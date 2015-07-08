@@ -16,19 +16,22 @@ public class PrintWnLmf {
 
 
         String pathToWNFile = "";
-        pathToWNFile = "/Users/piek/Desktop/NWR/NWR-benchmark/coreference/vua-eventcoreference_v2_2014/resources/wneng-30.lmf.xml.xpos.extended";
-        ArrayList<String> relations = new ArrayList<String>();
-        //relations.add("NEAR_SYNONYM");
-        relations.add("HAS_HYPERONYM");
-        relations.add("HAS_HYPERNYM");
-        relations.add("HYPERNYM");
-        //relations.add("HAS_MERO_PART");
-        //relations.add("HAS_HOLO_PART");
+       // pathToWNFile = "/Users/piek/Desktop/NWR/NWR-benchmark/coreference/vua-eventcoreference_v2_2014/resources/wneng-30.lmf.xml.xpos.extended";
+        pathToWNFile = "/Users/piek/Desktop/odwn/odwn_1.0.xml.lmf.pwn-glosses.google-glosses.ili.extended.lmf";
+        ArrayList<String> relations = new ArrayList<String>();   /// will apply lower-case matching to relation types for building the hiearchy
+        relations.add("has_hyperonym");
+        relations.add("has_hypernym");
+        relations.add("hypernym");
+        relations.add("event");
+        relations.add("near_synonym");
+        relations.add("xpos_near_synonym");
+        relations.add("has_xpos_hypernym");
+        relations.add("has_xpos_hyperonym");
 
         WordnetLmfSaxParser parserWn = new WordnetLmfSaxParser();
 
-        parserWn.parseFile(pathToWNFile);
         parserWn.setRelations(relations);
+        parserWn.parseFile(pathToWNFile);
 /*
         int depth = parser.wordnetData.getAverageDepthByWord();
         System.out.println("depth = " + depth);
@@ -70,9 +73,9 @@ public class PrintWnLmf {
         // wordnetData.buildSynsetIndex();
         wordnetData.buildChildRelationsFromids();
         ArrayList<String> topNodes = wordnetData.getTopNodesFromIds();
-        ArrayList<String> posTops = getPosSynsets(topNodes, pos);
-        System.out.println("posTops.toString() = " + posTops.toString());
-        printTree(wordnetData,posTops, fos);
+        //ArrayList<String> posTops = getPosSynsets(topNodes, pos);
+       // System.out.println("posTops.toString() = " + posTops.toString());
+        printTree(wordnetData,topNodes, fos);
 
     }
 
@@ -87,20 +90,30 @@ public class PrintWnLmf {
                            ArrayList<String> coveredNodes, OutputStream fos) throws IOException {
         for (int i = 0; i < synsets.size(); i++) {
             String s = synsets.get(i);
+            String str = "";
+            for (int j = 0; j < level; j++) {
+                str += "-";
+            }
+            String synonyms = wordnetData.getSynsetString(s);
+            str += s +":"+synonyms;
+            int nChildren = 0;
+            if (wordnetData.childRelations.containsKey(s)) {
+                nChildren = wordnetData.childRelations.get(s).size();
+            }
+            str += ":"+nChildren;
             if (!coveredNodes.contains(s)) {
-                coveredNodes.add(s);
-                String str = "";
-                for (int j = 0; j < level; j++) {
-                    str += "-";
-                }
-                String synonyms = wordnetData.getSynsetString(s);
-                str += s +":"+synonyms+ "\n";
+                str += "\n";
                 fos.write(str.getBytes());
+                coveredNodes.add(s);
                 if (wordnetData.childRelations.containsKey(s)) {
                     ArrayList<String> children = wordnetData.childRelations.get(s);
-                    int nLevel = level+1;
+                    int nLevel = level + 1;
                     printTree(wordnetData, children, nLevel, coveredNodes, fos);
                 }
+            }
+            else {
+                str += ":COVERED\n";
+                fos.write(str.getBytes());
             }
         }
     }

@@ -328,8 +328,10 @@ public class WordnetData {
                     String lemma = lemmas.get(j);
                     if (lemmaToSynsets.containsKey(lemma)) {
                         ArrayList<String> synsets = lemmaToSynsets.get(lemma);
-                        synsets.add(s);
-                        lemmaToSynsets.put(lemma, synsets);
+                        if (!synsets.contains(s)) {
+                            synsets.add(s);
+                            lemmaToSynsets.put(lemma, synsets);
+                        }
                     }
                     else {
                         ArrayList<String> synsets = new ArrayList<String>();
