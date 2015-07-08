@@ -543,9 +543,6 @@ public class WordnetSimilarityApi {
                 int D = 1+(hyperSource.size()+hyperTarget.size())/2;
                 double score = vu.wntools.wnsimilarity.measures.LeacockChodorow.GetDistance(D, hyperSource, hyperTarget);
 
-                /*System.out.println("score = " + score);
-                System.out.println("hyperSource = " + hyperSource.toString());
-                System.out.println("hyperTarget = " + hyperTarget.toString());*/
                 if (score>similarityPair.getScore()) {
                     similarityPair.setMatch(LeacockChodorow.match);
                     similarityPair.setScore(score);
@@ -554,7 +551,20 @@ public class WordnetSimilarityApi {
                 }
             }
         }
-
+        /*if ((similarityPair.getSourceTree().toString().indexOf("eso:")>-1) &&
+            (similarityPair.getTargetTree().toString().indexOf("eso:")>-1)){
+            System.out.println("similarityPair source = " + similarityPair.getSourceTree().toString());
+            System.out.println("similarityPair target = " + similarityPair.getTargetTree().toString());
+            System.out.println("similarityPair match = " + similarityPair.getMatch());
+            System.out.println("similarityPair score = " + similarityPair.getScore());
+        }
+        else if ((similarityPair.getSourceTree().toString().indexOf("fn:")>-1) &&
+            (similarityPair.getTargetTree().toString().indexOf("fn:")>-1)){
+            System.out.println("similarityPair source = " + similarityPair.getSourceTree().toString());
+            System.out.println("similarityPair target = " + similarityPair.getTargetTree().toString());
+            System.out.println("similarityPair match = " + similarityPair.getMatch());
+            System.out.println("similarityPair score = " + similarityPair.getScore());
+        }*/
         return similarityPair;
     }
 
