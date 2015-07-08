@@ -58,16 +58,18 @@ public class ClassifyWordList {
                    ArrayList<String> synsets = wordnetData.lemmaToSynsets.get(word);
                    for (int i = 0; i < synsets.size(); i++) {
                        String synset = synsets.get(i);
-/*                       ArrayList<ArrayList<String>> hyperChains = new ArrayList<ArrayList<String>>();
+                       ArrayList<ArrayList<String>> hyperChains = new ArrayList<ArrayList<String>>();
                        wordnetData.getMultipleHyperChain(synset, hyperChains);
                        for (int j = 0; j < hyperChains.size(); j++) {
                            ArrayList<String> chain = hyperChains.get(j);
                            str += "\t"+chain.toString()+"\n";
-                       }*/
+                       }
+/*
                        ArrayList<String> hyperChains = new ArrayList<String>();
                        hyperChains.add(synset);
                        wordnetData.getSingleHyperChain(synset, hyperChains);
                        str += "\t"+hyperChains.toString()+"\n";
+*/
                    }
                 }
                 else {

@@ -477,7 +477,7 @@ public class WordnetSimilarityApi {
     }
 
     /**
-     * Takes a path to a CDB Synset File (Cornetto XML export dump format)and a pair of synset IDs.
+     * Takes a path to a  Synset File and a pair of synset IDs.
      * It returns the similarity pair for the synset pairs
      * The method used is Leacock and Chodorow
      * @param wordnetData
@@ -515,7 +515,7 @@ public class WordnetSimilarityApi {
     }
 
     /**
-     * Takes a path to a CDB Synset File (Cornetto XML export dump format)and a pair of synset IDs.
+     * Takes a path to a Synset File and a pair of synset IDs.
      * It returns the similarity pair for the synset pairs
      * The method used is Leacock and Chodorow
      * @param wordnetData
@@ -535,6 +535,7 @@ public class WordnetSimilarityApi {
         ArrayList<ArrayList<String>> hyperChainsTarget = new ArrayList<ArrayList<String>>();
         wordnetData.getMultipleHyperChain(sourceId, hyperChainsSource);
         wordnetData.getMultipleHyperChain(targetId, hyperChainsTarget);
+        
         for (int i = 0; i < hyperChainsSource.size(); i++) {
             ArrayList<String> hyperSource = hyperChainsSource.get(i);
             for (int j = 0; j < hyperChainsTarget.size(); j++) {
