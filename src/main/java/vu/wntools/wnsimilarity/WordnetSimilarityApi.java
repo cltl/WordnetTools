@@ -569,6 +569,61 @@ public class WordnetSimilarityApi {
     }
 
     /**
+     * Takes a path to a Synset File and a pair of synset IDs.
+     * It returns the similarity pair for the synset pairs
+     * The method used is Leacock and Chodorow
+     * @param wordnetData
+     * @param sourceId
+     * @param targetId
+     * @return SimilarityPair
+     */
+    static public SimilarityPair synsetLeacockChodorowSimilarityIgnoreOntology (WordnetData wordnetData,
+                                                                              String sourceId,
+                                                                              String targetId) {
+
+        SimilarityPair similarityPair = new SimilarityPair();
+        similarityPair.setSourceId(sourceId);
+        similarityPair.setTargetId(targetId);
+
+        ArrayList<ArrayList<String>> hyperChainsSource = new ArrayList<ArrayList<String>>();
+        ArrayList<ArrayList<String>> hyperChainsTarget = new ArrayList<ArrayList<String>>();
+        wordnetData.getMultipleHyperChain(sourceId, hyperChainsSource);
+        wordnetData.getMultipleHyperChain(targetId, hyperChainsTarget);
+
+        for (int i = 0; i < hyperChainsSource.size(); i++) {
+            ArrayList<String> hyperSourceAll = hyperChainsSource.get(i);
+            ArrayList<String> hyperSource = new ArrayList<String>();
+            for (int j = 0; j < hyperSourceAll.size(); j++) {
+                String s = hyperSourceAll.get(j);
+                if (s.indexOf(":")==-1) {
+                   hyperSource.add(s);
+                }
+            }
+            for (int j = 0; j < hyperChainsTarget.size(); j++) {
+                ArrayList<String> hyperTargetAll = hyperChainsTarget.get(j);
+                ArrayList<String> hyperTarget = new ArrayList<String>();
+                for (int k = 0; k < hyperTargetAll.size(); k++) {
+                    String s = hyperTargetAll.get(k);
+                    if (s.indexOf(":")==-1) {
+                        hyperTarget.add(s);
+                    }
+                }
+                int D = 1+(hyperSource.size()+hyperTarget.size())/2;
+                double score = vu.wntools.wnsimilarity.measures.LeacockChodorow.GetDistance(D, hyperSource, hyperTarget);
+
+                if (score>similarityPair.getScore()) {
+                    similarityPair.setMatch(LeacockChodorow.match);
+                    similarityPair.setScore(score);
+                    similarityPair.setSourceTree(hyperSource);
+                    similarityPair.setTargetTree(hyperTarget);
+                }
+            }
+        }
+
+        return similarityPair;
+    }
+
+    /**
      * Takes a path to a CDB Synset File (Cornetto XML export dump format) and a pair of words.
      * It returns an ArrayList with the cumulative similarity pairs for all the meanings of the word.
      * The method used is Wu and Palmer.
