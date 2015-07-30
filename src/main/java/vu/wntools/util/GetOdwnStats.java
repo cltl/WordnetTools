@@ -1,6 +1,7 @@
 package vu.wntools.util;
 
 import vu.wntools.lmf.*;
+import vu.wntools.wordnet.WordnetLmfData;
 import vu.wntools.wordnet.WordnetLmfDataSaxParser;
 
 import java.io.File;

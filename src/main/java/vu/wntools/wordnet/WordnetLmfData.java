@@ -22,7 +22,7 @@ import java.util.HashMap;
 /**
  * Created by piek on 02/06/15.
  */
-public class WordnetLmfData2 {
+public class WordnetLmfData {
     private String globalLabel;
     private String languageEncoding;
     private String lexiconLabel;
@@ -38,7 +38,7 @@ public class WordnetLmfData2 {
     public HashMap<String, ArrayList<String>> parentToChildMap;
 
 
-    public WordnetLmfData2() {
+    public WordnetLmfData() {
         this.synsets = new ArrayList<Synset>();
         this.entries = new ArrayList<LmfEntry>();
         this.globalLabel = "";
