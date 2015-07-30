@@ -2,7 +2,6 @@ package vu.wntools.lmf;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import vu.wntools.wordnet.WordnetLmfData;
 
 import java.util.ArrayList;
 
