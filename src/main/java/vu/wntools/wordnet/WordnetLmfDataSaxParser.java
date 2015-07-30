@@ -290,7 +290,9 @@ public class WordnetLmfDataSaxParser extends DefaultHandler {
                     synsetRelation.setProvenance(attributes.getValue(i).trim());
                 }
             }
-            synset.addRelations(synsetRelation);
+            synset.getRelations().add(synsetRelation);
+
+           // synset.addRelations(synsetRelation);
         }
         else if (qName.equalsIgnoreCase("Definition")) {
             Gloss definition = new Gloss();
@@ -318,14 +320,52 @@ public class WordnetLmfDataSaxParser extends DefaultHandler {
             throws SAXException {
 
 
+        /**
+         * <Synset id="eng-30-01155090-v" ili="i27400">
+         <Definitions>
+         <Definition gloss="gelijk komen" language="nl" provenance="odwn"/>
+         <Definition gloss="catch up with and possibly overtake" language="en" provenance="pwn"/>
+         <Definition gloss="get equal" language="en" provenance="google-translate"/>
+         </Definitions>
+         </Synset>
+         */
         if (qName.equalsIgnoreCase("Synset")) {
-            if (wordnetData.addSynset(synset)) {
+            if (synset.getSynsetId().equals("eng-30-10980256-n")) {
+                System.out.println("synset.toString() = " + synset.toString());
+            }
+            else if (synset.getSynsetId().equals("eng-30-01155090-v")) {
+                System.out.println("synset = " + synset.toString());
+            }
+            if (wordnetData.synsetMap.containsKey(synset.getSynsetId())) {
+                Synset storedSynset = wordnetData.synsetMap.get(synset.getSynsetId());
+                storedSynset.merge(synset);
+                wordnetData.synsetMap.put(storedSynset.getSynsetId(), storedSynset);
+            }
+            else {
+                wordnetData.synsetMap.put(synset.getSynsetId(), synset);
+                // wordnetData.synsets.add(synset);
+            }
+            /*if (wordnetData.addSynset(synset)) {
                 /// if already there the info is merged and false is returned
                 /// otherwise it is added and we update the synsetMap.
                 wordnetData.synsetMap.put(synset.getSynsetId(), synset);
-            }
+            }*/
+
         }
-        else if (qName.equalsIgnoreCase("LexicalEntry")) {
+
+
+
+
+        /*
+        <Synset id="eng-30-10980256-n">
+      <SynsetRelations>
+        <SynsetRelation target="eng-30-10181137-n" relType="instance" source="pwn"/>
+        <SynsetRelation target="eng-30-10181137-n" relType="has_hyperonym" source="pwn"/>
+      </SynsetRelations>
+      <MonolingualExternalRefs/>
+    </Synset>
+         */
+/*        else if (qName.equalsIgnoreCase("LexicalEntry")) {
             wordnetData.addEntry(lmfEntry);
             String writtenForm = lmfEntry.getWrittenForm();
             if (writtenForm.isEmpty()) {
@@ -341,7 +381,7 @@ public class WordnetLmfDataSaxParser extends DefaultHandler {
                 lmfEntries.add(lmfEntry);
                 wordnetData.entryMap.put(writtenForm,lmfEntries);
             }
-        }
+        }*/
     }
 
     public void characters(char ch[], int start, int length)
@@ -351,6 +391,49 @@ public class WordnetLmfDataSaxParser extends DefaultHandler {
     }
 
     static public void main (String[] args) {
+        try {
+            String glossLanguage = "nl";
+            String glossOwner = "odwn";
+            String pathToLmfFile = "/Code/vu/WordnetTools/resources/odwn1.0.lmf";
+            String pathToGlossFile = "/Code/vu/WordnetTools/resources/odwn1.0.lmf.source-gloss";
+            String pathToIliFile  = "/Users/piek/Desktop/GWG/ili.ttl";
+            ReadILI readILI = new ReadILI();
+            readILI.readILIFile(pathToIliFile);
+            System.out.println("readILI.synsetToILIMap.size() = " + readILI.synsetToILIMap.size());
+            ReadGlosses readGlosses = new ReadGlosses();
+            readGlosses.readGlossFile(pathToGlossFile, glossLanguage, glossOwner);
+            System.out.println("readGlosses.synsetToGlosses.size() = " + readGlosses.synsetToGlosses.size());
+            WordnetLmfDataSaxParser wordnetLmfDataSaxParser = new WordnetLmfDataSaxParser();
+            wordnetLmfDataSaxParser.parseFile(pathToLmfFile);
+
+            for (int i = 0; i < wordnetLmfDataSaxParser.wordnetData.getSynsets().size(); i++) {
+                Synset synset = wordnetLmfDataSaxParser.wordnetData.getSynsets().get(i);
+                String synsetID = synset.getSynsetId();
+                if (synsetID.startsWith("eng-30-")) {
+                    synsetID = "eng-"+synsetID.substring(7);
+                }
+               // System.out.println("synsetID = " + synsetID);
+                if (readILI.synsetToILIMap.containsKey(synsetID)) {
+                    String iliId = readILI.synsetToILIMap.get(synsetID);
+                    synset.setIliId(iliId);
+                }
+                if (readGlosses.synsetToGlosses.containsKey(synset.getSynsetId())) {
+                    ArrayList<Gloss> defs = readGlosses.synsetToGlosses.get(synset.getSynsetId());
+                    for (int j = 0; j < defs.size(); j++) {
+                        Gloss def = defs.get(j);
+                        synset.addDefinition(def);
+                    }
+                }
+            }
+
+            OutputStream fos = new FileOutputStream(pathToLmfFile+".test");
+            wordnetLmfDataSaxParser.wordnetData.serialize(fos);
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    static public void main_org (String[] args) {
         try {
             String glossLanguage = "nl";
             String glossOwner = "odwn";

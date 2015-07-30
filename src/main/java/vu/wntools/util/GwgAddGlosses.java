@@ -8,6 +8,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Created by piek on 05/06/15.
@@ -25,10 +27,10 @@ public class GwgAddGlosses {
             String pathToLmfFile = "/Users/piek/Desktop/GWG/nl/odwn1.0.lmf.test";
             String pathToGlossFile = "/Users/piek/Desktop/GWG/nl/odwn-translated-glosses.final";
 */
-            String glossLanguage = "en";
-            String glossOwner = "google-translate";
-            String pathToLmfFile = "/Users/piek/Desktop/GWG/nl/startedFromOdwnRbnLmf/odwn_1.0.xml.lmf.pwn-glosses";
-            String pathToGlossFile = "/Users/piek/Desktop/GWG/nl/startedFromOdwnRbnLmf/translation/odwn-orbn.trans-gloss-cleaned";
+            String glossLanguage = "";
+            String glossOwner = "";
+            String pathToLmfFile = "";
+            String pathToGlossFile = "";
 /*
             String glossLanguage = "en";
             String glossOwner = "pwn";
@@ -55,7 +57,25 @@ public class GwgAddGlosses {
             System.out.println("readGlosses.synsetToGlosses.size() = " + readGlosses.synsetToGlosses.size());
             WordnetLmfDataSaxParser wordnetLmfDataSaxParser = new WordnetLmfDataSaxParser();
             wordnetLmfDataSaxParser.parseFile(pathToLmfFile);
-            for (int i = 0; i < wordnetLmfDataSaxParser.wordnetData.getSynsets().size(); i++) {
+            Set keySet = wordnetLmfDataSaxParser.wordnetData.synsetMap.keySet();
+            Iterator<String> keys = keySet.iterator();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                Synset synset = wordnetLmfDataSaxParser.wordnetData.synsetMap.get(key);
+                if (readGlosses.synsetToGlosses.containsKey(synset.getSynsetId())) {
+                    ArrayList<Gloss> defs = readGlosses.synsetToGlosses.get(synset.getSynsetId());
+                    for (int j = 0; j < defs.size(); j++) {
+                        Gloss def = defs.get(j);
+                        synset.addDefinition(def);
+                        //System.out.println("def = " + def);
+                    }
+                    wordnetLmfDataSaxParser.wordnetData.synsetMap.put(synset.getSynsetId(), synset);
+                }
+                else {
+                  //  System.out.println("Could not find synset.getSynsetId() = " + synset.getSynsetId());
+                }
+            }
+            /*for (int i = 0; i < wordnetLmfDataSaxParser.wordnetData.getSynsets().size(); i++) {
                 Synset synset = wordnetLmfDataSaxParser.wordnetData.getSynsets().get(i);
                 if (readGlosses.synsetToGlosses.containsKey(synset.getSynsetId())) {
                     ArrayList<Gloss> defs = readGlosses.synsetToGlosses.get(synset.getSynsetId());
@@ -64,10 +84,14 @@ public class GwgAddGlosses {
                         synset.addDefinition(def);
                     }
                 }
-            }
+                else {
+                    System.out.println("Could not find synset.getSynsetId() = " + synset.getSynsetId());
+                }
+            }*/
 
-            OutputStream fos = new FileOutputStream(pathToLmfFile+".google-glosses");
-            wordnetLmfDataSaxParser.wordnetData.serialize(fos);
+            OutputStream fos = new FileOutputStream(pathToLmfFile+"."+glossOwner);
+           // wordnetLmfDataSaxParser.wordnetData.serialize(fos);
+            wordnetLmfDataSaxParser.wordnetData.serializeMap(fos);
             fos.close();
         } catch (IOException e) {
             e.printStackTrace();

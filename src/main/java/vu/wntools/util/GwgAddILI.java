@@ -6,6 +6,8 @@ import vu.wntools.wordnet.WordnetLmfDataSaxParser;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Created by piek on 05/06/15.
@@ -17,9 +19,9 @@ public class GwgAddILI {
     static public void main (String[] args) {
         try {
             String pathToLmfFile = "";
-            pathToLmfFile = "/Users/piek/Desktop/GWG/nl/startedFromOdwnRbnLmf/odwn_1.0.xml.lmf.pwn-glosses.google-glosses";
+            pathToLmfFile = "";
             String pathToIliFile  = "";
-            pathToIliFile  = "/Users/piek/Desktop/GWG/ili.ttl";
+            pathToIliFile  = "";
             for (int i = 0; i < args.length; i++) {
                 String arg = args[i];
                 if (arg.equals("--wn-lmf") && (args.length>(i+1))) {
@@ -35,8 +37,11 @@ public class GwgAddILI {
             WordnetLmfDataSaxParser wordnetLmfDataSaxParser = new WordnetLmfDataSaxParser();
             wordnetLmfDataSaxParser.parseFile(pathToLmfFile);
 
-            for (int i = 0; i < wordnetLmfDataSaxParser.wordnetData.getSynsets().size(); i++) {
-                Synset synset = wordnetLmfDataSaxParser.wordnetData.getSynsets().get(i);
+            Set keySet = wordnetLmfDataSaxParser.wordnetData.synsetMap.keySet();
+            Iterator<String> keys = keySet.iterator();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                Synset synset = wordnetLmfDataSaxParser.wordnetData.synsetMap.get(key);
                 String synsetID = synset.getSynsetId();
                 if (synsetID.startsWith("eng-30-")) {
                     synsetID = "eng-"+synsetID.substring(7);
@@ -45,11 +50,16 @@ public class GwgAddILI {
                 if (readILI.synsetToILIMap.containsKey(synsetID)) {
                     String iliId = readILI.synsetToILIMap.get(synsetID);
                     synset.setIliId(iliId);
+                    wordnetLmfDataSaxParser.wordnetData.synsetMap.put(synset.getSynsetId(), synset);
+                }
+                else {
+                    //  System.out.println("Could not find synset.getSynsetId() = " + synset.getSynsetId());
                 }
             }
 
-            OutputStream fos = new FileOutputStream(pathToLmfFile+".ili.lmf");
-            wordnetLmfDataSaxParser.wordnetData.serialize(fos);
+
+            OutputStream fos = new FileOutputStream(pathToLmfFile+".ili");
+            wordnetLmfDataSaxParser.wordnetData.serializeMap(fos);
             fos.close();
         } catch (IOException e) {
             e.printStackTrace();

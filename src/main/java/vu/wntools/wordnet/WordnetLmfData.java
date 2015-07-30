@@ -18,6 +18,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Created by piek on 02/06/15.
@@ -150,6 +152,8 @@ public class WordnetLmfData {
             if (synset1.getSynsetId().equals(synset.getSynsetId())) {
                 ////merge
                 synset1.merge(synset);
+                this.synsetMap.put(synset1.getSynsetId(), synset1);
+
                 return false;
             }
         }
@@ -206,6 +210,76 @@ public class WordnetLmfData {
                 Synset synset = synsets.get(i);
                 root.appendChild(synset.toLmfXml(xmldoc));
             }
+            // Serialisation through Tranform.
+            DOMSource domSource = new DOMSource(xmldoc);
+            TransformerFactory tf = TransformerFactory.newInstance();
+            //tf.setAttribute("indent-number", 4);
+            Transformer serializer = tf.newTransformer();
+            serializer.setOutputProperty(OutputKeys.INDENT,"yes");
+            //serializer.setOutputProperty(OutputKeys.ENCODING,"UTF-8");
+            serializer.setOutputProperty(OutputKeys.STANDALONE, "yes");
+            //serializer.setParameter("format-pretty-print", Boolean.TRUE);
+            serializer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+
+            //StreamResult streamResult = new StreamResult(new OutputStreamWriter(stream, encoding));
+            StreamResult streamResult = new StreamResult(new OutputStreamWriter(stream));
+            serializer.transform(domSource, streamResult);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void serializeMap(OutputStream stream)
+    {
+        try
+        {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            DOMImplementation impl = builder.getDOMImplementation();
+
+            Document xmldoc = impl.createDocument(null, "LexicalResource", null);
+            xmldoc.setXmlStandalone(false);
+            Element root = xmldoc.getDocumentElement();
+
+            if (!globalLabel.isEmpty())  {
+                Element text = xmldoc.createElement("GlobalInformation");
+                text.setAttribute("label", getGlobalLabel());
+                root.appendChild(text);
+            }
+            Element lexicon = xmldoc.createElement("Lexicon");
+            if (!languageEncoding.isEmpty()) {
+                lexicon.setAttribute("languageCoding", this.getLanguageEncoding());
+            }
+            if (!this.getLexiconLabel().isEmpty()) {
+                lexicon.setAttribute("label", this.getLexiconLabel());
+            }
+            if (!this.getLanguage().isEmpty()) {
+                lexicon.setAttribute("language", this.getLanguage());
+            }
+            if (!this.getOwner().isEmpty()) {
+                lexicon.setAttribute("owner", this.getOwner());
+            }
+            if (!this.getVersion().isEmpty()) {
+                lexicon.setAttribute("version", this.getVersion());
+            }
+            root.appendChild(lexicon);
+            for (int i = 0; i < entries.size(); i++) {
+                LmfEntry lmfEntry = entries.get(i);
+                root.appendChild(lmfEntry.toLmfXml(xmldoc));
+            }
+            Set keySet = synsetMap.keySet();
+            Iterator<String> keys = keySet.iterator();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                Synset synset = synsetMap.get(key);
+                root.appendChild(synset.toLmfXml(xmldoc));
+            }
+            /*for (int i = 0; i < synsets.size(); i++) {
+                Synset synset = synsets.get(i);
+                root.appendChild(synset.toLmfXml(xmldoc));
+            }*/
             // Serialisation through Tranform.
             DOMSource domSource = new DOMSource(xmldoc);
             TransformerFactory tf = TransformerFactory.newInstance();

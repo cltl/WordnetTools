@@ -48,8 +48,8 @@ public class SynsetRelation {
     public Element toLmfXML(Document xmldoc)
     {
         Element root = xmldoc.createElement("SynsetRelation");
-        if (!relType.isEmpty()) root.setAttribute("relType", relType);
         if (!target.isEmpty()) root.setAttribute("target", target);
+        if (!relType.isEmpty()) root.setAttribute("relType", relType);
         if (!provenance.isEmpty()) root.setAttribute("provenance", provenance);
         return root;
     }}

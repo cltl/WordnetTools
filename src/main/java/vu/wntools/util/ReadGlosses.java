@@ -40,7 +40,7 @@ eng-30-02797881-n# elk v.d. vaste plaatsen in het sportveld
                     // System.out.println("inputLine = " + inputLine);
                     String [] fields = inputLine.split("#");
                     if (fields.length>1) {
-                        String synset = fields[0].trim();
+                        String synset = fields[0].trim().replaceAll("\"","");
                         String def = "";
                         for (int i = 1; i < fields.length; i++) {
                             String field = fields[i];
