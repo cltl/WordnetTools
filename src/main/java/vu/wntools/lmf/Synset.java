@@ -102,14 +102,18 @@ public class Synset {
         if (!this.getIliId().isEmpty()) {
             root.setAttribute("ili", this.getIliId());
         }
+        Element glosses = xmldoc.createElement("Glosses");
         for (int i = 0; i < this.getDefinitions().size(); i++) {
             Gloss definition = this.getDefinitions().get(i);
-            root.appendChild(definition.toXml(xmldoc));
+            glosses.appendChild(definition.toXml(xmldoc));
         }
+        root.appendChild(glosses);
+        Element relationElement = xmldoc.createElement("SynsetRelations");
         for (int i = 0; i < relations.size(); i++) {
             SynsetRelation synsetRelation = relations.get(i);
-            root.appendChild(synsetRelation.toLmfXML(xmldoc));
+            relationElement.appendChild(synsetRelation.toLmfXML(xmldoc));
         }
+        root.appendChild(relationElement);
         return root;
     }
 

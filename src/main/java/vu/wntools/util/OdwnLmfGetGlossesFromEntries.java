@@ -186,6 +186,53 @@ public class OdwnLmfGetGlossesFromEntries extends DefaultHandler {
 
     static public void main (String[] args) {
         try {
+            String pathToRbnLmfFile = "/Users/piek/Desktop/odwn/input_check/odwn_orbn-LMF.xml";
+
+            WordnetLmfDataSaxParser wordnetLmfDataSaxParser = new WordnetLmfDataSaxParser();
+            wordnetLmfDataSaxParser.parseFile(pathToRbnLmfFile);
+            OutputStream fosGlossMap = new FileOutputStream(pathToRbnLmfFile+".source-gloss");
+            wordnetLmfDataSaxParser.wordnetData.setGlobalLabel("ODWN-ORBN-LMF");
+            wordnetLmfDataSaxParser.wordnetData.setLexiconLabel("ODWN-ORBN-LMF-1.0");
+            for (int i = 0; i < wordnetLmfDataSaxParser.wordnetData.getSynsets().size(); i++) {
+                Synset synset = wordnetLmfDataSaxParser.wordnetData.getSynsets().get(i);
+                String synsetID = synset.getSynsetId();
+                if (wordnetLmfDataSaxParser.wordnetData.synsetToEntriesMap.containsKey(synsetID)) {
+                    ArrayList<String> entries = wordnetLmfDataSaxParser.wordnetData.synsetToEntriesMap.get(synsetID);
+                    for (int j = 0; j < entries.size(); j++) {
+                        String entry = entries.get(j);
+                        ArrayList<LmfEntry> lmfEntries = wordnetLmfDataSaxParser.wordnetData.entryMap.get(entry);
+                        for (int k = 0; k < lmfEntries.size(); k++) {
+                            LmfEntry lmfEntry = lmfEntries.get(k);
+                            for (int l = 0; l < lmfEntry.getSenses().size(); l++) {
+                                LmfSense lmfSense = lmfEntry.getSenses().get(l);
+                                if (lmfSense.getSynset().equals(synsetID)) {
+                                    if (!lmfSense.getDefinition().isEmpty()) {
+                                        Gloss gloss = new Gloss();
+                                        gloss.setLanguage("nl");
+                                        gloss.setProvenance("odwn");
+                                        gloss.setText(lmfSense.getDefinition());
+                                        synset.addDefinition(gloss);
+                                        String str = "\""+synset.getSynsetId()+"\""+" # "+ gloss.getText()+"\n";
+                                        fosGlossMap.write(str.getBytes());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+         /*   fosGlossMap.close();
+            OutputStream fos = new FileOutputStream(pathToCdbFile+".lmf");
+            wordnetLmfDataSaxParser.wordnetData.serialize(fos);
+            fos.close();*/
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static public void main_WEIRD (String[] args) {
+        try {
             String pathToCdbFile = "/Users/piek/Desktop/GWG/nl/odwn_1.0.xml";
             String pathToRbnLmfFile = "/Users/piek/Desktop/GWG/nl/odwn_orbn-LMF.xml";
 

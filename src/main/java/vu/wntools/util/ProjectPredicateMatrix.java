@@ -36,10 +36,16 @@ public class ProjectPredicateMatrix {
         String pathToPredicateMatrixFile = "/Code/vu/WordnetTools/resources/PredicateMatrix_withESO.v0.2.txt.role";
         //String pathToPredicateMatrixFile = "/Code/vu/WordnetTools/resources/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.en";
         //String pathToPredicateMatrixFile = "/Tools/ontotagger-v1.0/resources/predicate-matrix/PredicateMatrix.v0.txt";
-        String pathToWordnetLmfFile = "/Tools/wordnet-tools.0.1/resources/cornetto2.1.lmf.xml";
+        String pathToWordnetLmfFile = "";
+        pathToWordnetLmfFile = "/Tools/wordnet-tools.0.1/resources/cornetto2.1.lmf.xml";
+        pathToWordnetLmfFile = "/Code/vu/WordnetTools/resources/wn-bul-lmf.xml";
+        ArrayList<String> relations = new ArrayList<String>();
+        relations.add("hype");
 
         //String pathToWordnetLmfFile = "/Code/vu/WordnetTools/resources/odwn1.0.lmf";
-        String wordnetName = "odwn";
+        String wordnetName = "";
+        wordnetName = "odwn";
+        wordnetName = "bul";
         for (int i = 0; i < args.length; i++) {
             String arg = args[i];
             if (arg.equalsIgnoreCase("--matrix") && ((i+1)>args.length)) {
@@ -57,14 +63,19 @@ public class ProjectPredicateMatrix {
         }
         processMatrixFileWithWordnetSynset(pathToPredicateMatrixFile);
         WordnetLmfSaxParser wordnetLmfSaxParser = new WordnetLmfSaxParser();
+        wordnetLmfSaxParser.setRelations(relations);
         wordnetLmfSaxParser.parseFile(pathToWordnetLmfFile);
         wordnetLmfSaxParser.wordnetData.buildSynsetIndex();
+
+        wordnetLmfSaxParser.wordnetData.buildDirectEquivalencesFromIds("bul-10", "eng-30");
         System.out.println("wordnetLmfSaxParser.wordnetData.hyperRelations.size; = " + wordnetLmfSaxParser.wordnetData.hyperRelations.size());
         System.out.println("wordnetLmfSaxParser.wordnetData.otherRelations.size; = " + wordnetLmfSaxParser.wordnetData.otherRelations.size());
         System.out.println("DirectEquiSynsets().size() = " + wordnetLmfSaxParser.wordnetData.getSynsetToDirectEquiSynsets().size());
         System.out.println("NearEquiSynsets().size() = " + wordnetLmfSaxParser.wordnetData.getSynsetToNearEquiSynsets().size());
         System.out.println("OtherEquiSynsets().size() = " + wordnetLmfSaxParser.wordnetData.getSynsetToOtherEquiSynsets().size());
         System.out.println("wordNetPredicateMap.size() = " + wordNetPredicateMap.size());
+
+
         HashMap<String, ArrayList<ArrayList<String>>> projectedPredicateMapDirect = createMapping(wordnetLmfSaxParser.wordnetData.getSynsetToDirectEquiSynsets());
         String key = wordnetName+"-eq_synonym";
         if (REDUCE) {
@@ -391,7 +402,7 @@ public class ProjectPredicateMatrix {
             for (int i = 0; i < equivalences.size(); i++) {
                 String target = equivalences.get(i).toLowerCase();
                 if (key.endsWith("d_n-31318-n"))   {
-                    System.out.println("target = " + target);
+                  //  System.out.println("target = " + target);
                 }
                 if (wordNetPredicateMap.containsKey(target)) {
                     ArrayList<ArrayList<String>> mappings = wordNetPredicateMap.get(target);
@@ -406,6 +417,9 @@ public class ProjectPredicateMatrix {
                     else {
                         pmMappings.put(key, mappings);
                     }
+                }
+                else {
+                    System.out.println("Could not find the target = " + target);
                 }
             }
         }

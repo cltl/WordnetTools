@@ -35,6 +35,21 @@ public class GwgAddGlosses {
             String pathToLmfFile = "/Users/piek/Desktop/GWG/nl/startedFromOdwnRbnLmf/odwn_1.0.xml.lmf";
             String pathToGlossFile = "/Users/piek/Desktop/GWG/nl/wn-eng-glosses";
 */
+            for (int i = 0; i < args.length; i++) {
+                String arg = args[i];
+                if (arg.equals("--wn-lmf") && (args.length>(i+1))) {
+                    pathToLmfFile = args[i+1];
+                }
+                else if (arg.equals("--gloss") && (args.length>(i+1))) {
+                    pathToGlossFile = args[i+1];
+                }
+                else if (arg.equals("--language") && (args.length>(i+1))) {
+                    glossLanguage = args[i+1];
+                }
+                else if (arg.equals("--provenance") && (args.length>(i+1))) {
+                    glossOwner = args[i+1];
+                }
+            }
             ReadGlosses readGlosses = new ReadGlosses();
             readGlosses.readGlossFile(pathToGlossFile, glossLanguage, glossOwner);
             System.out.println("readGlosses.synsetToGlosses.size() = " + readGlosses.synsetToGlosses.size());

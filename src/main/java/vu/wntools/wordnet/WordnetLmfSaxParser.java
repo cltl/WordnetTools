@@ -12,6 +12,8 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -313,6 +315,9 @@ public class WordnetLmfSaxParser extends DefaultHandler {
                 if (attributes.getQName(i).equalsIgnoreCase("target")) {
                     targetId = attributes.getValue(i).trim();
                 }
+                else if (attributes.getQName(i).equalsIgnoreCase("targets")) {
+                    targetId = attributes.getValue(i).trim();
+                }
                 else if (attributes.getQName(i).equalsIgnoreCase("relType")) {
                     type = attributes.getValue(i).trim();
                 }
@@ -487,8 +492,37 @@ public class WordnetLmfSaxParser extends DefaultHandler {
         value += new String(ch, start, length);
         // System.out.println("tagValue:"+value);
     }
-
     static public void main (String[] args) {
+        //String pathToFile = args[0];
+        // String pathToFile = "/Releases/wordnetsimilarity_v.0.1/resources/cornetto2.0.lmf.xml";
+        //String pathToFile = "/Tools/wordnet-tools.0.1/resources/cornetto2.1.lmf.xml";
+        String pathToPwnFile = "/Users/piek/Desktop/NWR/NWR-benchmark/wikinews-en/vua-eventcoreference_v2_2014/resources/wneng-30.lmf.xml.xpos.extended";
+
+        ArrayList<String> relations = new ArrayList<String>();
+        //relations.add("NEAR_SYNONYM");
+        relations.add("has_hyperonym");
+        relations.add("has_hypernym");
+        relations.add("event");
+        relations.add("hypernym");
+        //relations.add("HAS_MERO_PART");
+        //relations.add("HAS_HOLO_PART");
+
+        WordnetLmfSaxParser pwnparser = new WordnetLmfSaxParser();
+        pwnparser.setRelations(relations);
+        pwnparser.parseFile(pathToPwnFile);
+        System.out.println("pwnparser = " + pwnparser.wordnetData.hyperRelations.size());
+        int cnt = 0;
+        Set keySet = pwnparser.wordnetData.hyperRelations.keySet();
+        Iterator<String> keys = keySet.iterator();
+        while (keys.hasNext()) {
+            String key = keys.next();
+            ArrayList<String> hypers = pwnparser.wordnetData.hyperRelations.get(key);
+            cnt += hypers.size();
+        }
+        System.out.println("cnt hyperRelations = " + cnt);
+    }
+
+    static public void main_2 (String[] args) {
         //String pathToFile = args[0];
        // String pathToFile = "/Releases/wordnetsimilarity_v.0.1/resources/cornetto2.0.lmf.xml";
         //String pathToFile = "/Tools/wordnet-tools.0.1/resources/cornetto2.1.lmf.xml";

@@ -16,8 +16,19 @@ public class GwgAddILI {
 
     static public void main (String[] args) {
         try {
-            String pathToLmfFile = "/Users/piek/Desktop/GWG/nl/startedFromOdwnRbnLmf/odwn_1.0.xml.lmf.pwn-glosses.google-glosses";
-            String pathToIliFile  = "/Users/piek/Desktop/GWG/ili.ttl";
+            String pathToLmfFile = "";
+            pathToLmfFile = "/Users/piek/Desktop/GWG/nl/startedFromOdwnRbnLmf/odwn_1.0.xml.lmf.pwn-glosses.google-glosses";
+            String pathToIliFile  = "";
+            pathToIliFile  = "/Users/piek/Desktop/GWG/ili.ttl";
+            for (int i = 0; i < args.length; i++) {
+                String arg = args[i];
+                if (arg.equals("--wn-lmf") && (args.length>(i+1))) {
+                   pathToLmfFile = args[i+1];
+                }
+                else if (arg.equals("--ili") && (args.length>(i+1))) {
+                   pathToIliFile = args[i+1];
+                }
+            }
             ReadILI readILI = new ReadILI();
             readILI.readILIFile(pathToIliFile);
             System.out.println("readILI.synsetToILIMap.size() = " + readILI.synsetToILIMap.size());

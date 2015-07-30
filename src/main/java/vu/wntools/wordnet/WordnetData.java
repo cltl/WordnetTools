@@ -77,6 +77,7 @@ public class WordnetData {
             ArrayList<String> givenHypers = hyperRelations.get(sourceId);
             for (int i = 0; i < targetIds.size(); i++) {
                 String target = targetIds.get(i);
+               // System.out.println("target = " + target);
                 if (!givenHypers.contains(target)) {
                     givenHypers.add(target);
                 }
@@ -373,6 +374,28 @@ public class WordnetData {
         return synsetNode;
     }
 
+    public void buildDirectEquivalencesFromIds (String prefix1, String prefix2) {
+        for (int i = 0; i < synsetArrayList.size(); i++) {
+            String synsetId = synsetArrayList.get(i);
+            if (synsetId.startsWith(prefix1)) {
+                String id = prefix2+synsetId.substring(prefix1.length());
+               // System.out.println("id = " + id);
+                if (this.synsetToDirectEquiSynsets.containsKey(synsetId)) {
+                    ArrayList<String> equivalences = this.synsetToDirectEquiSynsets.get(synsetId);
+                    if (!equivalences.contains(id)) {
+                        equivalences.add(id);
+                        this.synsetToDirectEquiSynsets.put(synsetId, equivalences);
+                    }
+                }
+                else {
+                    ArrayList<String> equivalences = new ArrayList<String>();
+                    equivalences.add(id);
+                    this.synsetToDirectEquiSynsets.put(synsetId, equivalences);
+                }
+
+            }
+        }
+    }
     public String getSynsetString (String synsetId) {
         String synsetString = "";
 
