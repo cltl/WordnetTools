@@ -71,7 +71,6 @@ public class JsonForRadialReingoldTilfordTree {
     static ArrayList<String> allOdwn = new ArrayList<String>();
 
     static public void main(String[] args) {
-        String targetFolderName = "odwn-new-verb-3";
         String targetFolderPath = "";
         String pos = "v";
         String provenanceFilter = "pwn";
@@ -82,7 +81,25 @@ public class JsonForRadialReingoldTilfordTree {
         pathToFile = "/Users/piek/Desktop/GWG/nl/startedFromOdwnRbnLmf/odwn_1.0.xml.lmf.pwn-glosses.google-glosses.ili.lmf";
         pathToPwnFile = "/Tools/wordnet-tools.0.1/resources/wneng-30.lmf.xml";
 
-        targetFolderPath = new File(pathToFile).getParentFile().getAbsolutePath()+"/"+targetFolderName;
+        for (int i = 0; i < args.length; i++) {
+            String arg = args[i];
+            if (arg.equals("--output-folder") && args.length>(i+1)) {
+                targetFolderPath = args[i+1];
+            }
+            else if (arg.equals("--provenance") && args.length>(i+1)) {
+                provenanceFilter = args[i+1];
+            }
+            else if (arg.equals("--odwn") && args.length>(i+1)) {
+                pathToFile = args[i+1];
+            }
+            else if (arg.equals("--pwn") && args.length>(i+1)) {
+                pathToPwnFile = args[i+1];
+            }
+            else if (arg.equals("--pos") && args.length>(i+1)) {
+                pos = args[i+1];
+            }
+        }
+
         File targetDir = new File(targetFolderPath);
         if (!targetDir.exists()) {
             targetDir.mkdir();
@@ -105,6 +122,7 @@ public class JsonForRadialReingoldTilfordTree {
         parser.wordnetData.buildSynsetIndex();
         parser.wordnetData.buildLexicalUnitIndex();
         parser.wordnetData.buildLemmaIndex();
+        parser.wordnetData.buildChildRelationsFromSynsets();
 
         pwnparser.wordnetData.buildSynsetIndex();
         pwnparser.wordnetData.buildLexicalUnitIndex();
@@ -124,7 +142,7 @@ public class JsonForRadialReingoldTilfordTree {
         pathToMiddle = "/Users/piek/Desktop/GWG/nl/startedFromOdwnRbnLmf/lemma-translation/odwn_1.0.xml.lmf.pwn-glosses.google-glosses.ili.lmf.new.not-mapped.matchMiddle";
         pathToTop = "/Users/piek/Desktop/GWG/nl/startedFromOdwnRbnLmf/lemma-translation/odwn_1.0.xml.lmf.pwn-glosses.google-glosses.ili.lmf.new.not-mapped.matchTop";
 
-        odwnNoDef = readOdwnFromFile(pathToNoDef);
+/*        odwnNoDef = readOdwnFromFile(pathToNoDef);
         odwnOneWordDef = readOdwnFromFile(pathToOneWordDef);
         odwnNoMatch = readOdwnFromFile(pathToNoMatch);
         odwnBottom = readOdwnFromFile(pathToBottom);
@@ -136,7 +154,7 @@ public class JsonForRadialReingoldTilfordTree {
         allOdwn.addAll(odwnNoMatch);
         allOdwn.addAll(odwnMiddle);
         allOdwn.addAll(odwnBottom);
-        allOdwn.addAll(odwnTop);
+        allOdwn.addAll(odwnTop);*/
         writeJson(parser.wordnetData, pwnparser.wordnetData, pos, targetFolderPath);
     }
 
@@ -152,122 +170,80 @@ public class JsonForRadialReingoldTilfordTree {
             OutputStream overviewFos = new FileOutputStream(overviewHtmlFile);
             overviewFos.write(htmlStr.getBytes());
             ArrayList<String> topNodes = new ArrayList<String>();
+            ArrayList<String> coveredNodes = new ArrayList<String>();
 
-            topNodes = buildChildRelationsFromids(wordnetData);
-            if (pos.equalsIgnoreCase("n")) {
-                ArrayList<String> topNouns = getPosSynsets(topNodes, "n");
-              //  System.out.println("topNouns = " + topNouns.toString());
-                JSONObject data = new JSONObject();
-                int nConcepts = buildTree(wordnetData, pwnData, topNouns, data, 0);
-                storeResult(targetFolderPath, pos, "all synsets:", nConcepts, "all", 1, overviewFos, data);
-                /*String jsonFile = targetFolderPath+"/"+ "all" +   "." +pos+".json";
-                String scriptFile = targetFolderPath+"/"+ "all" + "." +pos+".html";
-                String link = "<h3><a href=\""+ scriptFile+"\" target=\"_blank\">"+"all synsets depth 2"+":"+nConcepts+"</a></h3>\n\n";
-                htmlStr = link;
-                overviewFos.write(htmlStr.getBytes());
-                try {
-                    OutputStream fos = new FileOutputStream(jsonFile);
-                    StringWriter out = new StringWriter();
-                    data.write(out);
-                    fos.write(out.toString().getBytes());
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    OutputStream fos = new FileOutputStream(scriptFile);
-                    String script = jScriptFile.makeFile(jsonFile, nConcepts);
-                    fos.write(script.getBytes());
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }*/
+           // topNodes = buildChildRelationsFromids(wordnetData);
+            topNodes = wordnetData.getTopNodes();
+            topNodes = getPosSynsets(topNodes, pos);
+            System.out.println("topNodes = " + topNodes.toString());
+            JSONObject data = new JSONObject();
+            int nConcepts = buildTree(wordnetData, pwnData, topNodes, data, 0);
+            storeResult(targetFolderPath, pos, "all synsets:", nConcepts, "all", 1, overviewFos, data);
+            ArrayList<String> level1 = getNextLevel(topNodes, wordnetData);
 
-                ArrayList<String> nextLevel = getNextLevel(topNouns, wordnetData);
-
-                for (int i = 0; i < nextLevel.size(); i++) {
-                    data = new JSONObject();
-                    String s =  nextLevel.get(i);
-                    String synonyms = wordnetData.getSynsetString(s);
-                    String engSynonyms = pwnData.getSynsetString(s);
-                    synonyms += "["+engSynonyms+"]";
-                    ArrayList<String> singleTop = new ArrayList<String>();
-                    singleTop.add(s);
-                    nConcepts = buildTree(wordnetData, pwnData, singleTop, data, 0);
-                    storeResult(targetFolderPath, pos, synonyms, nConcepts, s, 2, overviewFos, data);
-                    ArrayList<String> nextNextLevel = getNextLevel(s, wordnetData);
-                    for (int j = 0; j < nextNextLevel.size(); j++) {
-                        String s1 = nextNextLevel.get(j);
-                        if (!nextLevel.contains(s1)) {
-                            data = new JSONObject();
-                            synonyms = wordnetData.getSynsetString(s1);
-                            engSynonyms = pwnData.getSynsetString(s1);
-                            synonyms += "[" + engSynonyms + "]";
-                            singleTop = new ArrayList<String>();
-                            singleTop.add(s1);
-                            nConcepts = buildTree(wordnetData, pwnData, singleTop, data, 0);
-                            storeResult(targetFolderPath, pos, synonyms, nConcepts, s1, 3, overviewFos, data);
+            for (int i = 0; i < level1.size(); i++) {
+                data = new JSONObject();
+                String s =  level1.get(i);
+                String synonyms = wordnetData.getSynsetString(s);
+                System.out.println("synonyms = " + synonyms);
+                String engSynonyms = pwnData.getSynsetString(s);
+                synonyms += "["+engSynonyms+"]";
+                ArrayList<String> singleTop = new ArrayList<String>();
+                singleTop.add(s);
+                nConcepts = buildTree(wordnetData, pwnData, singleTop, data, 0);
+                storeResult(targetFolderPath, pos, synonyms, nConcepts, s, 2, overviewFos, data);
+                coveredNodes.add(s);
+                ArrayList<String> level2 = getNextLevel(s, wordnetData);
+                if (level2.size()>0) System.out.println("level2.size() = " + level2.size());
+                for (int j = 0; j < level2.size(); j++) {
+                    String s1 = level2.get(j);
+                    if (!coveredNodes.contains(s1)) {
+                        data = new JSONObject();
+                        synonyms = wordnetData.getSynsetString(s1);
+                        engSynonyms = pwnData.getSynsetString(s1);
+                        synonyms += "[" + engSynonyms + "]";
+                        singleTop = new ArrayList<String>();
+                        singleTop.add(s1);
+                        coveredNodes.add(s1);
+                        nConcepts = buildTree(wordnetData, pwnData, singleTop, data, 0);
+                        storeResult(targetFolderPath, pos, synonyms, nConcepts, s1, 3, overviewFos, data);
+                        ArrayList<String> level3 = getNextLevel(s1, wordnetData);
+                        if (level3.size()>0) System.out.println("level3.size() = " + level3.size());
+                        for (int jj = 0; jj < level3.size(); jj++) {
+                            String s2 = level3.get(jj);
+                            if (!coveredNodes.contains(s2)) {
+                                data = new JSONObject();
+                                synonyms = wordnetData.getSynsetString(s2);
+                                engSynonyms = pwnData.getSynsetString(s2);
+                                synonyms += "[" + engSynonyms + "]";
+                                singleTop = new ArrayList<String>();
+                                singleTop.add(s2);
+                                coveredNodes.add(s2);
+                                nConcepts = buildTree(wordnetData, pwnData, singleTop, data, 0);
+                                storeResult(targetFolderPath, pos, synonyms, nConcepts, s2, 4, overviewFos, data);
+                                ArrayList<String> level4 = getNextLevel(s2, wordnetData);
+                                if (level4.size()>0) System.out.println("level4.size() = " + level4.size());
+                                for (int jjj = 0; jjj < level4.size(); jjj++) {
+                                    String s3 = level4.get(jjj);
+                                    if (!coveredNodes.contains(s3)) {
+                                        data = new JSONObject();
+                                        synonyms = wordnetData.getSynsetString(s3);
+                                        engSynonyms = pwnData.getSynsetString(s3);
+                                        synonyms += "[" + engSynonyms + "]";
+                                        singleTop = new ArrayList<String>();
+                                        singleTop.add(s3);
+                                        coveredNodes.add(s3);
+                                        nConcepts = buildTree(wordnetData, pwnData, singleTop, data, 0);
+                                        storeResult(targetFolderPath, pos, synonyms, nConcepts, s3, 5, overviewFos, data);
+                                    }
+                                }
+                            }
                         }
+
                     }
-                    /*jsonFile = targetFolderPath+"/"+ pos +   "."+ s + ".json";
-                    scriptFile = targetFolderPath+"/"+ pos +"."+ s + ".html";
-                    link = "<h3><a href=\""+ scriptFile+"\" target=\"_blank\">"+synonyms+":"+nConcepts+"</a></h3>\n";
-                    htmlStr = link;
-                    overviewFos.write(htmlStr.getBytes());
-
-                    try {
-                        OutputStream fos = new FileOutputStream(jsonFile);
-                        StringWriter out = new StringWriter();
-                        data.write(out);
-                        fos.write(out.toString().getBytes());
-                        fos.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    try {
-                        OutputStream fos = new FileOutputStream(scriptFile);
-                        String script = jScriptFile.makeFile(jsonFile, nConcepts);
-                        fos.write(script.getBytes());
-                        fos.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }*/
-
-
                 }
-
             }
-            else if (pos.equalsIgnoreCase("v")) {
-                ArrayList<String> topVerbs = getPosSynsets(topNodes, "v");
-                System.out.println("topVerbs = " + topVerbs);
-                JSONObject data = new JSONObject();
-                int nConcepts = buildTree(wordnetData, pwnData, topVerbs, data, 0);
-                String jsonFile = targetFolderPath+"/"+ "all" +   "." +pos+".json";
-                String scriptFile = targetFolderPath+"/"+ "all" + "." +pos+".html";
-                String link = "<h3><a href=\""+ scriptFile+"\" target=\"_blank\">"+"all synsets depth 2"+":"+nConcepts+"</a></h3>\n\n";
-                htmlStr = link;
-                overviewFos.write(htmlStr.getBytes());
-                try {
-                    OutputStream fos = new FileOutputStream(jsonFile);
-                    StringWriter out = new StringWriter();
-                    data.write(out);
-                    fos.write(out.toString().getBytes());
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    OutputStream fos = new FileOutputStream(scriptFile);
-                    String script = jScriptFile.makeFile(jsonFile, nConcepts);
-                    fos.write(script.getBytes());
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
-
-            }
             htmlStr = "</body>\n";
             overviewFos.write(htmlStr.getBytes());
         }
@@ -287,13 +263,13 @@ public class JsonForRadialReingoldTilfordTree {
                                 int level,
                                 OutputStream overviewFos,
                                 JSONObject data) throws IOException, JSONException {
-        String jsonFile = targetFolderPath+"/"+ pos +   "."+ s + ".json";
-        String scriptFile = targetFolderPath+"/"+ pos +"."+ s + ".html";
-        String link = "<h"+level+"><a href=\""+ scriptFile+"\" target=\"_blank\">"+synonyms+":"+nConcepts+"</a></h"+level+">\n";
+        String jsonFile =  pos +   "."+ s + ".json";
+        String scriptFile =  pos +"."+ s + ".html";
+        String link = "<h"+level+"><a href=\""+ scriptFile+"\" target=\"_blank\">"+level+": "+synonyms+":"+nConcepts+"</a></h"+level+">\n";
         overviewFos.write(link.getBytes());
 
         try {
-            OutputStream fos = new FileOutputStream(jsonFile);
+            OutputStream fos = new FileOutputStream(targetFolderPath+"/"+jsonFile);
             StringWriter out = new StringWriter();
             data.write(out);
             fos.write(out.toString().getBytes());
@@ -303,8 +279,8 @@ public class JsonForRadialReingoldTilfordTree {
         }
 
         try {
-            OutputStream fos = new FileOutputStream(scriptFile);
-            String script = jScriptFile.makeFile(jsonFile, nConcepts);
+            OutputStream fos = new FileOutputStream(targetFolderPath+"/"+scriptFile);
+            String script = jScriptFile.makeFile("./"+jsonFile, nConcepts);
             fos.write(script.getBytes());
             fos.close();
         } catch (IOException e) {
@@ -316,7 +292,15 @@ public class JsonForRadialReingoldTilfordTree {
                            ArrayList<String> topNodes, JSONObject data, final int depth) throws JSONException {
         ArrayList<String> coveredSynsets = new ArrayList<String>();
         int nConcepts = 0;
-        nConcepts = addJson(wordnetData, pwnData, topNodes, 0, depth, coveredSynsets, data);
+        nConcepts = addJson(wordnetData, pwnData, topNodes, depth, coveredSynsets, data);
+        return nConcepts;
+    }
+
+    static int buildCircle (WordnetData wordnetData,WordnetData pwnData,
+                           ArrayList<String> topNodes, JSONObject data, final int depth) throws JSONException {
+        ArrayList<String> coveredSynsets = new ArrayList<String>();
+        int nConcepts = 0;
+        nConcepts = addChildrenJson(wordnetData, pwnData, topNodes, 0, depth, coveredSynsets, data);
         return nConcepts;
     }
 
@@ -324,7 +308,6 @@ public class JsonForRadialReingoldTilfordTree {
     static int addJson (WordnetData wordnetData,WordnetData pwnData,
                            ArrayList<String> synsets,
                            int level,
-                           final int depth,
                            ArrayList<String> coveredNodes,
                            JSONObject data) throws JSONException {
         int nConcepts = 0;
@@ -375,17 +358,17 @@ public class JsonForRadialReingoldTilfordTree {
                         sizeString = "200";
                         color = "#5cbe7f";   /// green
                     }
-
-                    //   System.out.println("synonyms = " + synonyms);
+                   // System.out.println("s = " + s);
+                   // System.out.println("synonyms = " + synonyms);
                     JSONObject synset = createJsonSynset(synonyms, sizeString, color);
 
                     if (wordnetData.childRelations.containsKey(s)) {
                         ArrayList<String> children = wordnetData.childRelations.get(s);
                         level++;
                         // System.out.println("children = " + children.toString());
-                        nConcepts += addJson(wordnetData, pwnData, children, level, depth, coveredNodes, synset);
+                        nConcepts += addJson(wordnetData, pwnData, children, level, coveredNodes, synset);
                     } else {
-                        //   System.out.println("NO CHILDREN");
+                     //      System.out.println("NO CHILDREN");
                     }
 
                     data.append("children", synset);
@@ -394,6 +377,71 @@ public class JsonForRadialReingoldTilfordTree {
                 }
             }
        // }
+        return nConcepts;
+    }
+
+    static int addChildrenJson (WordnetData wordnetData,WordnetData pwnData,
+                           ArrayList<String> synsets,
+                           int level,
+                           final int depth,
+                           ArrayList<String> coveredNodes,
+                           JSONObject data) throws JSONException {
+        int nConcepts = 0;
+        if (depth==0 || level< depth) {
+            for (int i = 0; i < synsets.size(); i++) {
+                String s = synsets.get(i);
+                if (!coveredNodes.contains(s)) {
+                    nConcepts++;
+                    coveredNodes.add(s);
+                    String synonyms = wordnetData.getFirstSynsetString(s);
+                    String sizeString = "";
+                    String color = "";
+                    if (s.startsWith("odwn")) {
+                        if (wordnetData.synsetToGlosses.containsKey(s)) {
+                            ArrayList<Gloss> glosses = wordnetData.synsetToGlosses.get(s);
+                            for (int j = 0; j < glosses.size(); j++) {
+                                Gloss gloss = glosses.get(j);
+                                if (gloss.getLanguage().equals("en")) {
+                                    synonyms += "["+gloss.getText()+"]";
+                                }
+                            }
+                        }
+                        sizeString = "600";
+                        color = "#ffc0cb"; //pink
+                    } else {
+                        if (synonyms.isEmpty()) {
+                            synonyms = "[" + pwnData.getFirstSynsetString(s) + "]";
+                            sizeString = "500";
+                            color = "#37c3e0"; //blue
+                        } else {
+                            String engSynonyms = "[" + pwnData.getFirstSynsetString(s) + "]";
+                            synonyms += engSynonyms;
+                            sizeString = "400";
+                            color = "#990000";   /// dark red
+                        }
+
+                    }
+                    if (synonyms.isEmpty()) {
+                        System.out.println("s = " + s);
+                        synonyms = s;
+                        sizeString = "200";
+                        color = "#5cbe7f";   /// green
+                    }
+                    JSONObject synset = createJsonSynset(synonyms, sizeString, color);
+                    if (wordnetData.childRelations.containsKey(s)) {
+                        ArrayList<String> children = wordnetData.childRelations.get(s);
+                        level++;
+                        // System.out.println("children = " + children.toString());
+                        nConcepts += addChildrenJson(wordnetData, pwnData, children, level, depth, coveredNodes, synset);
+                    } else {
+                        //      System.out.println("NO CHILDREN");
+                    }
+                    data.append("children", synset);
+                } else {
+                    //   System.out.println("already covered: "+coveredNodes.size());
+                }
+            }
+        }
         return nConcepts;
     }
 

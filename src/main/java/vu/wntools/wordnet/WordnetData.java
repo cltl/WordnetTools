@@ -188,7 +188,7 @@ public class WordnetData {
             for (int i = 0; i < synsetIds.size(); i++) {
                 String synsetId = synsetIds.get(i);
                 if (!hyperRelations.containsKey(synsetId)) {
-                   topNodes.add(synsetId);
+                   if (!topNodes.contains(synsetId)) topNodes.add(synsetId);
                 }
             }
         }
@@ -237,6 +237,33 @@ public class WordnetData {
                             }
                         }
                    }
+                }
+            }
+        }
+    }
+
+    public void buildChildRelationsFromSynsets () {
+        Set keyHyperSet = hyperRelations.keySet();
+        Iterator entries = keyHyperSet.iterator();
+        while(entries.hasNext()) {
+            String child = (String) entries.next();
+            ArrayList<String> synsetIds = hyperRelations.get(child);
+            if (synsetIds!=null) {
+                for (int j = 0; j < synsetIds.size(); j++) {
+                    String hyper = synsetIds.get(j);
+                    if (childRelations.containsKey(hyper)) {
+                        ArrayList<String> children = childRelations.get(hyper);
+                        if (!children.contains(child)) {
+                            children.add(child);
+                            childRelations.put(hyper, children);
+                        }
+                    }
+                    else {
+                        ArrayList<String> children = new ArrayList<String>();
+                        children.add(child);
+                        childRelations.put(hyper, children);
+                       // System.out.println("hyper = " + hyper);
+                    }
                 }
             }
         }

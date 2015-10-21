@@ -16,7 +16,7 @@ public class jScriptFile {
             "}\n" +
             "\n" +
             ".node {\n" +
-            "  font: 14px sans-serif;\n" +
+            "  font: 10px sans-serif;\n" +
             "}\n" +
             "\n" +
             ".link {\n" +
@@ -28,7 +28,7 @@ public class jScriptFile {
             "</style>\n" +
             "<body>\n" +
             "<!-- <script src=\"http://d3js.org/d3.v3.min.js\"></script> -->\n" +
-            "<script src= \"./d3.v3.min.js\"></script>\n" +
+            "<script src= \"../d3.v3.min.js\"></script>\n" +
             "<!-- <script src=\"http://www.d3plus.org/js/d3plus.js\"></script> -->\n" +
             "\n" +
             "<script>\n" +
@@ -77,7 +77,7 @@ public class jScriptFile {
             "      .attr(\"dy\", \".31em\")\n" +
             "      .attr(\"fill\",\"black\") <!-- makes the text black -->\n" +
             "      .attr(\"text-anchor\", function(d) { return d.x < 180 ? \"start\" : \"end\"; })\n" +
-            "      .attr(\"transform\", function(d) { return d.x < 180 ? \"rotate(20)translate(8)\" : \"rotate(160)translate(-8)\"; })\n" +
+            "      .attr(\"transform\", function(d) { return d.x < 180 ? \"translate(8)\" : \"rotate(180)translate(-8)\"; })\n" +
             "      \n" +
             "      .call(wrap, \"10\")\n" +
             "      .text(function(d) { return d.name; });\n" +
@@ -130,25 +130,29 @@ public class jScriptFile {
             "</script>";
 
     static public String makeFile (String fileName, int nConcepts) {
-        String size = "1000";
-        if (nConcepts<500) {
-            size = "2500";
+        String size = "2000";
+       /* if (nConcepts<500) {
+            size = "500";
         }
         else if (nConcepts<2000) {
-            size = "4500";
+            size = "1000";
         }
+*//*
         else if (nConcepts<4000) {
             size = "6500";
         }
+*//*
         else if (nConcepts<6000) {
-            size = "8500";
+            size = "2000";
         }
+*//*
         else if (nConcepts<8000) {
             size = "10000";
         }
+*//*
         else {
-            size = "12000";
-        }
+            size = "4000";
+        }*/
         String str = part1+size+part2+fileName+part3;
         return str;
     }
