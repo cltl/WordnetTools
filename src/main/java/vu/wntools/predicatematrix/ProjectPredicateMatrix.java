@@ -1,5 +1,6 @@
-package vu.wntools.util;
+package vu.wntools.predicatematrix;
 
+import vu.wntools.util.Util;
 import vu.wntools.wordnet.WordnetData;
 import vu.wntools.wordnet.WordnetLmfSaxParser;
 
@@ -27,47 +28,68 @@ import java.util.*;
 public class ProjectPredicateMatrix {
     static HashMap<String, ArrayList<ArrayList<String>>> wordNetPredicateMap = new HashMap<String,ArrayList<ArrayList<String>>>();
     static ArrayList<String> preEmpted = new ArrayList<String>();
-    static boolean REDUCE = true;
-    static boolean LU = true;
+    static boolean REDUCE = false;
+    static boolean LU = false;
 
     static public void main (String[] args) {
         //String pathToPredicateMatrixFile = args[0];
         //String pathToCdbSynsetFile = args[1];
-        String pathToPredicateMatrixFile = "/Code/vu/WordnetTools/resources/PredicateMatrix_withESO.v0.2.txt.role";
+        String pathToPredicateMatrixFile = "";
+        //pathToPredicateMatrixFile = "/Code/vu/WordnetTools/resources/PredicateMatrix_withESO.v0.2.txt.role";
         //String pathToPredicateMatrixFile = "/Code/vu/WordnetTools/resources/PredicateMatrix.v1.1/PredicateMatrix.v1.1.role.en";
         //String pathToPredicateMatrixFile = "/Tools/ontotagger-v1.0/resources/predicate-matrix/PredicateMatrix.v0.txt";
         String pathToWordnetLmfFile = "";
-        pathToWordnetLmfFile = "/Tools/wordnet-tools.0.1/resources/cornetto2.1.lmf.xml";
-        pathToWordnetLmfFile = "/Code/vu/WordnetTools/resources/wn-bul-lmf.xml";
+       // pathToWordnetLmfFile = "/Tools/wordnet-tools.0.1/resources/cornetto2.1.lmf.xml";
+       // pathToWordnetLmfFile = "/Code/vu/WordnetTools/resources/wn-bul-lmf.xml";
         ArrayList<String> relations = new ArrayList<String>();
-        relations.add("hype");
-
+//        relations.add("hype");
+/*
+        relations.add("near_synonym");
+        relations.add("xpos_synonym");
+        relations.add("xpos_near_synonym");
+        relations.add("xpos_near_hyperonym");
+        relations.add("xpos_has_hyperonym");
+        relations.add("event");
+*/
         //String pathToWordnetLmfFile = "/Code/vu/WordnetTools/resources/odwn1.0.lmf";
         String wordnetName = "";
-        wordnetName = "odwn";
-        wordnetName = "bul";
+      //  wordnetName = "odwn";
+      //  wordnetName = "bul";
         for (int i = 0; i < args.length; i++) {
             String arg = args[i];
-            if (arg.equalsIgnoreCase("--matrix") && ((i+1)>args.length)) {
+            if (arg.equalsIgnoreCase("--matrix") && ((i+1)<args.length)) {
                 pathToPredicateMatrixFile = args[i+1];
             }
-            else if (arg.equalsIgnoreCase("--wn-lmf") && ((i+1)>args.length)) {
+            else if (arg.equalsIgnoreCase("--wn-lmf") && ((i+1)<args.length)) {
                 pathToWordnetLmfFile = args[i+1];
             }
-            else if (arg.equalsIgnoreCase("--wn-name") && ((i+1)>args.length)) {
+            else if (arg.equalsIgnoreCase("--wn-name") && ((i+1)<args.length)) {
                 wordnetName = args[i+1];
             }
             else if (arg.equalsIgnoreCase("--reduce")) {
                 REDUCE = true;
             }
+            else if (arg.equalsIgnoreCase("--lu")) {
+                LU = true;
+            }
+            else if (arg.equalsIgnoreCase("--relations") && ((i+1)<args.length)) {
+                relations = Util.readRelationsFile(args[i+1]);
+            }
+            else {
+              //  System.out.println("arg = " + arg);
+            }
         }
+        System.out.println("pathToPredicateMatrixFile = " + pathToPredicateMatrixFile);
+        System.out.println("pathToWordnetLmfFile = " + pathToWordnetLmfFile);
+
         processMatrixFileWithWordnetSynset(pathToPredicateMatrixFile);
         WordnetLmfSaxParser wordnetLmfSaxParser = new WordnetLmfSaxParser();
         wordnetLmfSaxParser.setRelations(relations);
         wordnetLmfSaxParser.parseFile(pathToWordnetLmfFile);
         wordnetLmfSaxParser.wordnetData.buildSynsetIndex();
 
-        wordnetLmfSaxParser.wordnetData.buildDirectEquivalencesFromIds("bul-10", "eng-30");
+      //  wordnetLmfSaxParser.wordnetData.buildDirectEquivalencesFromIds("bul-10", "eng-30");
+        wordnetLmfSaxParser.wordnetData.buildDirectEquivalencesFromIds("eng-30", "eng-30");
         System.out.println("wordnetLmfSaxParser.wordnetData.hyperRelations.size; = " + wordnetLmfSaxParser.wordnetData.hyperRelations.size());
         System.out.println("wordnetLmfSaxParser.wordnetData.otherRelations.size; = " + wordnetLmfSaxParser.wordnetData.otherRelations.size());
         System.out.println("DirectEquiSynsets().size() = " + wordnetLmfSaxParser.wordnetData.getSynsetToDirectEquiSynsets().size());
@@ -356,6 +378,82 @@ public class ProjectPredicateMatrix {
                         break;
                     }
                 }
+                /*if (!match) {
+                    parentChain = new ArrayList<String>();
+                    wordnetData.getXposRelationChain(key, parentChain);
+                    if (key.endsWith("d_n-31318-n")) {
+                        System.out.println("other parentChain.toString() = " + parentChain.toString());
+                    }
+                    for (int i = 0; i < parentChain.size(); i++) {
+                        // break at the most specific level
+                        String parentSynset = parentChain.get(i);
+                        if (projectedPredicateMapDirect.containsKey(parentSynset)) {
+                            ArrayList<ArrayList<String>> pmMaps = projectedPredicateMapDirect.get(parentSynset);
+                            pmMappings.put(key, pmMaps);
+                            match = true;
+                            break;
+                        }
+                        else if (projectedPredicateMapNear.containsKey(parentSynset)) {
+                            ArrayList<ArrayList<String>> pmMaps = projectedPredicateMapNear.get(parentSynset);
+                            pmMappings.put(key, pmMaps);
+                            match = true;
+                            break;
+                        }
+                        else if (projectedPredicateMapOther.containsKey(parentSynset)) {
+                            ArrayList<ArrayList<String>> pmMaps = projectedPredicateMapOther.get(parentSynset);
+                            pmMappings.put(key, pmMaps);
+                            match = true;
+                            break;
+                        }
+                    }
+                }*/
+            }
+        }
+        return pmMappings;
+    }
+
+    static HashMap<String, ArrayList<ArrayList<String>>> createDirectHyperonymMappings (WordnetData wordnetData,
+                                         HashMap<String, ArrayList<ArrayList<String>>> projectedPredicateMapDirect,
+                                         HashMap<String, ArrayList<ArrayList<String>>> projectedPredicateMapNear,
+                                         HashMap<String, ArrayList<ArrayList<String>>> projectedPredicateMapOther) {
+        HashMap<String, ArrayList<ArrayList<String>>> pmMappings = new HashMap<String, ArrayList<ArrayList<String>>>();
+        Set keySet = wordnetData.synsetToEntries.keySet();
+        Iterator keys = keySet.iterator();
+        while (keys.hasNext()) {
+            String key = (String) keys.next();
+            if (!projectedPredicateMapDirect.containsKey(key) &&
+                !projectedPredicateMapNear.containsKey(key) &&
+                !projectedPredicateMapOther.containsKey(key)) {
+                ArrayList<String> parentChain = new ArrayList<String>();
+                //System.out.println("key = " + key);
+                wordnetData.getSingleHyperChain(key, parentChain);
+                if (key.endsWith("d_n-31318-n")) {
+                    System.out.println("hyper parentChain.toString() = " + parentChain.toString());
+                }
+                boolean match = false;
+                for (int i = 0; i == 1; i++) {
+                    // break at the most specific level
+                    String parentSynset = parentChain.get(i);
+                    if (projectedPredicateMapDirect.containsKey(parentSynset)) {
+                        ArrayList<ArrayList<String>> pmMaps = projectedPredicateMapDirect.get(parentSynset);
+                        pmMappings.put(key, pmMaps);
+                        match = true;
+                        break;
+                    }
+                    else if (projectedPredicateMapNear.containsKey(parentSynset)) {
+                        ArrayList<ArrayList<String>> pmMaps = projectedPredicateMapNear.get(parentSynset);
+                        pmMappings.put(key, pmMaps);
+                        match = true;
+                        break;
+                    }
+                    else if (projectedPredicateMapOther.containsKey(parentSynset)) {
+                        ArrayList<ArrayList<String>> pmMaps = projectedPredicateMapOther.get(parentSynset);
+                        pmMappings.put(key, pmMaps);
+                        match = true;
+                        break;
+                    }
+                }
+/*
                 if (!match) {
                     parentChain = new ArrayList<String>();
                     wordnetData.getXposRelationChain(key, parentChain);
@@ -385,6 +483,7 @@ public class ProjectPredicateMatrix {
                         }
                     }
                 }
+*/
             }
         }
         return pmMappings;
@@ -419,7 +518,7 @@ public class ProjectPredicateMatrix {
                     }
                 }
                 else {
-                    System.out.println("Could not find the target = " + target);
+                  //  System.out.println("Could not find the target = " + target);
                 }
             }
         }

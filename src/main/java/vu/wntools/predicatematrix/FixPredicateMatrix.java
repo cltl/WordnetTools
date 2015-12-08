@@ -1,4 +1,4 @@
-package vu.wntools.util;
+package vu.wntools.predicatematrix;
 
 import java.io.*;
 
@@ -42,7 +42,8 @@ public class FixPredicateMatrix {
 
 
     static public void main (String[] args) {
-        String pathToPredicateMatrixFile = "/Code/vu/WordnetTools/resources/PredicateMatrix_withESO.v0.2.txt";
+        String pathToPredicateMatrixFile = args[0];
+        //pathToPredicateMatrixFile = "/Code/vu/WordnetTools/resources/PredicateMatrix_withESO.v0.2.txt";
         try {
            /*
            VN_CLASS VN_CLASS_NUMBER VN_SUBCLASS VN_SUBCLASS_NUMBER VN_LEMA WN_SENSE VN_THEMROLE FN_FRAME FN_LEXENT FN_ROLE PB_ROLESET PB_ARG MCR_ILIOFFSET MCR_DOMAIN MCR_SUMO MC_LEXNAME
@@ -104,6 +105,34 @@ vn:accept-77	vn:77	vn:NULL	vn:NULL	vn:accept	vn:Agent	wn:accept%2:31:01	mcr:ili-
                          * 27 SEMLINK;PREDICATE_MAPPING;ESO3
 
                          */
+
+              /*          0 id:eng
+                        1 id:v
+                        2 id:abandon.01
+                        3 id:0
+                        4 vn:51.2
+                        5 vn:51.2
+                        6 vn:NULL
+                        7 vn:NULL
+                        8 vn:abandon
+                        9 vn:Theme
+                        10 wn:abandon%2:38:00
+                        11 mcr:ili-30-00614057-v
+                        12 fn:Abandonment
+                        13 fn:abandon.v
+                        14 fn:Agent
+                        15 pb:abandon.01
+                        16 pb:0
+                        17 mcr:NULL
+                        18 mcr:NULL
+                        19 mcr:NULL
+                        20 mcr:NULL
+                        21 mcr:NULL
+                        22 mcr:NULL
+                        23 wn:NULL
+                        24 wn:NULL
+                        25 TAG;PB2FNnewFN*/
+
 
 
                         fields[0] = "pm-id:"+fields[0].substring(3);

@@ -1,4 +1,4 @@
-package vu.wntools.util;
+package vu.wntools.framenet;
 
 import java.io.*;
 import java.util.ArrayList;

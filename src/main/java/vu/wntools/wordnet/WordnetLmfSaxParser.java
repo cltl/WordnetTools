@@ -347,7 +347,8 @@ public class WordnetLmfSaxParser extends DefaultHandler {
                     } else if (type.equalsIgnoreCase("xpos_near_hypernym")) {
                         if (!targetId.isEmpty()) if (!others.contains(targetId)) others.add(targetId);
                     }
-                } else if (relations.contains(type)) {
+                } else if (relations.contains(type) || relations.contains(type.toLowerCase())) {
+                 //   if (!type.equalsIgnoreCase("has_hyperonym") && !type.equalsIgnoreCase("xpos_near_synonym")) System.out.println("type = " + type);
                     if (!targetId.isEmpty()) if (!hypers.contains(targetId)) hypers.add(targetId);
                 } else {
                     if (!targetId.isEmpty()) if (!others.contains(targetId)) others.add(targetId);
@@ -364,7 +365,7 @@ public class WordnetLmfSaxParser extends DefaultHandler {
                     } else if (type.equalsIgnoreCase("near_synonym")) {
                         if (!targetId.isEmpty()) if (!backupHypers.contains(targetId)) backupHypers.add(targetId);
                     }
-                } else if (relations.contains(type.toLowerCase())) {
+                } else if (relations.contains(type.toLowerCase()) || relations.contains(type)) {
                     if (!targetId.isEmpty()) if (!backupHypers.contains(targetId)) backupHypers.add(targetId);
                 }
             }
