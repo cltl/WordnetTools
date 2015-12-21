@@ -14,6 +14,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.zip.GZIPInputStream;
 
 /**
  * Created with IntelliJ IDEA.
@@ -126,12 +127,23 @@ public class WordnetLmfSaxParser extends DefaultHandler {
             System.out.println("Cannot find file");
             return;
         }
+
         String myerror = "";
         try {
+
+            InputStream fis = new FileInputStream(filePath);
+
+            if (filePath.toLowerCase().endsWith(".gz")) {
+                InputStream fileStream = new FileInputStream(filePath);
+                fis = new GZIPInputStream(fileStream);
+            }
+
+
             SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setValidating(false);
             SAXParser parser = factory.newSAXParser();
-            InputSource inp = new InputSource (new FileReader(filePath));
+           // InputSource inp = new InputSource (new FileReader(filePath));
+            InputSource inp = new InputSource (fis);
             parser.parse(inp, this);
         } catch (SAXParseException err) {
             myerror = "\n** Parsing error" + ", line " + err.getLineNumber()
