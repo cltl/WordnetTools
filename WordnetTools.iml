@@ -12,6 +12,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: org.json:json:20090211" level="project" />
-    <orderEntry type="library" name="Maven: KyotoKafSaxParser:KyotoKafSaxParser:1.0" level="project" />
+    <orderEntry type="library" name="Maven: eu.kyotoproject.KyotoKafSaxParser:KyotoKafSaxParser:3.0" level="project" />
+    <orderEntry type="library" name="Maven: ant:ant:1.6.5" level="project" />
   </component>
 </module>

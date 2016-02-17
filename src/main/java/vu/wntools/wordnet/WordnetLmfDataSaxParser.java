@@ -6,9 +6,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 import vu.wntools.lmf.*;
-import vu.wntools.util.ReadGlosses;
-import vu.wntools.util.ReadILI;
-
+import vu.wntools.util.*;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
