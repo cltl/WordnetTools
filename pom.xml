@@ -32,7 +32,12 @@
             <organizationUrl>http://www.cltl.nl</organizationUrl>
         </developer>
     </developers>
-
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
     <build>
         <plugins>
 
@@ -76,11 +81,17 @@
             <artifactId>json</artifactId>
             <version>20090211</version>
         </dependency>
+
         <dependency>
+            <groupId>com.github.cltl</groupId>
+            <artifactId>KafSaxParser</artifactId>
+            <version>3.0</version>
+        </dependency>
+       <!-- <dependency>
             <groupId>eu.kyotoproject.KyotoKafSaxParser</groupId>
             <artifactId>KyotoKafSaxParser</artifactId>
             <version>3.0</version>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
 </project>
