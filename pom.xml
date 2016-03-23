@@ -6,7 +6,7 @@
 
     <groupId>com.github.cltl</groupId>
     <artifactId>WordnetTools</artifactId>
-    <version>3.0</version>
+    <version>v3.0</version>
     <packaging>jar</packaging>
     <name>WordnetTools</name>
     <description>Reads WordnetLMF files and can apply various functions among which WordNet Similarity measurements.</description>
@@ -85,13 +85,8 @@
         <dependency>
             <groupId>com.github.cltl</groupId>
             <artifactId>KafSaxParser</artifactId>
-            <version>3.0</version>
+            <version>v3.0</version>
         </dependency>
-       <!-- <dependency>
-            <groupId>eu.kyotoproject.KyotoKafSaxParser</groupId>
-            <artifactId>KyotoKafSaxParser</artifactId>
-            <version>3.0</version>
-        </dependency>-->
     </dependencies>
 
 </project>
