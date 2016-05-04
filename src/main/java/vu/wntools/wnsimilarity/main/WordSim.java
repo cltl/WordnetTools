@@ -32,7 +32,7 @@ public class WordSim {
     static public void main (String[] args) {
         String wnFilePath = "";
         String source = "paard";
-        String target = "ezel";
+        String target = "gas";
         wnFilePath = "/Code/vu/newsreader/vua-resources/odwn_orbn_gwg-LMF_1.3.xml.gz";
         for (int i = 0; i < args.length; i++) {
             String arg = args[i];
