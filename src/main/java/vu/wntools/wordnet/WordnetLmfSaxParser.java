@@ -137,8 +137,6 @@ public class WordnetLmfSaxParser extends DefaultHandler {
                 InputStream fileStream = new FileInputStream(filePath);
                 fis = new GZIPInputStream(fileStream);
             }
-
-
             SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setValidating(false);
             SAXParser parser = factory.newSAXParser();
