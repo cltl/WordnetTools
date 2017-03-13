@@ -371,6 +371,31 @@ public class WordnetData {
         }
     }
 
+    public void buildLemmaIndex (String posTag) {
+        for (int i = 0; i < synsetArrayList.size(); i++) {
+            String s = synsetArrayList.get(i);
+            if (s.endsWith(posTag)) {
+                ArrayList<String> lemmas = getSynonyms(s);
+                if (lemmas != null) {
+                    for (int j = 0; j < lemmas.size(); j++) {
+                        String lemma = lemmas.get(j);
+                        if (lemmaToSynsets.containsKey(lemma)) {
+                            ArrayList<String> synsets = lemmaToSynsets.get(lemma);
+                            if (!synsets.contains(s)) {
+                                synsets.add(s);
+                                lemmaToSynsets.put(lemma, synsets);
+                            }
+                        } else {
+                            ArrayList<String> synsets = new ArrayList<String>();
+                            synsets.add(s);
+                            lemmaToSynsets.put(lemma, synsets);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public SynsetNode makeSynsetNode (String word, String synsetId) {
         SynsetNode synsetNode = new SynsetNode();
         synsetNode.setSynsetId(synsetId);

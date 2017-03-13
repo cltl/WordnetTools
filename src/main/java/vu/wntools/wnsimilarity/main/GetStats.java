@@ -19,9 +19,9 @@ public class GetStats {
 
 
     static public void main (String[] args) {
-        String pathToWnLmfFile = "";
+        String pathToWnLmfFile = "/Tools/wordnet-tools.0.1/resources/wneng-30.lmf.xml";
         String pathToRelationsFile = "";
-        String pos = "";
+        String pos = "v";
         ArrayList<String> relations = new ArrayList<String>();
         for (int i = 0; i < args.length; i++) {
             String arg = args[i];
@@ -43,6 +43,7 @@ public class GetStats {
                 relations = Util.readFileToArrayList(pathToRelationsFile);
             }
             wordnetLmfSaxParser.setRelations(relations);
+            pos = "a";
             if (!pos.isEmpty()) {
                 wordnetLmfSaxParser.setPos(pos);
                 System.out.println("pos = " + pos);

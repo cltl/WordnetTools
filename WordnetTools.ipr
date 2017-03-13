@@ -26,7 +26,6 @@
     <option name="USE_PROJECT_LEVEL_SETTINGS" value="false" />
   </component>
   <component name="CompilerConfiguration">
-    <option name="DEFAULT_COMPILER" value="Javac" />
     <resourceExtensions>
       <entry name=".+\.(properties|xml|html|dtd|tld)" />
       <entry name=".+\.(gif|png|jpeg|jpg)" />
@@ -52,14 +51,10 @@
       <entry name="?*.jpg" />
     </wildcardResourcePatterns>
     <annotationProcessing>
-      <profile default="true" name="Default" enabled="false">
-        <processorPath useClasspath="true" />
-      </profile>
-      <profile default="false" name="Annotation profile for WordnetTools" enabled="true">
+      <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
         <module name="WordnetTools" />
       </profile>
     </annotationProcessing>
@@ -88,9 +83,6 @@
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
     <file url="PROJECT" charset="UTF-8" />
   </component>
-  <component name="EntryPointsManager">
-    <entry_points version="2.0" />
-  </component>
   <component name="ErrorOptionsConfigurable.UI">
     <option name="proportions">
       <SplitterProportionsDataImpl />
@@ -107,6 +99,12 @@
     <option name="HIDE_CLASSES_WHERE_METHOD_NOT_IMPLEMENTED" value="false" />
   </component>
   <component name="IdProvider" IDEtalkID="0B2B2F56B9DE1B6EC9A8AD8795E0A6F6" />
+  <component name="InspectionProjectProfileManager">
+    <profile version="1.0">
+      <option name="myName" value="Project Default" />
+    </profile>
+    <version value="1.0" />
+  </component>
   <component name="JavacSettings">
     <option name="MAXIMUM_HEAP_SIZE" value="512" />
   </component>
@@ -346,8 +344,8 @@
     </option>
     <option name="lastEditedConfigurable" value="Project 'Default (Template) Project'" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.6 (1)" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$/out" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/target" />
   </component>
   <component name="ResourceManagerContainer">
     <option name="myResourceBundles">
@@ -470,15 +468,15 @@
         <root url="jar://$MAVEN_REPOSITORY$/ant/ant/1.6.5/ant-1.6.5-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: eu.kyotoproject.KyotoKafSaxParser:KyotoKafSaxParser:3.0">
+    <library name="Maven: com.github.cltl:KafSaxParser:v3.1.2">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/eu/kyotoproject/KyotoKafSaxParser/KyotoKafSaxParser/3.0/KyotoKafSaxParser-3.0.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/com/github/cltl/KafSaxParser/v3.1.2/KafSaxParser-v3.1.2.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/eu/kyotoproject/KyotoKafSaxParser/KyotoKafSaxParser/3.0/KyotoKafSaxParser-3.0-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/com/github/cltl/KafSaxParser/v3.1.2/KafSaxParser-v3.1.2-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/eu/kyotoproject/KyotoKafSaxParser/KyotoKafSaxParser/3.0/KyotoKafSaxParser-3.0-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/com/github/cltl/KafSaxParser/v3.1.2/KafSaxParser-v3.1.2-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: org.json:json:20090211">

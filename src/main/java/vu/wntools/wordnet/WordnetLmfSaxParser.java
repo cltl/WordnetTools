@@ -239,6 +239,9 @@ public class WordnetLmfSaxParser extends DefaultHandler {
                 if (attributes.getQName(i).equalsIgnoreCase("senseId")) {
                     lexicalUnitId = attributes.getValue(i).trim();
                 }
+                else if (attributes.getQName(i).equalsIgnoreCase("id")) {
+                    lexicalUnitId = attributes.getValue(i).trim();
+                }
                 if (attributes.getQName(i).equalsIgnoreCase("definition")) {
                     definition = attributes.getValue(i).trim();
                 }
