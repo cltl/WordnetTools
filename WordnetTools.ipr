@@ -157,7 +157,7 @@
   </component>
   <component name="MavenBuildProjectComponent">
     <option name="mavenExecutable" value="$PROJECT_DIR$/../../apache-maven-2.2.1" />
-    <option name="Settings File" value="$USER_HOME$/.m2/settings.xml" />
+    <option name="Settings File" value="" />
     <option name="mavenCommandLineParams" value="" />
     <option name="vmOptions" value="" />
     <option name="useMavenEmbedder" value="false" />
@@ -344,7 +344,7 @@
     </option>
     <option name="lastEditedConfigurable" value="Project 'Default (Template) Project'" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" default="false" project-jdk-name="java version &quot;1.8.0_91&quot;" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/target" />
   </component>
   <component name="ResourceManagerContainer">
