@@ -425,16 +425,18 @@ public class WordnetSimilarityApi {
         ArrayList<SimilarityPair> similarityPairArrayList = new ArrayList<SimilarityPair>();
         boolean knownWords = true;
         if (!wordnetData.entryToSynsets.containsKey(word1)) {
-           // System.out.println("Unknown word = " + word1);
+            System.out.println("Unknown word = " + word1);
             knownWords= false;
         }
         if (!wordnetData.entryToSynsets.containsKey(word2)) {
-           // System.out.println("Unknown word = " + word2);
+            System.out.println("Unknown word = " + word2);
             knownWords= false;
         }
         if (knownWords) {
             ArrayList<String> sources = wordnetData.entryToSynsets.get(word1);
             ArrayList<String> targets = wordnetData.entryToSynsets.get(word2);
+          //  System.out.println("sources = " + sources.toString());
+          //  System.out.println("targets = " + targets.toString());
             for (int i = 0; i < sources.size(); i++) {
                 String sourceId = sources.get(i);
                 for (int j = 0; j < targets.size(); j++) {
@@ -445,9 +447,9 @@ public class WordnetSimilarityApi {
 
                     ArrayList<ArrayList<String>> hyperChainsSource = new ArrayList<ArrayList<String>>();
                     ArrayList<ArrayList<String>> hyperChainsTarget = new ArrayList<ArrayList<String>>();
-                    //System.out.println("\n\nWord:"+word1);
+                   // System.out.println("\n\nWord:"+word1);
                     wordnetData.getMultipleHyperChain(sourceId, hyperChainsSource);
-                    //System.out.println("\n\nWord:"+word2);
+                   // System.out.println("\n\nWord:"+word2);
                     wordnetData.getMultipleHyperChain(targetId, hyperChainsTarget);
                     for (int k = 0; k < hyperChainsSource.size(); k++) {
                         ArrayList<String> hyperSource = hyperChainsSource.get(k);
@@ -455,7 +457,7 @@ public class WordnetSimilarityApi {
                             ArrayList<String> hyperTarget = hyperChainsTarget.get(l);
                             int D = (hyperSource.size()+hyperTarget.size())/2;
                             double score = LeacockChodorow.GetDistance(D, hyperSource, hyperTarget);
-                            //System.out.println("L & C score = " + score);
+                           // System.out.println("L & C score = " + score);
                            // System.out.println("similarityPair = " + similarityPair.getScore());
                             if (score>similarityPair.getScore()) {
                                 similarityPair.setMatch(LeacockChodorow.match);

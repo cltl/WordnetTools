@@ -124,7 +124,7 @@ public class WordnetLmfSaxParser extends DefaultHandler {
     public void parseFile(String filePath) {
         //System.out.println("filePath = " + filePath);
         if (!(new File(filePath)).exists()) {
-            System.out.println("Cannot find file");
+            System.out.println("Cannot find file WnLMF file = "+filePath);
             return;
         }
 
