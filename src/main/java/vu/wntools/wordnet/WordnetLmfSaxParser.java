@@ -124,7 +124,7 @@ public class WordnetLmfSaxParser extends DefaultHandler {
     public void parseFile(String filePath) {
         //System.out.println("filePath = " + filePath);
         if (!(new File(filePath)).exists()) {
-            System.out.println("Cannot find file WnLMF file = "+filePath);
+            System.err.println("Cannot find file WnLMF file = "+filePath);
             return;
         }
 
@@ -147,17 +147,17 @@ public class WordnetLmfSaxParser extends DefaultHandler {
             myerror = "\n** Parsing error" + ", line " + err.getLineNumber()
                     + ", uri " + err.getSystemId();
             myerror += "\n" + err.getMessage();
-            System.out.println("myerror = " + myerror);
+            System.err.println("myerror = " + myerror);
         } catch (SAXException e) {
             Exception x = e;
             if (e.getException() != null)
                 x = e.getException();
             myerror += "\nSAXException --" + x.getMessage();
-            System.out.println("myerror = " + myerror);
+            System.err.println("myerror = " + myerror);
         } catch (Exception eee) {
             eee.printStackTrace();
             myerror += "\nException --" + eee.getMessage();
-            System.out.println("myerror = " + myerror);
+            System.err.println("myerror = " + myerror);
         }
       //  System.out.println("myerror = " + myerror);
     }//--c

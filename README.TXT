@@ -142,5 +142,4 @@ nld-21-d_v-4057-v sc_subClassOf Verval-proces
 Wordnet-tools is compiled on Mac OS X version 10.6.8 with Java 1.6.
 
 
-Vossen, P., C. Soria, M. Monacini (2013):
 

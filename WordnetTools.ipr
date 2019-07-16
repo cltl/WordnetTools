@@ -80,7 +80,7 @@
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
     <option name="MAXIMUM_HEAP_SIZE" value="128" />
   </component>
-  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
+  <component name="Encoding">
     <file url="PROJECT" charset="UTF-8" />
   </component>
   <component name="ErrorOptionsConfigurable.UI">
@@ -161,7 +161,7 @@
     <option name="mavenCommandLineParams" value="" />
     <option name="vmOptions" value="" />
     <option name="useMavenEmbedder" value="false" />
-    <option name="useFilter" value="false" />
+    <option name="useFilter" value="true" />
     <option name="Batch Mode" value="false" />
     <option name="Check Plugin Updates" value="false" />
     <option name="Debug" value="false" />

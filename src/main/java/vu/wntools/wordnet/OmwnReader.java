@@ -7,9 +7,9 @@ public class OmwnReader {
 
 
     static public void readLexiconFile (String filepath , WordnetData wordnetData, int id, int word, String prefix) {
-        System.out.println("Before reading OMWN");
-        System.out.println("synset.size() = " + wordnetData.synsetToEntries.size());
-        System.out.println("lexicon.size() = " + wordnetData.entryToSynsets.size());
+        System.err.println("Before reading OMWN");
+        System.err.println("synset.size() = " + wordnetData.synsetToEntries.size());
+        System.err.println("lexicon.size() = " + wordnetData.entryToSynsets.size());
 
         File file = new File(filepath);
                if (file.exists()) {
@@ -22,11 +22,11 @@ public class OmwnReader {
                            if (inputLine.trim().length() > 0) {
                                String[] fields = inputLine.split("\t");
                                if (id>fields.length-1) {
-                                   System.out.println("Wn id column:"+id+" out of range, fields.length = " + fields.length);
+                                   System.err.println("Wn id column:"+id+" out of range, fields.length = " + fields.length);
                                    continue;
                                }
                                if (word>fields.length-1) {
-                                   System.out.println("Word column:"+word+" out of range, fields.length = " + fields.length);
+                                   System.err.println("Word column:"+word+" out of range, fields.length = " + fields.length);
                                    continue;
                                }
                                ArrayList<String> types = new ArrayList<String>();
@@ -59,11 +59,11 @@ public class OmwnReader {
                        e.printStackTrace();
                    }
                } else {
-                   System.out.println("Cannot find OMWN file = " + file.getAbsolutePath());
+                   System.err.println("Cannot find OMWN file = " + file.getAbsolutePath());
                }
-               System.out.println("After reading OMWN");
-               System.out.println("synset.size() = " + wordnetData.synsetToEntries.size());
-               System.out.println("lexicon.size() = " + wordnetData.entryToSynsets.size());
+               System.err.println("After reading OMWN");
+               System.err.println("synset.size() = " + wordnetData.synsetToEntries.size());
+               System.err.println("lexicon.size() = " + wordnetData.entryToSynsets.size());
        }
 
 

@@ -64,7 +64,7 @@ public class WordSimOmwn {
         for (int i = 0; i < args.length; i++) {
             String arg = args[i];
             String value = args[i+1];
-            System.out.println("arg = " + arg+ "; value = "+value);
+            System.err.println("arg = " + arg+ "; value = "+value);
             i++;
         }
         WordnetLmfSaxParser wordnetLmfDataSaxParser = new WordnetLmfSaxParser();

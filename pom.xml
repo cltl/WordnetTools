@@ -92,11 +92,14 @@
             <artifactId>json</artifactId>
             <version>20090211</version>
         </dependency>
-
         <dependency>
             <groupId>com.github.cltl</groupId>
             <artifactId>KafSaxParser</artifactId>
-            <version>v3.1.2</version>
+           <!-- <version>master-SNAPSHOT</version>  -->
+             <version>v3.1.2</version>
+            <!-- TO USE THE LATEST COMMIT INSTEAD OF A TAGGED VERSION USE: -->
+	 <!-- <version>master-SNAPSHOT</version>
+	  -->
         </dependency>
     </dependencies>
 
